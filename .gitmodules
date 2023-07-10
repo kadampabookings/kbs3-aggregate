@@ -1,0 +1,3 @@
+[submodule "kbs3-modality"]
+	path = kbs3-modality
+	url = https://github.com/nkt-kbs-project/kbs-modality.git
