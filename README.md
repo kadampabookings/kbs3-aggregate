@@ -6,6 +6,8 @@ A private extension of the open-source [Modality](https://github.com/modalityone
 ## Local Installation
 
 ```sh
+mkdir -vp kbs3  
+cd kbs3  
 git clone --recursive https://github.com/nkt-kbs-project/kbs3.git .  
 cd kbs3-modality-fork  
 git checkout staging  
