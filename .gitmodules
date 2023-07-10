@@ -1,3 +1,4 @@
-[submodule "kbs3-modality"]
-	path = kbs3-modality
-	url = https://github.com/nkt-kbs-project/kbs-modality.git
+[submodule "kbs3-modality-fork"]
+	path = kbs3-modality-fork
+	url = https://github.com/nkt-kbs-project/kbs3-modality-fork.git
+	branch = staging
