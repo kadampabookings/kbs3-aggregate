@@ -4,3 +4,6 @@
 [submodule "kbs3-webfx-fork"]
 	path = kbs3-webfx-fork
 	url = https://github.com/nkt-kbs-project/kbs3-webfx-fork.git
+[submodule "kbs3-webfx-platform-fork"]
+	path = kbs3-webfx-platform-fork
+	url = https://github.com/nkt-kbs-project/kbs3-webfx-platform-fork.git
