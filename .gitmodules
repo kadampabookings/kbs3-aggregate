@@ -16,3 +16,6 @@
 [submodule "kbs3"]
 	path = kbs3
 	url = https://github.com/nkt-kbs-project/kbs3.git
+[submodule "kbs2018"]
+	path = kbs2018
+	url = https://github.com/nkt-kbs-project/kbs2018.git
