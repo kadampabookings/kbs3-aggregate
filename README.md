@@ -12,11 +12,15 @@ git checkout staging
 git checkout -b feature/feature-name-here
 ```
 
-## Init KBS3-Modality-Fork for Development
+## Init Submodules for Development
 ```sh
-cd kbs3-modality-fork  
-git checkout staging
-git checkout -b feature/feature-name-here  
+cd kbs2018 && git checkout main && cd ..  
+cd kbs3 && git checkout main && cd ..  
+cd kbs3-modality-fork && git checkout main && cd ..  
+cd kbs3-webfx-extras-fork && git checkout main && cd ..  
+cd kbs3-webfx-fork && git checkout main && cd ..  
+cd kbs3-webfx-platform-fork && git checkout main && cd ..
+cd kbs3-webfx-stack-fork && git checkout main && cd ..  
 ```
 
 ##
