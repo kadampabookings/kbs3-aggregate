@@ -37,6 +37,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>kbs2018</module>
         <module>kbs3</module>
         <module>kbs3-modality-fork</module>
         <module>kbs3-webfx-extras-fork</module>
