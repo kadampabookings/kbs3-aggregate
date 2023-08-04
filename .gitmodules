@@ -13,3 +13,9 @@
 [submodule "kbs3"]
 	path = kbs3
 	url = https://github.com/nkt-kbs-project/kbs3.git
+[submodule "kbs3-webfx-fork"]
+	path = kbs3-webfx-fork
+	url = https://github.com/nkt-kbs-project/kbs3-webfx-fork.git
+[submodule "kbs3-webfx-stack-fork"]
+	path = kbs3-webfx-stack-fork
+	url = https://github.com/nkt-kbs-project/kbs3-webfx-stack-fork.git
