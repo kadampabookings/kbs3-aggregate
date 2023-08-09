@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      # WebFX requires at least JDK 13 due to javac bugs in prior versions (otherwise JDK 11+ should be enough in theory)
+      jdk-version: '19'
+
+    steps:
+
+      # Set up the JDK and Maven settings.xml
+      - name: Set up JDK ${{ env.jdk-version }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: ${{ env.jdk-version }}
+
+      # Checkout this repository
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+
+      # Build all modules and deploy their SNAPSHOT artifacts to the Modality packages GitHub repository
+      - name: Build this repository
+        run: mvn -B package
