@@ -10,6 +10,7 @@ jobs:
     env:
       # WebFX requires at least JDK 13 due to javac bugs in prior versions (otherwise JDK 11+ should be enough in theory)
       jdk-version: '19'
+      branch: 'staging'
 
     steps:
 
@@ -24,19 +25,19 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v3
 
-      - name: Checkout staging on all submodules
+      - name: Checkout ${{ env.branch }} on all submodules
         run: |
           git submodule update --init
-          cd kbsx && git checkout staging && cd ..
-          cd kbs3 && git checkout staging && cd ..
-          cd modality-fork && git checkout staging && cd ..
-          cd webfx-extras-fork && git checkout staging && cd ..
-          cd webfx-fork && git checkout staging && cd ..
-          cd webfx-platform-fork && git checkout staging && cd ..
-          cd webfx-stack-fork && git checkout staging && cd ..
-          cd webfx-parent-fork && git checkout staging && cd ..
-          cd webfx-stack-parent-fork && git checkout staging && cd ..
-          cd webfx-lib-javacupruntime-fork && git checkout staging && cd .. 
+          cd kbsx && git checkout ${{ env.branch }} && cd ..
+          cd kbs3 && git checkout ${{ env.branch }} && cd ..
+          cd modality-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-extras-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-platform-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-stack-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-parent-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd .. 
 
       # Build all modules and deploy their SNAPSHOT artifacts to the Modality packages GitHub repository
       - name: Build this repository
