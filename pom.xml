@@ -28,13 +28,13 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>kbs2018</module>
         <module>kbs3</module>
-        <module>kbs3-modality-fork</module>
-        <module>kbs3-webfx-extras-fork</module>
-        <module>kbs3-webfx-fork</module>
-        <module>kbs3-webfx-platform-fork</module>
-        <module>kbs3-webfx-stack-fork</module>
+        <module>kbsx</module>
+        <module>modality-fork</module>
+        <module>webfx-extras-fork</module>
+        <module>webfx-fork</module>
+        <module>webfx-platform-fork</module>
+        <module>webfx-stack-fork</module>
     </modules>
 
 </project>
