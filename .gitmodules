@@ -22,9 +22,9 @@
 [submodule "webfx-parent-fork"]
 	path = webfx-parent-fork
 	url = https://github.com/kadampabookings/webfx-parent-fork.git
-[submodule "webf-stack-parent-fork"]
-	path = webf-stack-parent-fork
-	url = https://github.com/kadampabookings/webfx-stack-parent-fork.git
 [submodule "webfx-lib-javacupruntime-fork"]
 	path = webfx-lib-javacupruntime-fork
 	url = https://github.com/kadampabookings/webfx-lib-javacupruntime-fork.git
+[submodule "webfx-stack-parent-fork"]
+	path = webfx-stack-parent-fork
+	url = https://github.com/kadampabookings/webfx-stack-parent-fork.git
