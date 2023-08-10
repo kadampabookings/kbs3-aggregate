@@ -1,3 +1,18 @@
 [submodule "kbs3"]
 	path = kbs3
 	url = https://github.com/nkt-kbs-project/kbs3.git
+[submodule "kbsx"]
+	path = kbsx
+	url = https://github.com/kadampabookings/kbsx.git
+[submodule "modality-fork"]
+	path = modality-fork
+	url = https://github.com/kadampabookings/modality-fork.git
+[submodule "webfx-extras-fork"]
+	path = webfx-extras-fork
+	url = https://github.com/kadampabookings/webfx-extras-fork.git
+[submodule "webfx-stack-fork"]
+	path = webfx-stack-fork
+	url = https://github.com/kadampabookings/webfx-stack-fork.git
+[submodule "webfx-platform-fork"]
+	path = webfx-platform-fork
+	url = https://github.com/kadampabookings/webfx-platform-fork.git

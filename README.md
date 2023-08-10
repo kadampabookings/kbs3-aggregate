@@ -6,7 +6,7 @@ An extension of the [Modality](https://github.com/modalityone/modality) project.
 ## 1/ Initialise
 ```sh
 mkdir -vp kbs3-aggregate && cd kbs3-aggregate  
-git clone --recursive https://github.com/nkt-kbs-project/kbs3-aggregate.git .  
+git clone --recursive https://github.com/kadampabookings/kbs3-aggregate.git .  
 ```
 
 ## 2/ Checkout Submodules to their Main Branches
