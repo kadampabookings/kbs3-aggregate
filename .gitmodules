@@ -16,3 +16,6 @@
 [submodule "webfx-platform-fork"]
 	path = webfx-platform-fork
 	url = https://github.com/kadampabookings/webfx-platform-fork.git
+[submodule "webfx-fork"]
+	path = webfx-fork
+	url = https://github.com/kadampabookings/webfx-fork.git
