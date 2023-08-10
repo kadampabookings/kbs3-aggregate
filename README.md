@@ -18,6 +18,9 @@ cd webfx-extras-fork && git checkout staging && cd ..
 cd webfx-fork && git checkout staging && cd ..  
 cd webfx-platform-fork && git checkout staging && cd ..
 cd webfx-stack-fork && git checkout staging && cd ..  
+cd webfx-parent-fork && git checkout staging && cd ..  
+cd webfx-stack-parent-fork && git checkout staging && cd ..  
+cd webfx-lib-javacupruntime-fork && git checkout staging && cd ..  
 ```
 
 ## 3/ Configure Git to Ignore Submodule Changes
@@ -29,6 +32,9 @@ git config submodule.webfx-extras-fork.ignore all
 git config submodule.webfx-fork.ignore all
 git config submodule.webfx-platform-fork.ignore all
 git config submodule.webfx-stack-fork.ignore all  
+git config submodule.webfx-parent-fork.ignore all  
+git config submodule.webfx-stack-parent-fork.ignore all  
+git config submodule.webfx-lib-javacupruntime-fork.ignore all  
 ```
 
 ## 4/ Create KBS3-Aggregate Feature Branch
