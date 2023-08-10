@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     env:
@@ -23,6 +23,8 @@ jobs:
       # Checkout this repository
       - name: Checkout this repository
         uses: actions/checkout@v3
+        with:
+          submodules: true
 
       # Build all modules and deploy their SNAPSHOT artifacts to the Modality packages GitHub repository
       - name: Build this repository
