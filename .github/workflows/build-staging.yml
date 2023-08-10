@@ -23,9 +23,11 @@ jobs:
       # Checkout this repository
       - name: Checkout this repository
         uses: actions/checkout@v3
-        with:
-          submodules: true
-          ref: 'main'
+
+      - name: Checkout staging on all submodules
+        run: |
+            git submodule foreach git checkout staging
+            git submodule foreach git pull origin staging
 
       # Build all modules and deploy their SNAPSHOT artifacts to the Modality packages GitHub repository
       - name: Build this repository
