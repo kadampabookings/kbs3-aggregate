@@ -63,7 +63,7 @@ git checkout -b feature/feature-name-here
 
 ## 6/ Add Modality Configuration
 ```sh
-cp ./modality-fork/.github/workflows/docker/ModalityDatabase.json conf/ModalityDatabase.json
+cp ./modality-fork/modality-base/modality-base-server-datasource/src/main/resources/one/modality/base/server/services/datasource/ModalityDatabase.default.json conf/ModalityDatabase.json
 ```
 Replace the default values in the conf/ModalityDatabase.json file with the connection details to your Postgres instance.
 
