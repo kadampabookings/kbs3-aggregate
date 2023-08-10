@@ -27,13 +27,16 @@ jobs:
       - name: Checkout staging on all submodules
         run: |
           git submodule update --init
-          cd kbsx && git checkout staging && cd ..  
+          cd kbsx && git checkout staging && cd ..
           cd kbs3 && git checkout staging && cd ..
           cd modality-fork && git checkout staging && cd ..
           cd webfx-extras-fork && git checkout staging && cd ..
           cd webfx-fork && git checkout staging && cd ..
           cd webfx-platform-fork && git checkout staging && cd ..
           cd webfx-stack-fork && git checkout staging && cd ..
+          cd webfx-parent-fork && git checkout staging && cd ..
+          cd webfx-stack-parent-fork && git checkout staging && cd ..
+          cd webfx-lib-javacupruntime-fork && git checkout staging && cd .. 
 
       # Build all modules and deploy their SNAPSHOT artifacts to the Modality packages GitHub repository
       - name: Build this repository

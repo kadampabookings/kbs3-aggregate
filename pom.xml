@@ -33,8 +33,11 @@
         <module>modality-fork</module>
         <module>webfx-extras-fork</module>
         <module>webfx-fork</module>
+        <module>webfx-lib-javacupruntime-fork</module>
         <module>webfx-platform-fork</module>
+        <module>webfx-parent-fork</module>
         <module>webfx-stack-fork</module>
+        <module>webfx-stack-parent-fork</module>
     </modules>
 
 </project>
