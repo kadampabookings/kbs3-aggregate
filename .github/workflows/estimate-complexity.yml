@@ -15,4 +15,4 @@ jobs:
         id: scc
         uses: hdmsantander/scc-docker-action@3.0
         with:
-          args: ${{ env.workspace }} (kbs3,modality,webfx)* --ci -i java
+          args: ${{ env.workspace }} * --ci -i java
