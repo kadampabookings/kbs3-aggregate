@@ -75,7 +75,7 @@ Replace the default values in the conf/ModalityDatabase.json file with the conne
 * Run the configuration to test the server can connect to the database
 
 
-## 9/ Create the KBS3 Back-Office Runtime Configuration
+## 9/ Create the KBS3 Back-Office Runtime Configuration
 * Create a new 'Application' runtime configuration
 * Name: KBS3 Back-Office
 * Runtime: Java 17
