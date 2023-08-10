@@ -1,3 +1,11 @@
+![Deploy to Sonatype](https://github.com/kadampabookings/kbs3-aggregate/actions/workflows/build-staging.yml/badge.svg)
+![Scc Code Count Badge](https://sloc.xyz/github/kadampabookings/kbs3-aggregate/?category=code)
+![Scc Blanks Count Badge](https://sloc.xyz/github/kadampabookings/kbs3-aggregate/?category=blanks)
+![Scc Comments Count Badge](https://sloc.xyz/github/kadampabookings/kbs3-aggregate/?category=comments)
+![Scc Lines Count Badge](https://sloc.xyz/github/kadampabookings/kbs3-aggregate/?category=lines)
+![Scc COCOMO Badge](https://sloc.xyz/github/kadampabookings/kbs3-aggregate/?category=cocomo)
+![Discover Vulnerabilities Using CodeQL](https://github.com/kadampabookings/kbs3-aggregate/actions/workflows/discover-vulnerabilities.yml/badge.svg)
+
 # Kadampa Business System 3 (KBS3)
 
 An extension of the [Modality](https://github.com/modalityone/modality) project. A forked version of Modality (`modality-fork`) is submoduled into this repository. 
