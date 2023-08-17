@@ -95,3 +95,14 @@ If IntelliJ cannot find a module when running the configuration, try one or both
 
 * Reload Maven
 * Install application (Maven -> kbs3-aggregate -> Lifecycle -> Install)
+
+
+## Merge Sync Submodule Branches into Local Staging Branches
+```sh
+./scripts/merge-sync-into-local-staging.sh
+```
+
+## Push All Staging Branches to Remote
+```sh
+./scripts/push-all-staging-branches-to-remote.sh
+```
