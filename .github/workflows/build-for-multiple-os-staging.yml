@@ -21,7 +21,7 @@
 # 15) App-iOS-arm64-native-package.ipa : iOS native app (Gluon)                                                  #
 ##################################################################################################################
 
-name: Build for Multiple OS
+name: Build Staging for Multiple OS
 
 on:
   workflow_dispatch:
@@ -499,6 +499,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       API_GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
+      release-tag: "staging-SNAPSHOT"
 
     steps:
 
@@ -521,19 +522,19 @@ jobs:
 
       # Clearing SNAPSHOT release assets
       - if: env.API_GITHUB_TOKEN != ''
-        name: Delete old assets from staging-SNAPSHOT release
+        name: Delete old assets from ${{ env.release-tag }} release
         uses: mknejp/delete-release-assets@v1
         with:
-          tag: staging-SNAPSHOT
+          tag: ${{ env.release-tag }}
           assets: '*'
           fail-if-no-assets: false
           token: ${{ env.API_GITHUB_TOKEN }}
 
       # Upload all artifacts into the SNAPSHOT release assets
       - if: env.API_GITHUB_TOKEN != ''
-        name: Upload artifacts to the staging-SNAPSHOT release assets
+        name: Upload artifacts to the ${{ env.release-tag }} release assets
         uses: AButler/upload-release-assets@v2.0
         with:
-          release-tag: staging-SNAPSHOT
+          release-tag: ${{ env.release-tag }}
           files: upload/*
           repo-token: ${{ env.API_GITHUB_TOKEN }}
