@@ -1,6 +1,6 @@
 [submodule "kbs3"]
 	path = kbs3
-	url = https://github.com/nkt-kbs-project/kbs3.git
+	url = https://github.com/kadampabookings/kbs3.git
 [submodule "kbsx"]
 	path = kbsx
 	url = https://github.com/kadampabookings/kbsx.git
