@@ -1,4 +1,4 @@
-name: Estimate Complexity Using SCC
+name: Prod | Estimate Complexity Using SCC
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     name: SCC analysis
     env:
-      branch: 'staging'
+      branch: 'prod'
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v3
