@@ -7,7 +7,7 @@ do
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
     git stash
     git checkout sync
-    git pull
+    git pull origin sync
     git checkout staging
     git merge --no-commit sync
     git commit -m "merged from sync"
