@@ -1,0 +1,44 @@
+name: Prod | Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      # WebFX requires at least JDK 13 due to javac bugs in prior versions (otherwise JDK 11+ should be enough in theory)
+      jdk-version: '19'
+      branch: 'prod'
+
+    steps:
+
+      # Set up the JDK and Maven settings.xml
+      - name: Set up JDK ${{ env.jdk-version }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: ${{ env.jdk-version }}
+
+      # Checkout this repository
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+
+      - name: Checkout ${{ env.branch }} on all submodules
+        run: |
+          git submodule update --init
+          cd kbsx && git checkout ${{ env.branch }} && cd ..
+          cd kbs3 && git checkout ${{ env.branch }} && cd ..
+          cd modality-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-extras-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-platform-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-stack-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-parent-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd .. 
+
+      # Build all modules and deploy their SNAPSHOT artifacts to the Modality packages GitHub repository
+      - name: Build this repository
+        run: mvn -B package
