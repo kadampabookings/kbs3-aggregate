@@ -1,15 +1,21 @@
-name: Estimate Complexity Using SCC
+name: Staging | Discover Vulnerabilities Using CodeQL
 
 on:
   workflow_dispatch:
 
 jobs:
-  scc_job:
+  CodeQL-Build:
     runs-on: ubuntu-latest
-    name: SCC analysis
+
     env:
+      jdk-version: '19'
       branch: 'staging'
+
+    permissions:
+      security-events: write
+
     steps:
+      # Checkout this repository
       - name: Checkout this repository
         uses: actions/checkout@v3
 
@@ -27,8 +33,19 @@ jobs:
           cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
           cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd .. 
 
-      - name: Execute scc.
-        id: scc
-        uses: hdmsantander/scc-docker-action@3.0
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
         with:
-          args: ${{ env.workspace }} --ci -i java
+          languages: java
+
+      - name: Set up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: ${{ env.jdk-version }}
+
+      - name: Build with Maven
+        run: mvn package -B
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2

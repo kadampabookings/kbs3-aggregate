@@ -21,7 +21,7 @@
 # 15) App-iOS-arm64-native-package.ipa : iOS native app (Gluon)                                                  #
 ##################################################################################################################
 
-name: Build Staging for Multiple OS
+name: Staging | Build for Multiple OS
 
 on:
   workflow_dispatch:
