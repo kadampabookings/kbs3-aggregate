@@ -1,0 +1,66 @@
+name: Build and publish Maven site
+
+on:
+  workflow_dispatch:
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+
+    env:
+      # WebFX requires at least JDK 13 due to javac bugs in prior versions (otherwise JDK 11+ should be enough in theory)
+      branch: 'staging'
+      jdk-version: '19'
+      repo-dir: .
+      target-site-dir: './target/staging/kbs3'
+      web-site-url: 'https://site-kbs3-aggregate.modality.one'
+      web-push-repository-name:  'modality-netlify'
+      web-push-repository-owner: 'modalityone'
+      web-push-branch: 'site-kbs3-aggregate'
+      web-push-username: ${{ github.actor }}
+      web-push-email: ${{ secrets.API_GITHUB_EMAIL }}
+
+    steps:
+
+      # Set up the JDK and Maven settings.xml
+      - name: Set up JDK ${{ env.jdk-version }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: ${{ env.jdk-version }}
+
+      # Checkout this repository
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+        with:
+          path: ${{ env.repo-dir }}
+
+      - name: Checkout ${{ env.branch }} on all submodules
+        run: |
+          git submodule update --init
+          cd kbsx && git checkout ${{ env.branch }} && cd ..
+          cd kbs3 && git checkout ${{ env.branch }} && cd ..
+          cd modality-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-extras-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-platform-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-stack-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-parent-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd .. 
+
+      # Build Maven site
+      - name: Build Maven site
+        run: mvn -B -Dplugin.site.param.topSiteURL=${{ env.web-site-url }} install site site:stage
+
+      - name: Publish Maven site to ${{ env.web-push-branch }} branch
+        uses: cpina/github-action-push-to-another-repository@master
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_GITHUB_TOKEN }}
+        with:
+          source-directory: ${{ env.target-site-dir }}
+          destination-repository-username: ${{ env.web-push-repository-owner }}
+          destination-repository-name: ${{ env.web-push-repository-name }}
+          target-branch: ${{ env.web-push-branch }}
+          destination-github-username: ${{ env.web-push-username }}
+          user-email: ${{ env.web-push-email }}
