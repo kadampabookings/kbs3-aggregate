@@ -1,4 +1,4 @@
-name: Build and publish Maven site
+name: Staging | Build and publish Maven site
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ jobs:
       branch: 'staging'
       jdk-version: '19'
       repo-dir: .
-      target-site-dir: './target/staging/kbs3'
+      target-site-dir: './target/staging/kbs3-aggregate'
       web-site-url: 'https://site-kbs3-aggregate.modality.one'
       web-push-repository-name:  'modality-netlify'
       web-push-repository-owner: 'modalityone'
