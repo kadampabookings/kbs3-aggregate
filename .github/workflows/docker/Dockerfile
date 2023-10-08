@@ -1,14 +1,14 @@
 FROM azul/zulu-openjdk:19
 
 RUN set -eux; \
-        mkdir -p /opt/kbsx/conf
+        mkdir -p /opt/kbs/conf
 
-COPY kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar /opt/kbsx
-COPY kbsx-backoffice-application-gwt-1.0.0-SNAPSHOT.war /opt/kbsx
-COPY kbsx-frontoffice-application-gwt-1.0.0-SNAPSHOT.war /opt/kbsx
-COPY public-variables.properties secret-variables.properties override@webfx.stack.http.options.json override@modality.base.server.datasource.properties /opt/kbsx/conf
+COPY kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar /opt/kbs
+COPY kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war /opt/kbs
+COPY kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war /opt/kbs
+COPY public-variables.properties secret-variables.properties override@webfx.stack.http.options.json override@modality.base.server.datasource.properties /opt/kbs/conf
 
-WORKDIR /opt/kbsx
+WORKDIR /opt/kbs
 
 EXPOSE 80
 
