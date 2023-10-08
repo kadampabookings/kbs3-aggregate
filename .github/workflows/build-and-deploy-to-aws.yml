@@ -90,8 +90,4 @@ jobs:
           docker tag  $ECR_REGISTRY/$ECR_REPOSITORY $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           CLUSTER_STATUS=`aws ecs describe-clusters --clusters ${ECS_CLUSTER} | grep -q ACTIVE`
-          if [ "${CLUSTER_STATUS}" == "" ]; then
-            echo "The STAGING environment seems not to be running. So not refreshing the application services."
-          else
-            aws ecs update-service --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE} --force-new-deployment
-          fi
+          aws ecs update-service --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE} --force-new-deployment

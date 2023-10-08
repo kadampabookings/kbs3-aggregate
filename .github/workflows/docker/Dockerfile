@@ -6,7 +6,7 @@ RUN set -eux; \
 COPY kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar /opt/kbs
 COPY kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war /opt/kbs
 COPY kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war /opt/kbs
-COPY public-variables.properties secret-variables.properties override@webfx.stack.http.options.json override@modality.base.server.datasource.properties /opt/kbs/conf
+COPY public-variables.properties secret-variables.properties override@webfx.stack.http.options.json override@webfx.stack.http.routes.json override@modality.base.server.datasource.properties /opt/kbs/conf
 
 WORKDIR /opt/kbs
 
