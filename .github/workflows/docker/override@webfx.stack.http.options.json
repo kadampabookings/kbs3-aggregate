@@ -1,0 +1,19 @@
+{
+  "httpServers": [
+    {
+      "protocol": "http",
+      "port": "${{ HTTP_PORT | 80 }}"
+    }
+  ],
+  "httpStaticRoutes": [
+    {
+      "routePattern": "/*",
+      "hostnamePatterns": ["backoffice.*"],
+      "pathToStaticFolder": "/opt/kbsx/kbsx-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/modality_all_backoffice_application_gwt"
+    },
+    {
+      "routePattern": "/*",
+      "pathToStaticFolder": "/opt/kbsx/kbsx-frontoffice-application-gwt-1.0.0-SNAPSHOT.war!/modality_all_frontoffice_application_gwt"
+    }
+  ]
+}
