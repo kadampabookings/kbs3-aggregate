@@ -52,12 +52,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
-      - name: Retrieve DB endpoint and password
-        uses: aws-actions/aws-secretsmanager-get-secrets@v1
-        with:
-          secret-ids: |
-            MODALITY_DATABASE_HOST, modality-demo-db-fqdn
-            MODALITY_DATABASE_PASSWORD, modality-demo-db-randompass
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -72,11 +66,11 @@ jobs:
           AWS_REGION: ${{ vars.AWS_REGION }}
           ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
           ECS_SERVICE: ${{ vars.ECS_SERVICE }}
-          MODALITY_DATABASE_HOST: ${{ env.KBS_DATABASE_HOST }}
-          MODALITY_DATABASE_PORT: ${{ secrets.KBS_DATABASE_PORT }}
-          MODALITY_DATABASE_NAME: ${{ secrets.KBS_DATABASE_NAME }}
-          MODALITY_DATABASE_USERNAME: ${{ secrets.KBS_DATABASE_USERNAME }}
-          MODALITY_DATABASE_PASSWORD: ${{ env.KBS_DATABASE_PASSWORD }}
+          KBS_DATABASE_HOST: ${{ secrets.KBS_DATABASE_HOST }}
+          KBS_DATABASE_PORT: ${{ secrets.KBS_DATABASE_PORT }}
+          KBS_DATABASE_NAME: ${{ secrets.KBS_DATABASE_NAME }}
+          KBS_DATABASE_USERNAME: ${{ secrets.KBS_DATABASE_USERNAME }}
+          KBS_DATABASE_PASSWORD: ${{ secrets.KBS_DATABASE_PASSWORD }}
           IMAGE_TAG: ${{ github.sha }}
           DOCKER_CONF_DIR: ".github/workflows/docker"
         run: |
