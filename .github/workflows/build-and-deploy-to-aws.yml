@@ -62,6 +62,11 @@ jobs:
           FAT_JAR: "kbs3/kbs-server-application-vertx/target/kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar"
           BACK_OFFICE_WAR: "kbs3/kbs-backoffice-application-gwt/target/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war"
           BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
+          FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
+          FACEBOOK_CLIENT_SECRET: ${{ secrets.FACEBOOK_CLIENT_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          MOJO_AUTH_API_KEY: ${{ secrets.MOJO_AUTH_API_KEY }}
           FRONT_OFFICE_WAR: "kbs3/kbs-frontoffice-application-gwt/target/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war"
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ vars.KBS_REPOSITORY }}
@@ -87,6 +92,11 @@ jobs:
           sed -i "s/__KBS_DATABASE_USERNAME__/${KBS_DATABASE_USERNAME}/g" override@modality.base.server.datasource.properties
           sed -i "s/__KBS_DATABASE_PASSWORD__/${KBS_DATABASE_PASSWORD}/g" override@modality.base.server.datasource.properties
           sed -i "s/__BACKOFFICE_ORIGIN__/${BACKOFFICE_ORIGIN}/g" public-variables.properties
+          sed -i "s/__FACEBOOK_CLIENT_ID__/${FACEBOOK_CLIENT_ID}/g" secret-variables.properties
+          sed -i "s/__FACEBOOK_CLIENT_SECRET__/${FACEBOOK_CLIENT_SECRET}/g" secret-variables.properties
+          sed -i "s/__GOOGLE_CLIENT_ID__/${GOOGLE_CLIENT_ID}/g" secret-variables.properties
+          sed -i "s/__GOOGLE_CLIENT_SECRET__/${GOOGLE_CLIENT_SECRET}/g" secret-variables.properties
+          sed -i "s/__MOJO_AUTH_API_KEY__/${MOJO_AUTH_API_KEY}/g" secret-variables.properties
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY
           docker tag  $ECR_REGISTRY/$ECR_REPOSITORY $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
