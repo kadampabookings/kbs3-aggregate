@@ -78,11 +78,11 @@ jobs:
           cp $BACK_OFFICE_WAR $DOCKER_CONF_DIR
           cp $FRONT_OFFICE_WAR $DOCKER_CONF_DIR
           cd $DOCKER_CONF_DIR
-          sed -i "s/__KBS_DATABASE_HOST__/${KBS_DATABASE_HOST}/g" override@modality.base.server.datasource
-          sed -i "s/__KBS_DATABASE_PORT__/${KBS_DATABASE_PORT}/g" override@modality.base.server.datasource
-          sed -i "s/__KBS_DATABASE_NAME__/${KBS_DATABASE_NAME}/g" override@modality.base.server.datasource
-          sed -i "s/__KBS_DATABASE_USERNAME__/${KBS_DATABASE_USERNAME}/g" override@modality.base.server.datasource
-          sed -i "s/__KBS_DATABASE_PASSWORD__/${KBS_DATABASE_PASSWORD}/g" override@modality.base.server.datasource
+          sed -i "s/__KBS_DATABASE_HOST__/${KBS_DATABASE_HOST}/g" override@modality.base.server.datasource.properties
+          sed -i "s/__KBS_DATABASE_PORT__/${KBS_DATABASE_PORT}/g" override@modality.base.server.datasource.properties
+          sed -i "s/__KBS_DATABASE_NAME__/${KBS_DATABASE_NAME}/g" override@modality.base.server.datasource.properties
+          sed -i "s/__KBS_DATABASE_USERNAME__/${KBS_DATABASE_USERNAME}/g" override@modality.base.server.datasource.properties
+          sed -i "s/__KBS_DATABASE_PASSWORD__/${KBS_DATABASE_PASSWORD}/g" override@modality.base.server.datasource.properties
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY
           docker tag  $ECR_REGISTRY/$ECR_REPOSITORY $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
