@@ -1,0 +1,14 @@
+{
+  "httpStaticRoutes": [
+    {
+      "routePattern": "/*",
+      "hostnamePatterns": ["backoffice.*"],
+      "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_all_backoffice_application_gwt"
+    },
+    {
+      "routePattern": "/*",
+      "hostnamePatterns": ["frontoffice.*"],
+      "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_all_frontoffice_application_gwt"
+    }
+  ]
+}
