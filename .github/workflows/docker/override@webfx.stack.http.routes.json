@@ -7,7 +7,7 @@
     },
     {
       "routePattern": "/*",
-      "hostnamePatterns": ["frontoffice.*"],
+      "hostnamePatterns": ["frontoffice.*", "app.*"],
       "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_frontoffice_application_gwt"
     }
   ]
