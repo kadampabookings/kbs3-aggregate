@@ -42,7 +42,7 @@ jobs:
             cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd ..
 
       - name: Build with Maven
-        run: mvn package -B -P 'vertx-fatjar,gwt-compile'
+        run: mvn package -B -P 'vertx-fatjar,gwt-compile' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
