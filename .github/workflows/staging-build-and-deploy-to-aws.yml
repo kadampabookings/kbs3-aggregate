@@ -88,7 +88,8 @@ jobs:
           sed -i "s/__KBS_DATABASE_NAME__/${KBS_DATABASE_NAME}/g" override@modality.base.server.datasource.properties
           sed -i "s/__KBS_DATABASE_USERNAME__/${KBS_DATABASE_USERNAME}/g" override@modality.base.server.datasource.properties
           sed -i "s/__KBS_DATABASE_PASSWORD__/${KBS_DATABASE_PASSWORD}/g" override@modality.base.server.datasource.properties
-          sed -i "s/__BACKOFFICE_ORIGIN__/${BACKOFFICE_ORIGIN}/g" public-variables.properties
+          var = "${BACKOFFICE_ORIGIN}";
+          sed -i "s/__BACKOFFICE_ORIGIN__/${var//\//\\/}/g" public-variables.properties
           sed -i "s/__FACEBOOK_CLIENT_ID__/${FACEBOOK_CLIENT_ID}/g" secret-variables.properties
           sed -i "s/__FACEBOOK_CLIENT_SECRET__/${FACEBOOK_CLIENT_SECRET}/g" secret-variables.properties
           sed -i "s/__GOOGLE_CLIENT_ID__/${GOOGLE_CLIENT_ID}/g" secret-variables.properties
