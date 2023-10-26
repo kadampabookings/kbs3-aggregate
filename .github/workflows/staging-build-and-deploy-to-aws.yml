@@ -83,13 +83,7 @@ jobs:
           cp $BACK_OFFICE_WAR $DOCKER_CONF_DIR
           cp $FRONT_OFFICE_WAR $DOCKER_CONF_DIR
           cd $DOCKER_CONF_DIR
-          sed -i "s/__KBS_DATABASE_HOST__/${KBS_DATABASE_HOST}/g" override@modality.base.server.datasource.properties
-          sed -i "s/__KBS_DATABASE_PORT__/${KBS_DATABASE_PORT}/g" override@modality.base.server.datasource.properties
-          sed -i "s/__KBS_DATABASE_NAME__/${KBS_DATABASE_NAME}/g" override@modality.base.server.datasource.properties
-          sed -i "s/__KBS_DATABASE_USERNAME__/${KBS_DATABASE_USERNAME}/g" override@modality.base.server.datasource.properties
-          KBS_DATABASE_PASSWORD_ESCAPED=$(printf '%s\n' "${KBS_DATABASE_PASSWORD}" | sed -e 's/[]\/$*.^[]/\\&/g')
-          sed -i "s/__KBS_DATABASE_PASSWORD__/${KBS_DATABASE_PASSWORD_ESCAPED}/g" override@modality.base.server.datasource.properties
-          cat override@modality.base.server.datasource.properties
+          cat override@modality.base.server.datasource.properties.tpl | envsubst > override@modality.base.server.datasource.properties
           BACKOFFICE_ORIGIN_ESCAPED=$(printf '%s\n' "${BACKOFFICE_ORIGIN}" | sed -e 's/[]\/$*.^[]/\\&/g')
           sed -i "s/__BACKOFFICE_ORIGIN__/${BACKOFFICE_ORIGIN_ESCAPED}/g" public-variables.properties
           sed -i "s/__FACEBOOK_CLIENT_ID__/${FACEBOOK_CLIENT_ID}/g" secret-variables.properties

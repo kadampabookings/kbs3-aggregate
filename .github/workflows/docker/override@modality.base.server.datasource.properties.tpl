@@ -1,0 +1,5 @@
+host = ${KBS_DATABASE_HOST}
+port = ${KBS_DATABASE_PORT}
+databaseName = ${KBS_DATABASE_NAME}
+username = ${KBS_DATABASE_USERNAME}
+password = ${KBS_DATABASE_PASSWORD}
