@@ -41,6 +41,15 @@ jobs:
             cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
             cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd ..
 
+      - name: Injecting secrets into client config
+        env:
+          GOOGLE_MAP_JS_API_KEY: ${{ secrets.GOOGLE_MAP_JS_API_KEY }}
+        run: |
+          export temp_file = temp.txt
+          export conf_file = kbs3/kbs-frontoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
+          envsubst < $conf_file > $temp_file
+          cp $temp_file $conf_file
+
       - name: Build with Maven
         run: mvn package -B -P 'vertx-fatjar,gwt-compile' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt
       - name: Configure AWS credentials
