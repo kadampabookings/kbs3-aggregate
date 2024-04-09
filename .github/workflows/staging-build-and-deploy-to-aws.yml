@@ -41,12 +41,23 @@ jobs:
             cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
             cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd ..
 
-      - name: Injecting secrets into client config
+      - name: Injecting secrets into front-office config
         env:
           GOOGLE_MAP_JS_API_KEY: ${{ secrets.GOOGLE_MAP_JS_API_KEY }}
         run: |
           temp_file=temp.txt
           conf_file=kbs3/kbs-frontoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
+          envsubst < $conf_file > $temp_file
+          cp $temp_file $conf_file
+
+      - name: Injecting secrets into back-office config
+        env:
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        run: |
+          temp_file=temp.txt
+          conf_file=kbs3/kbs-backoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
           envsubst < $conf_file > $temp_file
           cp $temp_file $conf_file
 
