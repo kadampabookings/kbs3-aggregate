@@ -45,10 +45,8 @@ jobs:
         env:
           GOOGLE_MAP_JS_API_KEY: ${{ secrets.GOOGLE_MAP_JS_API_KEY }}
         run: |
-          temp_file=temp.txt
           conf_file=kbs3/kbs-frontoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
-          envsubst < $conf_file > $temp_file
-          cp $temp_file $conf_file
+          echo "GOOGLE_MAP_JS_API_KEY=$GOOGLE_MAP_JS_API_KEY" >> $conf_file
 
       - name: Injecting secrets into back-office config
         env:
@@ -56,10 +54,10 @@ jobs:
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         run: |
-          temp_file=temp.txt
           conf_file=kbs3/kbs-backoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
-          envsubst < $conf_file > $temp_file
-          cp $temp_file $conf_file
+          echo "CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME" >> $conf_file
+          echo "CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY" >> $conf_file
+          echo "CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET" >> $conf_file
 
       - name: Build with Maven
         run: mvn package -B -P 'vertx-fatjar,gwt-compile' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt
