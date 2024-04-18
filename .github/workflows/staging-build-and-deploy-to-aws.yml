@@ -59,9 +59,9 @@ jobs:
         run: |
           conf_file=kbs3/kbs-server-application-vertx/src/main/resources/dev/webfx/platform/conf/src-root.json
           temp_file=tmp.json
-          echo '{ "CLOUDINARY_CLOUD_NAME": "$CLOUDINARY_CLOUD_NAME"' >> $temp_file
-          echo ', "CLOUDINARY_API_KEY": "$CLOUDINARY_API_KEY"' >> $temp_file
-          echo ', "CLOUDINARY_API_SECRET": "$CLOUDINARY_API_SECRET" }' >> $temp_file
+          echo "{ \"CLOUDINARY_CLOUD_NAME\": \"$CLOUDINARY_CLOUD_NAME\"" >> $temp_file
+          echo ", \"CLOUDINARY_API_KEY\": \"$CLOUDINARY_API_KEY\"" >> $temp_file
+          echo ", \"CLOUDINARY_API_SECRET\": \"$CLOUDINARY_API_SECRET\" }" >> $temp_file
           jq -s '.[0] * .[1]' $conf_file $temp_file > tmp2.json && mv tmp2.json $conf_file
 
       - name: Build with Maven
