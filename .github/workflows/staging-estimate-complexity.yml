@@ -11,7 +11,7 @@ jobs:
       branch: 'staging'
     steps:
       - name: Checkout this repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Checkout ${{ env.branch }} on all submodules
         run: |

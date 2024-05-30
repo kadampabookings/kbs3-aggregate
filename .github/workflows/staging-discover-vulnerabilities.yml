@@ -17,7 +17,7 @@ jobs:
     steps:
       # Checkout this repository
       - name: Checkout this repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Checkout ${{ env.branch }} on all submodules
         run: |
@@ -39,7 +39,7 @@ jobs:
           languages: java
 
       - name: Set up JDK 19
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: ${{ env.jdk-version }}
