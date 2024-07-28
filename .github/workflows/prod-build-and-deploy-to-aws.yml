@@ -18,7 +18,7 @@ jobs:
 
     env:
       jdk-version: '19'
-      branch: 'main'
+      branch: 'staging'
 
     environment: ${{ github.ref == 'refs/heads/main' && 'production' }}
 
@@ -41,7 +41,7 @@ jobs:
             cd webfx-stack-fork && git checkout ${{ env.branch }} && cd ..
             cd webfx-parent-fork && git checkout ${{ env.branch }} && cd ..
             cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
-            cd webfx-lib-javacupruntime-fork && git checkout staging && cd ..
+            cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd ..
 
       - name: Injecting secrets into front-office config
         env:
