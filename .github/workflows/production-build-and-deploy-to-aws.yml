@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Production | Build and Deploy to AWS
+name: Prod | Build and Deploy to AWS
 
 on:
   workflow_dispatch:
