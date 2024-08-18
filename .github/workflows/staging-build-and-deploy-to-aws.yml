@@ -65,7 +65,7 @@ jobs:
           jq -s '.[0] * .[1]' $conf_file $temp_file > tmp2.json && mv tmp2.json $conf_file
 
       - name: Build with Maven
-        run: mvn package -B -P 'vertx-fatjar,gwt-compile' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt
+        run: mvn package -B -P 'vertx-fatjar,gwt-compile' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt,kbs3/kbs-magiclink-client-application-gwt
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -81,13 +81,14 @@ jobs:
         env:
           FAT_JAR: "kbs3/kbs-server-application-vertx/target/kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar"
           BACK_OFFICE_WAR: "kbs3/kbs-backoffice-application-gwt/target/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war"
+          FRONT_OFFICE_WAR: "kbs3/kbs-frontoffice-application-gwt/target/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war"
+          MAGIC_LINK_WAR: "kbs3/kbs-magiclink-client-application-gwt/target/kbs-magiclink-client-application-gwt-1.0.0-SNAPSHOT.war"
           BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
           FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
           FACEBOOK_CLIENT_SECRET: ${{ secrets.FACEBOOK_CLIENT_SECRET }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           MOJO_AUTH_API_KEY: ${{ secrets.MOJO_AUTH_API_KEY }}
-          FRONT_OFFICE_WAR: "kbs3/kbs-frontoffice-application-gwt/target/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war"
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ vars.KBS_REPOSITORY }}
           ECR_ACCOUNT_ID: ${{ vars.ECR_ACCOUNT_ID }}
@@ -105,6 +106,7 @@ jobs:
           cp $FAT_JAR $DOCKER_CONF_DIR
           cp $BACK_OFFICE_WAR $DOCKER_CONF_DIR
           cp $FRONT_OFFICE_WAR $DOCKER_CONF_DIR
+          cp $MAGIC_LINK_WAR $DOCKER_CONF_DIR
           cd $DOCKER_CONF_DIR
           cat override@modality.base.server.datasource.properties.tpl | envsubst > override@modality.base.server.datasource.properties
           cat public-variables.properties.tpl | envsubst > public-variables.properties
