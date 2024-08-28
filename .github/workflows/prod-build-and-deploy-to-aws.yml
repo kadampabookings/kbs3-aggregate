@@ -86,6 +86,7 @@ jobs:
           FRONT_OFFICE_WAR: "kbs3/kbs-frontoffice-application-gwt/target/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war"
           MAGIC_LINK_WAR: "kbs3/kbs-magiclink-client-application-gwt/target/kbs-magiclink-client-application-gwt-1.0.0-SNAPSHOT.war"
           BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
+          FRONTOFFICE_ORIGIN: ${{ vars.FRONTOFFICE_ORIGIN }}
           FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
           FACEBOOK_CLIENT_SECRET: ${{ secrets.FACEBOOK_CLIENT_SECRET }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
