@@ -43,12 +43,21 @@ jobs:
           cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
           cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd ..
 
-      - name: Injecting secrets into front-office config
+      - name: Injecting variables & secrets into front-office config
         env:
+          FRONTOFFICE_ORIGIN: ${{ vars.FRONTOFFICE_ORIGIN }}
           GOOGLE_MAP_JS_API_KEY: ${{ secrets.GOOGLE_MAP_JS_API_KEY }}
         run: |
           conf_file=kbs3/kbs-frontoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
+          echo "FRONTOFFICE_ORIGIN=$FRONTOFFICE_ORIGIN" >> $conf_file
           echo "GOOGLE_MAP_JS_API_KEY=$GOOGLE_MAP_JS_API_KEY" >> $conf_file
+
+      - name: Injecting variables into back-office config
+        env:
+          BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
+        run: |
+          conf_file=kbs3/kbs-backoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
+          echo "BACKOFFICE_ORIGIN=$BACKOFFICE_ORIGIN" >> $conf_file
 
       - name: Install jq
         run: sudo apt install jq
