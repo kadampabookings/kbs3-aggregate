@@ -1,10 +1,6 @@
 {
   "httpStaticRoutes": [
     {
-      "routePattern": "/magic-link/*",
-      "pathToStaticFolder": "/opt/kbs/kbs-magiclink-client-application-gwt-1.0.0-SNAPSHOT.war!/kbs_magiclink_client_application_gwt"
-    },
-    {
       "routePattern": "/*",
       "hostnamePatterns": ["backoffice.*"],
       "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_backoffice_application_gwt"
