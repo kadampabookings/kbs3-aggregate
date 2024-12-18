@@ -167,6 +167,9 @@ jobs:
       # 13) App-MacOS-x64-jvm-package.pkg                                                                              #
       ##################################################################################################################
 
+      - name: Build webfx-parent-fork (specific to kbs3-aggregate)
+        run: mvn install -B -pl webfx-parent-fork
+
       # Building this repository with JDK 13+ (Java 11 target)
       - name: Build this repository (no OpenJFX fat jar - no GWT build)
         run: mvn -B -P '!gwt-compile,!openjfx-fatjar,!openjfx-desktop' install
