@@ -20,6 +20,8 @@ jobs:
       jdk-version: '19'
       branch: 'staging'
 
+    environment: ${{ github.ref == 'refs/heads/main' && 'staging' }}
+
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 19
@@ -29,24 +31,33 @@ jobs:
           java-version: 19
       - name: Checkout ${{ env.branch }} on all submodules
         run: |
-            git submodule update --init
-            cd kbsx && git checkout ${{ env.branch }} && cd ..
-            cd kbs3 && git checkout ${{ env.branch }} && cd ..
-            cd modality-fork && git checkout ${{ env.branch }} && cd ..
-            cd webfx-extras-fork && git checkout ${{ env.branch }} && cd ..
-            cd webfx-fork && git checkout ${{ env.branch }} && cd ..
-            cd webfx-platform-fork && git checkout ${{ env.branch }} && cd ..
-            cd webfx-stack-fork && git checkout ${{ env.branch }} && cd ..
-            cd webfx-parent-fork && git checkout ${{ env.branch }} && cd ..
-            cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
-            cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd ..
+          git submodule update --init
+          cd kbsx && git checkout ${{ env.branch }} && cd ..
+          cd kbs3 && git checkout ${{ env.branch }} && cd ..
+          cd modality-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-extras-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-platform-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-stack-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-parent-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-stack-parent-fork && git checkout ${{ env.branch }} && cd ..
+          cd webfx-lib-javacupruntime-fork && git checkout ${{ env.branch }} && cd ..
 
-      - name: Injecting secrets into front-office config
+      - name: Injecting variables & secrets into front-office config
         env:
+          FRONTOFFICE_ORIGIN: ${{ vars.FRONTOFFICE_ORIGIN }}
           GOOGLE_MAP_JS_API_KEY: ${{ secrets.GOOGLE_MAP_JS_API_KEY }}
         run: |
           conf_file=kbs3/kbs-frontoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
+          echo "FRONTOFFICE_ORIGIN=$FRONTOFFICE_ORIGIN" >> $conf_file
           echo "GOOGLE_MAP_JS_API_KEY=$GOOGLE_MAP_JS_API_KEY" >> $conf_file
+
+      - name: Injecting variables into back-office config
+        env:
+          BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
+        run: |
+          conf_file=kbs3/kbs-backoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
+          echo "BACKOFFICE_ORIGIN=$BACKOFFICE_ORIGIN" >> $conf_file
 
       - name: Install jq
         run: sudo apt install jq
@@ -78,13 +89,14 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
-            mask-password: 'true'
+          mask-password: 'true'
       - name: Build, tag, and push image to Amazon ECR
         env:
           SERVER_FAT_JAR: "kbs3/kbs-server-application-vertx/target/kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar"
           BACK_OFFICE_WAR: "kbs3/kbs-backoffice-application-gwt/target/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war"
           FRONT_OFFICE_WAR: "kbs3/kbs-frontoffice-application-gwt/target/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war"
           BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
+          FRONTOFFICE_ORIGIN: ${{ vars.FRONTOFFICE_ORIGIN }}
           FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
           FACEBOOK_CLIENT_SECRET: ${{ secrets.FACEBOOK_CLIENT_SECRET }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
