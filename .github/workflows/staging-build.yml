@@ -41,4 +41,4 @@ jobs:
 
       # Build all modules and deploy their SNAPSHOT artifacts to the Modality packages GitHub repository
       - name: Build this repository
-        run: mvn -B -P 'gwt-compile,openjfx-fatjar,!openjfx-desktop' package
+        run: mvn -B -P 'staging,gwt-compile,openjfx-fatjar,!openjfx-desktop' package
