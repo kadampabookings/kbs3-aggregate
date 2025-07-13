@@ -75,12 +75,17 @@ jobs:
           echo ", \"CLOUDINARY_API_SECRET\": \"$CLOUDINARY_API_SECRET\" }" >> $temp_file
           jq -s '.[0] * .[1]' $conf_file $temp_file > tmp2.json && mv tmp2.json $conf_file
 
-      - name: Build with Maven
+      - name: Installing local parents (to ensure not using the Central ones)
         run: |
-          mvn webfx:update
+          export MAVEN_OPTS="$MAVEN_OPTS --no-transfer-progress"
           cd webfx-parent-fork && mvn install && cd ..
           cd webfx-stack-parent-fork && mvn install && cd ..
-          mvn package -B -P 'staging,vertx-fatjar,gwt-compile,gwt-sourcemaps' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt
+
+      - name: Running webfx-update
+        run: mvn webfx:update
+
+      - name: Build with Maven
+        run: mvn package -B -P 'staging,vertx-fatjar,gwt-compile,gwt-sourcemaps' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
