@@ -77,15 +77,15 @@ jobs:
 
       - name: Installing local parents (to ensure not using the Central ones)
         run: |
-          export MAVEN_OPTS="$MAVEN_OPTS --no-transfer-progress"
           cd webfx-parent-fork && mvn install && cd ..
           cd webfx-stack-parent-fork && mvn install && cd ..
 
       - name: Running webfx-update
-        run: mvn webfx:update
+        run: mvn webfx:update --no-transfer-progress
 
       - name: Build with Maven
-        run: mvn package -B -P 'staging,vertx-fatjar,gwt-compile,gwt-sourcemaps' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt
+        run: mvn package -B -P 'staging,vertx-fatjar,gwt-compile,gwt-sourcemaps' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt --no-transfer-progress
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
