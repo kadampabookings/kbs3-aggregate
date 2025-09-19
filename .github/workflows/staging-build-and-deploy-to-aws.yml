@@ -62,21 +62,6 @@ jobs:
       - name: Install jq
         run: sudo apt install jq
 
-      - name: Injecting secrets into server config
-        env:
-          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-        run: |
-          conf_file=kbs3/kbs-server-application-vertx/src/main/resources/dev/webfx/platform/conf/src-root.json
-          temp_file=tmp.json
-          echo "{" >> $temp_file
-          echo "  \"CLOUDINARY_CLOUD_NAME\": \"$CLOUDINARY_CLOUD_NAME\"" >> $temp_file
-          echo ", \"CLOUDINARY_API_KEY\": \"$CLOUDINARY_API_KEY\"" >> $temp_file
-          echo ", \"CLOUDINARY_API_SECRET\": \"$CLOUDINARY_API_SECRET\"" >> $temp_file
-          echo "}" >> $temp_file
-          jq -s '.[0] * .[1]' $conf_file $temp_file > tmp2.json && mv tmp2.json $conf_file
-
       - name: Installing local parents (to ensure not using the Central ones)
         run: |
           cd webfx-parent-fork && mvn install -B --no-transfer-progress && cd ..
@@ -110,6 +95,9 @@ jobs:
           FACEBOOK_CLIENT_SECRET: ${{ secrets.FACEBOOK_CLIENT_SECRET }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
           MOJO_AUTH_API_KEY: ${{ secrets.MOJO_AUTH_API_KEY }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
