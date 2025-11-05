@@ -56,6 +56,7 @@ Reference this when:
 Reference this when:
 - Working with CSS files (JavaFX vs Web)
 - Adding or modifying translations (i18n)
+- Creating UI elements with automatic language binding (I18nControls)
 - Working with properties or YAML configuration files
 - Understanding naming conventions for resources
 - Styling UI components
@@ -102,8 +103,9 @@ mvn package -P 'staging,vertx-fatjar,gwt-compile,gwt-sourcemaps' \
 
 1. **DO NOT** manually edit Maven `pom.xml` files marked with `<!-- File managed by WebFX (DO NOT EDIT MANUALLY) -->`
 2. **Set sizing/padding in Java code, NOT CSS** - ensures cross-platform consistency
-3. **Ensure submodules are on matching branches** before building
-4. **Install local parent POMs** before building to avoid Central repository versions
+3. **Use I18nControls for creating UI elements** (e.g., `I18nControls.newLabel(key)`) - ensures automatic language updates
+4. **Ensure submodules are on matching branches** before building
+5. **Install local parent POMs** before building to avoid Central repository versions
 
 ## Database Reference
 

@@ -118,14 +118,176 @@ alert.setText("Are you sure you want to delete this item?");
 ```java
 Button saveButton = I18nControls.newButton(BaseI18nKeys.Save);
 Label title = I18nControls.newLabel(MediasI18nKeys.EventSettings);
-textField.setPromptText(I18n.getI18nText(BaseI18nKeys.EnterEmail));
-alert.setText(I18n.getI18nText(BaseI18nKeys.ConfirmDelete));
+I18n.bindI18nTextProperty(textField.promptTextProperty(), BaseI18nKeys.EnterEmail);
+I18n.bindI18nTextProperty(alert.textProperty(), BaseI18nKeys.ConfirmDelete);
 ```
 
 **Why**:
 - The application supports 7 languages (English, French, German, Spanish, Portuguese, Vietnamese, Chinese)
 - Hardcoded text cannot be translated
 - All user-facing text must be translatable
+
+### Rule 4.1: Use I18nControls for Automatic Language Binding
+
+**CRITICAL**: When creating UI elements like Labels and Buttons, **ALWAYS use `I18nControls` methods** instead of constructors + `I18n.getI18nText()`.
+
+**❌ WRONG** - No automatic language updates:
+```java
+// This gets the text ONCE at creation time - won't update if user changes language!
+Label welcomeLabel = new Label(I18n.getI18nText(BaseI18nKeys.Welcome));
+Button saveButton = new Button(I18n.getI18nText(BaseI18nKeys.Save));
+
+// Later, if user switches from English to French, these controls still show English text!
+```
+
+**✅ CORRECT** - Automatic language updates:
+```java
+// These create BINDINGS that automatically update when language changes
+Label welcomeLabel = I18nControls.newLabel(BaseI18nKeys.Welcome);
+Button saveButton = I18nControls.newButton(BaseI18nKeys.Save);
+
+// When user switches from English to French, text updates automatically!
+```
+
+**How it works**:
+- `I18nControls.newLabel(key)` creates a Label with a **binding** to the i18n dictionary
+- `I18nControls.newButton(key)` creates a Button with a **binding** to the i18n dictionary
+- When the user changes language, all bound controls update automatically
+- `I18n.getI18nText(key)` returns a **static string** at that moment - no binding, no updates
+
+**Available I18nControls methods**:
+```java
+// Creating new controls with automatic binding
+Label label = I18nControls.newLabel(key);
+Button button = I18nControls.newButton(key);
+CheckBox checkbox = I18nControls.newCheckBox(key);
+RadioButton radio = I18nControls.newRadioButton(key);
+Hyperlink link = I18nControls.newHyperlink(key);
+ToggleButton toggle = I18nControls.newToggleButton(key);
+
+// Binding properties on existing controls
+I18n.bindI18nTextProperty(label.textProperty(), key);
+I18n.bindI18nTextProperty(textField.promptTextProperty(), key);
+I18n.bindI18nTextProperty(tab.textProperty(), key);
+
+// Binding multiple properties at once
+I18nControls.bindI18nProperties(existingLabel, key);  // Binds text, graphic, textFill
+I18nControls.bindI18nProperties(existingTextField, key);  // Binds promptText
+```
+
+**When to use each approach**:
+
+| Scenario | Correct Approach | Example |
+|----------|------------------|---------|
+| Creating a new Label | `I18nControls.newLabel(key)` | `Label title = I18nControls.newLabel(BaseI18nKeys.Title);` |
+| Creating a new Button | `I18nControls.newButton(key)` | `Button save = I18nControls.newButton(BaseI18nKeys.Save);` |
+| Setting prompt text | `I18n.bindI18nTextProperty()` | `I18n.bindI18nTextProperty(textField.promptTextProperty(), key);` |
+| Binding existing control | `I18nControls.bindI18nProperties()` | `I18nControls.bindI18nProperties(existingLabel, key);` |
+| Building dynamic strings | `I18n.getI18nText()` + binding | See below |
+
+**Rule 4.2: Use Parameters Instead of Concatenation**
+
+When you need dynamic text with variables (e.g., "Delete role: Admin"), **NEVER concatenate multiple i18n calls**. Use parameter placeholders in `.properties` files instead.
+
+**❌ WRONG** - Concatenating i18n calls:
+```java
+// BAD: Multiple i18n calls concatenated - breaks in other languages
+Label msg = new Label(I18n.getI18nText(Delete) + " " + I18n.getI18nText(Space) +
+                      role.getName() + I18n.getI18nText(QuestionMark));
+
+// BAD: Word order differs by language!
+String message = I18n.getI18nText(WelcomeText) + " " + userName + "!";
+```
+
+**Problems with concatenation**:
+1. **No binding** - Text won't update when user changes language
+2. **Word order differs by language** - "Delete role Admin?" vs "Supprimer le rôle Admin ?"
+3. **Hard for translators** - They see fragments like "Delete", "Space", "?" instead of complete sentences
+4. **Punctuation varies** - English uses "?" while Spanish uses "¿?" and French adds spaces
+
+**✅ CORRECT** - Use parameter placeholders in properties files:
+
+```properties
+# In your_module_en.properties
+ConfirmDeleteRole=Are you sure you want to delete the role "{0}"?
+WelcomeMessage=Welcome, {0}!
+UserAccessSummary=The selected user will have {0} access for role {1} in {2}.
+MustBeInRange=Must be between {0} and {1}
+PersonAlreadyBooked={0} is already booked for this event.
+```
+
+```properties
+# In your_module_fr.properties
+ConfirmDeleteRole=Êtes-vous sûr de vouloir supprimer le rôle « {0} » ?
+WelcomeMessage=Bienvenue, {0} !
+UserAccessSummary=L'utilisateur sélectionné aura un accès {0} pour le rôle {1} dans {2}.
+MustBeInRange=Doit être entre {0} et {1}
+PersonAlreadyBooked={0} est déjà inscrit(e) pour cet événement.
+```
+
+```java
+// GOOD: Single i18n call with parameters and binding
+Label msg = new Label();
+msg.textProperty().bind(I18n.i18nTextProperty(ConfirmDeleteRole, role.getName()));
+
+// GOOD: Multiple parameters in correct order for each language
+errorMessageProperty.bind(I18n.i18nTextProperty(MustBeInRange, minValue, maxValue));
+
+Label summary = new Label();
+summary.textProperty().bind(I18n.i18nTextProperty(UserAccessSummary,
+    accessLevel, roleName, organizationName));
+```
+
+**Parameter syntax in .properties files**:
+- `{0}` - First parameter
+- `{1}` - Second parameter
+- `{2}` - Third parameter
+- And so on...
+
+**Why this matters**: Different languages have different word orders, punctuation, and grammar. Parameters allow translators to arrange words naturally for their language while keeping the logic in one place.
+
+**Rule 4.3: YAML vs Properties - When to Use Each**
+
+**YAML files** (`.yaml`) - For **language-independent resources** (same for all languages):
+- SVG paths and graphics
+- Image file paths (`"images/s16/actions/delete.png"`)
+- Icon references
+- Technical identifiers
+- Structured metadata
+
+**Properties files** (`.properties`) - For **text that needs translation** (varies by language):
+- Button labels
+- Dialog messages
+- Error messages
+- User-facing text
+- Dynamic text with parameters
+
+```yaml
+# ❌ WRONG - Translatable text in YAML
+# modality-backoffice-operations@en.yaml
+DeleteConfirmation: "Are you sure you want to delete this item?"
+WelcomeMessage: "Welcome to the application"
+
+# ✅ CORRECT - Only language-independent resources in YAML
+# modality-backoffice-operations@en.yaml
+DeleteButton:
+  graphic: "images/s16/actions/delete.png"
+EditButton:
+  graphic: "images/s16/actions/edit.png"
+```
+
+```properties
+# ✅ CORRECT - Translatable text in properties files
+# modality-backoffice-operations_en.properties
+DeleteConfirmation=Are you sure you want to delete this item?
+WelcomeMessage=Welcome to the application
+
+# modality-backoffice-operations_fr.properties
+DeleteConfirmation=Êtes-vous sûr de vouloir supprimer cet élément ?
+WelcomeMessage=Bienvenue dans l'application
+```
+
+**Key principle**: If it varies by language, use `.properties`. If it's the same for all languages, use `.yaml`.
 
 ### How to Add New Translations
 
@@ -159,12 +321,23 @@ alert.setText(I18n.getI18nText(BaseI18nKeys.ConfirmDelete));
    Label title = I18nControls.newLabel(YourModuleI18nKeys.EventSettings);
    ```
 
-### I18n Helper Methods
+### I18n Helper Methods - Quick Reference
 
-- `I18nControls.newLabel(key)` - Create label with i18n text
-- `I18nControls.newButton(key)` - Create button with i18n text
-- `I18n.getI18nText(key)` - Get translated string
-- `I18n.i18nTextProperty(key)` - Get observable i18n property for bindings
+**Preferred - Creates controls with automatic binding**:
+- `I18nControls.newLabel(key)` - Create Label with automatic language updates
+- `I18nControls.newButton(key)` - Create Button with automatic language updates
+- `I18nControls.newCheckBox(key)` - Create CheckBox with automatic language updates
+- `I18nControls.newRadioButton(key)` - Create RadioButton with automatic language updates
+- `I18nControls.newHyperlink(key)` - Create Hyperlink with automatic language updates
+- `I18nControls.newToggleButton(key)` - Create ToggleButton with automatic language updates
+
+**For binding properties on existing controls**:
+- `I18n.bindI18nTextProperty(property, key)` - Bind a text property (e.g., promptText)
+- `I18nControls.bindI18nProperties(control, key)` - Bind all i18n properties on existing control
+- `I18n.i18nTextProperty(key, args)` - Get observable property for custom bindings
+
+**Avoid - No automatic updates**:
+- ❌ `I18n.getI18nText(key)` - Returns static string, **no binding**, won't update on language change
 
 ---
 
@@ -492,6 +665,50 @@ new Label("Save Changes");
 I18nControls.newLabel(BaseI18nKeys.SaveChanges);
 ```
 
+### Violation 3.1: Using I18n.getI18nText() for Controls
+
+```java
+// ❌ WRONG - No automatic language updates
+Label label = new Label(I18n.getI18nText(BaseI18nKeys.Welcome));
+Button button = new Button(I18n.getI18nText(BaseI18nKeys.Save));
+
+// ✅ CORRECT - Automatic language updates via binding
+Label label = I18nControls.newLabel(BaseI18nKeys.Welcome);
+Button button = I18nControls.newButton(BaseI18nKeys.Save);
+```
+
+### Violation 3.2: Concatenating I18n Calls
+
+```java
+// ❌ WRONG - Concatenating multiple i18n calls
+Label msg = new Label(I18n.getI18nText(Delete) + " " + role.getName() + I18n.getI18nText(QuestionMark));
+String welcome = I18n.getI18nText(Welcome) + " " + userName + "!";
+
+// ✅ CORRECT - Use parameters in properties file
+// In properties: ConfirmDeleteRole=Are you sure you want to delete the role "{0}"?
+Label msg = new Label();
+msg.textProperty().bind(I18n.i18nTextProperty(ConfirmDeleteRole, role.getName()));
+```
+
+### Violation 3.3: Translatable Text in YAML Files
+
+```yaml
+# ❌ WRONG - Text that needs translation in YAML
+DeleteConfirmation: "Are you sure you want to delete this item?"
+WelcomeMessage: "Welcome to the application"
+```
+
+```properties
+# ✅ CORRECT - Translatable text in properties
+# your-module_en.properties
+DeleteConfirmation=Are you sure you want to delete this item?
+WelcomeMessage=Welcome to the application
+
+# your-module_fr.properties
+DeleteConfirmation=Êtes-vous sûr de vouloir supprimer cet élément ?
+WelcomeMessage=Bienvenue dans l'application
+```
+
 ### Violation 4: Not Using Helpers
 
 ```java
@@ -548,11 +765,16 @@ When reviewing code, check for:
 - [ ] **No inline CSS** (`setStyle()` calls)
 - [ ] **Padding/sizing in Java**, not CSS
 - [ ] **No hardcoded text** - all use i18n keys
+- [ ] **I18nControls for UI creation** - use `I18nControls.newLabel()`, `I18nControls.newButton()`, etc. (not `new Label(I18n.getI18nText())`)
+- [ ] **I18n bindings** - use `I18n.bindI18nTextProperty()` for properties like promptText
+- [ ] **No i18n concatenation** - use parameters (`{0}`, `{1}`) instead of concatenating multiple i18n calls
+- [ ] **YAML for language-independent** - icons, SVG, image paths in YAML
+- [ ] **Properties for translations** - all translatable text in .properties files (not YAML)
 - [ ] **Helper methods used** (Bootstrap, ModalityStyle)
 - [ ] **Clear method names** - no generic names like `process()`, `handle()`, `doIt()`
 - [ ] **Documentation** - complex logic is explained
 - [ ] **Simple structure** - avoid deep nesting
-- [ ] **Proper i18n** - all user-facing text is translatable
+- [ ] **Proper i18n** - all user-facing text is translatable with automatic language updates
 - [ ] **Type safety** - use `EntityList<Event>` not raw `EntityList`
 - [ ] **No code duplication** - extract common patterns to helpers
 - [ ] **WebFX update** ran after modifying CSS/properties/YAML files
@@ -564,7 +786,9 @@ When reviewing code, check for:
 | Button styling | Bootstrap | `Bootstrap.primaryButton()` |
 | Icon buttons | ModalityStyle | `ModalityStyle.primaryEditButton()` |
 | Form fields | ModalityStyle | `ModalityStyle.createFormTextField()` |
-| Labels | I18nControls | `I18nControls.newLabel(key)` |
+| Labels (i18n) | I18nControls | `I18nControls.newLabel(key)` |
+| Buttons (i18n) | I18nControls | `I18nControls.newButton(key)` |
+| Property binding | I18n | `I18n.bindI18nTextProperty(property, key)` |
 | Translations | properties files | `module_en.properties` |
 | Padding | Java code | `node.setPadding(new Insets(20))` |
 | Colors | CSS files | `.my-class { -fx-text-fill: blue; }` |

@@ -111,6 +111,39 @@ hbox.setPadding(new Insets(15));
 
 The project supports 7 languages with consistent file naming conventions.
 
+### Critical Rule: Use I18nControls for Automatic Language Binding
+
+**ALWAYS use `I18nControls` methods** when creating UI elements to ensure automatic language updates when users switch languages.
+
+**❌ WRONG** - No automatic language updates:
+```java
+Label label = new Label(I18n.getI18nText(key));  // Gets text ONCE, won't update
+Button button = new Button(I18n.getI18nText(key));  // Gets text ONCE, won't update
+```
+
+**✅ CORRECT** - Automatic language updates:
+```java
+Label label = I18nControls.newLabel(key);  // Creates binding, updates automatically
+Button button = I18nControls.newButton(key);  // Creates binding, updates automatically
+```
+
+**Why this matters**:
+- `I18nControls` methods create **bindings** to the i18n dictionary
+- When users change language, all bound controls update automatically
+- `I18n.getI18nText()` returns a **static string** - no binding, no updates
+
+**Available methods**:
+- `I18nControls.newLabel(key)` - Create Label with binding
+- `I18nControls.newButton(key)` - Create Button with binding
+- `I18nControls.newCheckBox(key)` - Create CheckBox with binding
+- `I18nControls.newRadioButton(key)` - Create RadioButton with binding
+- `I18nControls.newHyperlink(key)` - Create Hyperlink with binding
+- `I18nControls.newToggleButton(key)` - Create ToggleButton with binding
+- `I18n.bindI18nTextProperty(property, key)` - Bind existing property (e.g., promptText)
+- `I18nControls.bindI18nProperties(control, key)` - Bind all properties on existing control
+
+**See also**: [Code Review Guidelines - I18n Rules](code-review-guidelines.md#internationalization-i18n-rules) for complete details.
+
 ### Supported Languages
 
 | Language | Suffix | Example |
@@ -125,7 +158,7 @@ The project supports 7 languages with consistent file naming conventions.
 
 ### Properties Files (.properties)
 
-Used for **translations** (internationalization).
+Used for **translations** (internationalization) - text that varies by language.
 
 **Location**: `src/main/webfx/i18n/`
 
@@ -147,19 +180,113 @@ BookingLabel=Booking
 ConfirmButton=Confirm
 CancelButton=Cancel
 
-# With parameters
+# With parameters (RECOMMENDED for dynamic text)
 WelcomeMessage=Welcome, {0}!
 BookingConfirmation=Your booking #{0} has been confirmed.
+PersonAlreadyBooked1={0} is already booked for this event.
+MustBeInRange2=Must be between {0} and {1}
+AssignRoleSummaryText=Summary: The selected user will have {0} access for role {1} in {2}.
+```
+
+**CRITICAL: Use Parameters Instead of Concatenation**
+
+**❌ WRONG** - Concatenating multiple i18n calls:
+```java
+// BAD: Multiple separate i18n calls concatenated
+Label msg = new Label(I18n.getI18nText(Delete) + " " + I18n.getI18nText(Space) +
+                      role.getName() + I18n.getI18nText(QuestionMark));
+
+// BAD: No binding, won't update on language change, and hard to translate
+String message = I18n.getI18nText(WelcomeText) + " " + userName + "!";
+```
+
+**Problems with concatenation**:
+1. **No binding** - Text won't update when user changes language
+2. **Word order differs by language** - "Delete role Admin?" in English becomes "Supprimer le rôle Admin ?" in French
+3. **Hard for translators** - They see fragments, not complete sentences
+4. **Punctuation varies** - Spaces, question marks, colons differ across languages
+
+**✅ CORRECT** - Use parameters in .properties file:
+```properties
+# In your_module_en.properties
+ConfirmDeleteRole=Are you sure you want to delete the role "{0}"?
+WelcomeMessage=Welcome, {0}!
+UserAccessSummary=The selected user will have {0} access for role {1} in {2}.
+EditEventInformation=Edit event information: {0}
+ModifyBookingNumber=Modify booking number {0}
+OnlineFestivalAvailableUntil=Video recordings will be available online until {0}.
+```
+
+```properties
+# In your_module_fr.properties
+ConfirmDeleteRole=Êtes-vous sûr de vouloir supprimer le rôle « {0} » ?
+WelcomeMessage=Bienvenue, {0} !
+UserAccessSummary=L'utilisateur sélectionné aura un accès {0} pour le rôle {1} dans {2}.
+EditEventInformation=Modifier les informations de l'événement: {0}
+ModifyBookingNumber=Modifier la réservation numéro {0}
+OnlineFestivalAvailableUntil=Les enregistrements vidéo seront disponibles en ligne jusqu'au {0}.
+```
+
+```java
+// GOOD: Single i18n call with parameters - allows proper translation
+Label msg = new Label();
+msg.textProperty().bind(I18n.i18nTextProperty(ConfirmDeleteRole, role.getName()));
+
+// GOOD: With binding for automatic language updates
+errorMessageProperty.bind(I18n.i18nTextProperty(MustBeInRange2, minValue, maxValue));
+
+// GOOD: Multiple parameters in correct order for each language
+Label summary = new Label();
+summary.textProperty().bind(I18n.i18nTextProperty(UserAccessSummary,
+    accessLevel, roleName, organizationName));
+```
+
+**Parameter syntax**:
+- `{0}` - First parameter
+- `{1}` - Second parameter
+- `{2}` - Third parameter
+- And so on...
+
+**Real-world examples from the codebase**:
+```java
+// Example 1: Date range validation
+errorMessageProperty.bind(I18n.i18nTextProperty(
+    OnlineFestivalI18nKeys.MustBeInRange2,
+    priceFormatter.apply(minAmount),
+    priceFormatter.apply(maxAmount)
+));
+
+// Example 2: Event information
+event.setName(I18n.getI18nText(
+    "[{0}] Festival {1} Online",
+    festivalType.getShortI18nKey(),
+    year
+));
+
+// Example 3: Refund message
+String refundMessage = I18n.getI18nText(
+    OrderI18nKeys.RefundMessage,
+    contactEmail
+);
 ```
 
 ### YAML Files (.yaml)
 
-Used for **common properties** and structured configuration including translations with metadata.
+Used for **language-independent resources** and common properties that are the same across all languages.
+
+**IMPORTANT**: YAML files (even language-specific ones like `@en.yaml`) should contain **only elements that don't need translation**:
+- SVG paths and graphics
+- Image file paths
+- Icons references
+- Technical identifiers
+- Structured metadata
+
+**Text that needs translation** should be in `.properties` files, NOT in YAML files.
 
 **Location**: `src/main/webfx/i18n/` or `src/main/webfx/conf/`
 
 **Naming Patterns**:
-- Translation files: `[module-name]@[language].yaml`
+- Resource files: `[module-name]@[language].yaml` (language suffix is convention, but content is language-independent)
 - Configuration files: `[namespace].yaml`
 - Overrides: `override@[original-name]@[language].yaml` or `override@[namespace].yaml`
 
@@ -171,22 +298,59 @@ modality.base.client.i18n.yaml
 override@modality.base.client.i18n.yaml
 ```
 
-**Format**:
+**Format** - Language-independent resources only:
 ```yaml
-# Translation with metadata
-BookingIcon:
-  value: "booking-icon.svg"
-  type: icon
-  category: booking
+# Graphics and icons (same for all languages)
+DeleteRoom:
+  text: "Delete room"  # This is just a fallback/identifier, real translation in .properties
+  graphic: "images/s16/actions/delete.png"  # Same image path for all languages
 
-# Structured translations
-Booking:
-  Title: "Booking Management"
-  Subtitle: "Manage your bookings"
-  Actions:
-    Confirm: "Confirm Booking"
-    Cancel: "Cancel Booking"
+EditRoomProperties:
+  text: "Edit room properties"
+  graphic: "images/s16/actions/edit.png"
+
+# Icon references
+OpenBookingCart:
+  graphic: "images/s16/cart.png"
+
+CancelOthers:
+  graphic: "images/s16/actions/cancel.png"
+
+# Dynamic graphics based on expressions
+ShowBookingEditor:
+  graphic: "[expression: genderIcon]"
+
+ToggleMarkNotMultipleBooking:
+  graphic: "[expression: multipleBooking = null ? '[MarkMultipleBooking]' : '[MarkNotMultipleBooking]' ]"
 ```
+
+**Real-world examples from the codebase**:
+
+`modality-hotel-backoffice-resourceconfiguration@en.yaml`:
+```yaml
+ChangeRoomType: "Change room type"
+DeleteRoom:
+  text: "Delete room"
+  graphic: "images/s16/actions/delete.png"
+EditRoomProperties:
+  text: "Edit room properties"
+  graphic: "images/s16/actions/edit.png"
+ToggleOnlineOffline: "Toggle online/offline"
+```
+
+`modality-ecommerce-backoffice-document@en.yaml`:
+```yaml
+OpenBookingCart:
+  graphic: "images/s16/cart.png"
+CancelOthers:
+  graphic: "images/s16/actions/cancel.png"
+MarkMultipleBooking:
+  graphic: "images/s16/multipleBookings/redCross.png"
+MarkAsArrived:
+  graphic: "images/s16/actions/markAsArrived.png"
+```
+
+**Key principle**: If it varies by language, use `.properties`. If it's the same for all languages (like image paths, SVG data, icons), use `.yaml`.
 
 ### Configuration Files
 
@@ -259,10 +423,14 @@ CustomLabel: modality.base.StandardLabel
 4. Test on both platforms after changes
 
 ### i18n
-1. Always provide translations for all 7 supported languages
-2. Use descriptive key names that indicate purpose
-3. Keep translation files organized by module
-4. Use YAML for structured data, properties for simple key-value pairs
+1. **Use `I18nControls` methods** for creating UI elements (ensures automatic language updates)
+2. **Avoid `I18n.getI18nText()`** for control creation (no binding, won't update on language change)
+3. **Use parameters (`{0}`, `{1}`, etc.) instead of concatenation** - allows proper word order per language
+4. **YAML files for language-independent resources** (SVG, icons, image paths) - same for all languages
+5. **Properties files for translations** - text that varies by language
+6. Always provide translations for all 7 supported languages
+7. Use descriptive key names that indicate purpose
+8. Keep translation files organized by module
 
 ### Configuration
 1. Use `declare@` files to register module capabilities
