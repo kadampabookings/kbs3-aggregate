@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emploi du temps de l'événement</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: #f5f5f5;
+            padding: 32px;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1122px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .header-icon {
+            width: 82px;
+            height: 82px;
+            margin: 0 auto 16px;
+            color: #0891b2;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0891b2;
+        }
+
+        /* Day Section */
+        .day-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .day-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .day-icon {
+            width: 48px;
+            height: 48px;
+            background-color: #0891b2;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .day-details h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .day-details p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .day-status {
+            font-size: 14px;
+            color: #666;
+            text-align: right;
+        }
+
+        /* Session Card */
+        .session-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 17px;
+            margin-bottom: 12px;
+            transition: box-shadow 0.2s;
+        }
+
+        .session-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .session-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .time-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 146px;
+        }
+
+        .time-slot {
+            background: #f9fafb;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 10px 13px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .time-separator {
+            color: #999;
+        }
+
+        .session-title {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .session-badges {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 9px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-audio {
+            background-color: #ecfdf5;
+            color: #059669;
+            border: 1px solid #d1fae5;
+        }
+
+        .badge-video {
+            background-color: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #dbeafe;
+        }
+
+        .badge-files {
+            background-color: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-icon {
+            width: 12px;
+            height: 12px;
+        }
+
+        .participants {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 13px;
+        }
+
+        .participants-icon {
+            width: 16px;
+            height: 16px;
+            color: #0891b2;
+        }
+
+        .participants-count {
+            font-size: 14px;
+            font-weight: 500;
+            color: #0891b2;
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-button {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .icon-button:hover {
+            background-color: #f9fafb;
+        }
+
+        .icon-button svg {
+            width: 16px;
+            height: 16px;
+            color: #666;
+        }
+
+        /* Add Session Button */
+        .add-session-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            background-color: #0891b2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: background-color 0.2s;
+        }
+
+        .add-session-btn:hover {
+            background-color: #0e7490;
+        }
+
+        .add-session-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">
+                <svg viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M66 14H18C15.7909 14 14 15.7909 14 18V66C14 68.2091 15.7909 70 18 70H66C68.2091 70 70 68.2091 70 66V18C70 15.7909 68.2091 14 66 14Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M56 7V21M28 7V21M14 28H70" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="56" cy="56" r="14" fill="currentColor"/>
+                    <path d="M56 49V56L60 60" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h1>Emploi du temps de l'événement</h1>
+        </div>
+
+        <!-- Lundi -->
+        <div class="day-section">
+            <div class="day-header">
+                <div class="day-info">
+                    <div class="day-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <path d="M16 2V6M8 2V6M3 10H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="day-details">
+                        <h2>Lundi</h2>
+                        <p>10 Avril 2023</p>
+                    </div>
+                </div>
+                <div class="day-status">
+                    <strong>4 séances</strong><br>actives
+                </div>
+            </div>
+
+            <div class="sessions">
+                <!-- Session 1 -->
+                <div class="session-card">
+                    <div class="session-content">
+                        <div class="time-range">
+                            <div class="time-slot">9:30</div>
+                            <span class="time-separator">-</span>
+                            <div class="time-slot">10:30</div>
+                        </div>
+                        <div class="session-title">Introduction à l'événement</div>
+                        <div class="session-badges">
+                            <span class="badge badge-audio">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="6" cy="6" r="5" fill="currentColor"/>
+                                </svg>
+                                Audio
+                            </span>
+                            <span class="badge badge-video">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 3L10 6L2 9V3Z" fill="currentColor"/>
+                                </svg>
+                                Vidéo
+                            </span>
+                        </div>
+                        <div class="participants">
+                            <svg class="participants-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 7C12.1046 7 13 6.10457 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C9 6.10457 9.89543 7 11 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 7C6.10457 7 7 6.10457 7 5C7 3.89543 6.10457 3 5 3C3.89543 3 3 3.89543 3 5C3 6.10457 3.89543 7 5 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M11 9C9.67392 9 8.40215 9.52678 7.46447 10.4645C6.52678 11.4021 6 12.6739 6 14H16C16 12.6739 15.4732 11.4021 14.5355 10.4645C13.5979 9.52678 12.3261 9 11 9Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 9C3.67392 9 2.40215 9.52678 1.46447 10.4645C0.526784 11.4021 0 12.6739 0 14H10C10 12.6739 9.47322 11.4021 8.53553 10.4645C7.59785 9.52678 6.32608 9 5 9Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span class="participants-count">145</span>
+                        </div>
+                        <span class="badge badge-files">
+                            <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 1H3C2.44772 1 2 1.44772 2 2V10C2 10.5523 2.44772 11 3 11H9C9.55228 11 10 10.5523 10 10V4L7 1Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M7 1V4H10" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            Fichiers
+                        </span>
+                        <div class="session-actions">
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.146 2.146C12.3413 1.95074 12.5973 1.84074 12.8648 1.83598C13.1323 1.83122 13.3918 1.93203 13.5934 2.12003C13.795 2.30803 13.9239 2.56897 13.9572 2.85003C13.9905 3.13109 13.926 3.41482 13.774 3.646L7.414 14.246C7.30584 14.4165 7.15313 14.5553 6.97181 14.6484C6.79048 14.7414 6.58692 14.7854 6.38199 14.776C6.17707 14.7666 5.97831 14.704 5.80491 14.5943C5.63151 14.4846 5.48951 14.3315 5.393 14.15L2.646 9H1C0.734783 9 0.480429 8.89464 0.292893 8.70711C0.105357 8.51957 0 8.26522 0 8C0 7.73478 0.105357 7.48043 0.292893 7.29289C0.480429 7.10536 0.734783 7 1 7H3C3.19736 7 3.39093 7.05678 3.55838 7.16414C3.72583 7.27151 3.86015 7.42521 3.944 7.606L6 11.5L11.438 2.354C11.5165 2.21927 11.6238 2.10298 11.753 2.01313C11.8822 1.92328 12.0303 1.86204 12.186 1.834L12.146 2.146Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="4" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session 2 -->
+                <div class="session-card">
+                    <div class="session-content">
+                        <div class="time-range">
+                            <div class="time-slot">11:00</div>
+                            <span class="time-separator">-</span>
+                            <div class="time-slot">12:30</div>
+                        </div>
+                        <div class="session-title">Conférence principale</div>
+                        <div class="session-badges">
+                            <span class="badge badge-audio">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="6" cy="6" r="5" fill="currentColor"/>
+                                </svg>
+                                Audio
+                            </span>
+                        </div>
+                        <div class="participants">
+                            <svg class="participants-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 7C12.1046 7 13 6.10457 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C9 6.10457 9.89543 7 11 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 7C6.10457 7 7 6.10457 7 5C7 3.89543 6.10457 3 5 3C3.89543 3 3 3.89543 3 5C3 6.10457 3.89543 7 5 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M11 9C9.67392 9 8.40215 9.52678 7.46447 10.4645C6.52678 11.4021 6 12.6739 6 14H16C16 12.6739 15.4732 11.4021 14.5355 10.4645C13.5979 9.52678 12.3261 9 11 9Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 9C3.67392 9 2.40215 9.52678 1.46447 10.4645C0.526784 11.4021 0 12.6739 0 14H10C10 12.6739 9.47322 11.4021 8.53553 10.4645C7.59785 9.52678 6.32608 9 5 9Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span class="participants-count">230</span>
+                        </div>
+                        <div class="session-actions">
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.146 2.146C12.3413 1.95074 12.5973 1.84074 12.8648 1.83598C13.1323 1.83122 13.3918 1.93203 13.5934 2.12003C13.795 2.30803 13.9239 2.56897 13.9572 2.85003C13.9905 3.13109 13.926 3.41482 13.774 3.646L7.414 14.246C7.30584 14.4165 7.15313 14.5553 6.97181 14.6484C6.79048 14.7414 6.58692 14.7854 6.38199 14.776C6.17707 14.7666 5.97831 14.704 5.80491 14.5943C5.63151 14.4846 5.48951 14.3315 5.393 14.15L2.646 9H1C0.734783 9 0.480429 8.89464 0.292893 8.70711C0.105357 8.51957 0 8.26522 0 8C0 7.73478 0.105357 7.48043 0.292893 7.29289C0.480429 7.10536 0.734783 7 1 7H3C3.19736 7 3.39093 7.05678 3.55838 7.16414C3.72583 7.27151 3.86015 7.42521 3.944 7.606L6 11.5L11.438 2.354C11.5165 2.21927 11.6238 2.10298 11.753 2.01313C11.8822 1.92328 12.0303 1.86204 12.186 1.834L12.146 2.146Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="4" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session 3 -->
+                <div class="session-card">
+                    <div class="session-content">
+                        <div class="time-range">
+                            <div class="time-slot">14:30</div>
+                            <span class="time-separator">-</span>
+                            <div class="time-slot">16:00</div>
+                        </div>
+                        <div class="session-title">Atelier pratique</div>
+                        <div class="session-badges">
+                            <span class="badge badge-video">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 3L10 6L2 9V3Z" fill="currentColor"/>
+                                </svg>
+                                Vidéo
+                            </span>
+                        </div>
+                        <div class="participants">
+                            <svg class="participants-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 7C12.1046 7 13 6.10457 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C9 6.10457 9.89543 7 11 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 7C6.10457 7 7 6.10457 7 5C7 3.89543 6.10457 3 5 3C3.89543 3 3 3.89543 3 5C3 6.10457 3.89543 7 5 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M11 9C9.67392 9 8.40215 9.52678 7.46447 10.4645C6.52678 11.4021 6 12.6739 6 14H16C16 12.6739 15.4732 11.4021 14.5355 10.4645C13.5979 9.52678 12.3261 9 11 9Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 9C3.67392 9 2.40215 9.52678 1.46447 10.4645C0.526784 11.4021 0 12.6739 0 14H10C10 12.6739 9.47322 11.4021 8.53553 10.4645C7.59785 9.52678 6.32608 9 5 9Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span class="participants-count">85</span>
+                        </div>
+                        <span class="badge badge-files">
+                            <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 1H3C2.44772 1 2 1.44772 2 2V10C2 10.5523 2.44772 11 3 11H9C9.55228 11 10 10.5523 10 10V4L7 1Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M7 1V4H10" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            Fichiers
+                        </span>
+                        <div class="session-actions">
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.146 2.146C12.3413 1.95074 12.5973 1.84074 12.8648 1.83598C13.1323 1.83122 13.3918 1.93203 13.5934 2.12003C13.795 2.30803 13.9239 2.56897 13.9572 2.85003C13.9905 3.13109 13.926 3.41482 13.774 3.646L7.414 14.246C7.30584 14.4165 7.15313 14.5553 6.97181 14.6484C6.79048 14.7414 6.58692 14.7854 6.38199 14.776C6.17707 14.7666 5.97831 14.704 5.80491 14.5943C5.63151 14.4846 5.48951 14.3315 5.393 14.15L2.646 9H1C0.734783 9 0.480429 8.89464 0.292893 8.70711C0.105357 8.51957 0 8.26522 0 8C0 7.73478 0.105357 7.48043 0.292893 7.29289C0.480429 7.10536 0.734783 7 1 7H3C3.19736 7 3.39093 7.05678 3.55838 7.16414C3.72583 7.27151 3.86015 7.42521 3.944 7.606L6 11.5L11.438 2.354C11.5165 2.21927 11.6238 2.10298 11.753 2.01313C11.8822 1.92328 12.0303 1.86204 12.186 1.834L12.146 2.146Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="4" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session 4 -->
+                <div class="session-card">
+                    <div class="session-content">
+                        <div class="time-range">
+                            <div class="time-slot">16:30</div>
+                            <span class="time-separator">-</span>
+                            <div class="time-slot">17:30</div>
+                        </div>
+                        <div class="session-title">Session optionnelle</div>
+                        <div class="session-badges">
+                            <span class="badge badge-audio">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="6" cy="6" r="5" fill="currentColor"/>
+                                </svg>
+                                Audio
+                            </span>
+                        </div>
+                        <div class="participants">
+                            <svg class="participants-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 7C12.1046 7 13 6.10457 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C9 6.10457 9.89543 7 11 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 7C6.10457 7 7 6.10457 7 5C7 3.89543 6.10457 3 5 3C3.89543 3 3 3.89543 3 5C3 6.10457 3.89543 7 5 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M11 9C9.67392 9 8.40215 9.52678 7.46447 10.4645C6.52678 11.4021 6 12.6739 6 14H16C16 12.6739 15.4732 11.4021 14.5355 10.4645C13.5979 9.52678 12.3261 9 11 9Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 9C3.67392 9 2.40215 9.52678 1.46447 10.4645C0.526784 11.4021 0 12.6739 0 14H10C10 12.6739 9.47322 11.4021 8.53553 10.4645C7.59785 9.52678 6.32608 9 5 9Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span class="participants-count">0</span>
+                        </div>
+                        <div class="session-actions">
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.146 2.146C12.3413 1.95074 12.5973 1.84074 12.8648 1.83598C13.1323 1.83122 13.3918 1.93203 13.5934 2.12003C13.795 2.30803 13.9239 2.56897 13.9572 2.85003C13.9905 3.13109 13.926 3.41482 13.774 3.646L7.414 14.246C7.30584 14.4165 7.15313 14.5553 6.97181 14.6484C6.79048 14.7414 6.58692 14.7854 6.38199 14.776C6.17707 14.7666 5.97831 14.704 5.80491 14.5943C5.63151 14.4846 5.48951 14.3315 5.393 14.15L2.646 9H1C0.734783 9 0.480429 8.89464 0.292893 8.70711C0.105357 8.51957 0 8.26522 0 8C0 7.73478 0.105357 7.48043 0.292893 7.29289C0.480429 7.10536 0.734783 7 1 7H3C3.19736 7 3.39093 7.05678 3.55838 7.16414C3.72583 7.27151 3.86015 7.42521 3.944 7.606L6 11.5L11.438 2.354C11.5165 2.21927 11.6238 2.10298 11.753 2.01313C11.8822 1.92328 12.0303 1.86204 12.186 1.834L12.146 2.146Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11.5 2H4.5C3.67157 2 3 2.67157 3 3.5V12.5C3 13.3284 3.67157 14 4.5 14H11.5C12.3284 14 13 13.3284 13 12.5V3.5C13 2.67157 12.3284 2 11.5 2Z" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M10 6L8 8L10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="4" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="add-session-btn">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Ajouter une séance
+            </button>
+        </div>
+
+        <!-- Mardi -->
+        <div class="day-section">
+            <div class="day-header">
+                <div class="day-info">
+                    <div class="day-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <path d="M16 2V6M8 2V6M3 10H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="day-details">
+                        <h2>Mardi</h2>
+                        <p>11 Avril 2023</p>
+                    </div>
+                </div>
+                <div class="day-status">
+                    <strong>2 séances</strong><br>actives
+                </div>
+            </div>
+
+            <div class="sessions">
+                <!-- Session 1 -->
+                <div class="session-card">
+                    <div class="session-content">
+                        <div class="time-range">
+                            <div class="time-slot">9:00</div>
+                            <span class="time-separator">-</span>
+                            <div class="time-slot">10:00</div>
+                        </div>
+                        <div class="session-title">Workshop - Session A</div>
+                        <div class="session-badges">
+                            <span class="badge badge-audio">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="6" cy="6" r="5" fill="currentColor"/>
+                                </svg>
+                                Audio
+                            </span>
+                            <span class="badge badge-video">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 3L10 6L2 9V3Z" fill="currentColor"/>
+                                </svg>
+                                Vidéo
+                            </span>
+                        </div>
+                        <div class="participants">
+                            <svg class="participants-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 7C12.1046 7 13 6.10457 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C9 6.10457 9.89543 7 11 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 7C6.10457 7 7 6.10457 7 5C7 3.89543 6.10457 3 5 3C3.89543 3 3 3.89543 3 5C3 6.10457 3.89543 7 5 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M11 9C9.67392 9 8.40215 9.52678 7.46447 10.4645C6.52678 11.4021 6 12.6739 6 14H16C16 12.6739 15.4732 11.4021 14.5355 10.4645C13.5979 9.52678 12.3261 9 11 9Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 9C3.67392 9 2.40215 9.52678 1.46447 10.4645C0.526784 11.4021 0 12.6739 0 14H10C10 12.6739 9.47322 11.4021 8.53553 10.4645C7.59785 9.52678 6.32608 9 5 9Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span class="participants-count">120</span>
+                        </div>
+                        <div class="session-actions">
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.146 2.146C12.3413 1.95074 12.5973 1.84074 12.8648 1.83598C13.1323 1.83122 13.3918 1.93203 13.5934 2.12003C13.795 2.30803 13.9239 2.56897 13.9572 2.85003C13.9905 3.13109 13.926 3.41482 13.774 3.646L7.414 14.246C7.30584 14.4165 7.15313 14.5553 6.97181 14.6484C6.79048 14.7414 6.58692 14.7854 6.38199 14.776C6.17707 14.7666 5.97831 14.704 5.80491 14.5943C5.63151 14.4846 5.48951 14.3315 5.393 14.15L2.646 9H1C0.734783 9 0.480429 8.89464 0.292893 8.70711C0.105357 8.51957 0 8.26522 0 8C0 7.73478 0.105357 7.48043 0.292893 7.29289C0.480429 7.10536 0.734783 7 1 7H3C3.19736 7 3.39093 7.05678 3.55838 7.16414C3.72583 7.27151 3.86015 7.42521 3.944 7.606L6 11.5L11.438 2.354C11.5165 2.21927 11.6238 2.10298 11.753 2.01313C11.8822 1.92328 12.0303 1.86204 12.186 1.834L12.146 2.146Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="4" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session 2 -->
+                <div class="session-card">
+                    <div class="session-content">
+                        <div class="time-range">
+                            <div class="time-slot">13:30</div>
+                            <span class="time-separator">-</span>
+                            <div class="time-slot">14:30</div>
+                        </div>
+                        <div class="session-title">Table ronde</div>
+                        <div class="session-badges">
+                            <span class="badge badge-audio">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="6" cy="6" r="5" fill="currentColor"/>
+                                </svg>
+                                Audio
+                            </span>
+                            <span class="badge badge-video">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 3L10 6L2 9V3Z" fill="currentColor"/>
+                                </svg>
+                                Vidéo
+                            </span>
+                        </div>
+                        <div class="participants">
+                            <svg class="participants-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 7C12.1046 7 13 6.10457 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C9 6.10457 9.89543 7 11 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 7C6.10457 7 7 6.10457 7 5C7 3.89543 6.10457 3 5 3C3.89543 3 3 3.89543 3 5C3 6.10457 3.89543 7 5 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M11 9C9.67392 9 8.40215 9.52678 7.46447 10.4645C6.52678 11.4021 6 12.6739 6 14H16C16 12.6739 15.4732 11.4021 14.5355 10.4645C13.5979 9.52678 12.3261 9 11 9Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 9C3.67392 9 2.40215 9.52678 1.46447 10.4645C0.526784 11.4021 0 12.6739 0 14H10C10 12.6739 9.47322 11.4021 8.53553 10.4645C7.59785 9.52678 6.32608 9 5 9Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span class="participants-count">195</span>
+                        </div>
+                        <span class="badge badge-files">
+                            <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 1H3C2.44772 1 2 1.44772 2 2V10C2 10.5523 2.44772 11 3 11H9C9.55228 11 10 10.5523 10 10V4L7 1Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M7 1V4H10" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            Fichiers
+                        </span>
+                        <div class="session-actions">
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.146 2.146C12.3413 1.95074 12.5973 1.84074 12.8648 1.83598C13.1323 1.83122 13.3918 1.93203 13.5934 2.12003C13.795 2.30803 13.9239 2.56897 13.9572 2.85003C13.9905 3.13109 13.926 3.41482 13.774 3.646L7.414 14.246C7.30584 14.4165 7.15313 14.5553 6.97181 14.6484C6.79048 14.7414 6.58692 14.7854 6.38199 14.776C6.17707 14.7666 5.97831 14.704 5.80491 14.5943C5.63151 14.4846 5.48951 14.3315 5.393 14.15L2.646 9H1C0.734783 9 0.480429 8.89464 0.292893 8.70711C0.105357 8.51957 0 8.26522 0 8C0 7.73478 0.105357 7.48043 0.292893 7.29289C0.480429 7.10536 0.734783 7 1 7H3C3.19736 7 3.39093 7.05678 3.55838 7.16414C3.72583 7.27151 3.86015 7.42521 3.944 7.606L6 11.5L11.438 2.354C11.5165 2.21927 11.6238 2.10298 11.753 2.01313C11.8822 1.92328 12.0303 1.86204 12.186 1.834L12.146 2.146Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="4" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="add-session-btn">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Ajouter une séance
+            </button>
+        </div>
+
+        <!-- Mercredi -->
+        <div class="day-section">
+            <div class="day-header">
+                <div class="day-info">
+                    <div class="day-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <path d="M16 2V6M8 2V6M3 10H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="day-details">
+                        <h2>Mercredi</h2>
+                        <p>12 Avril 2023</p>
+                    </div>
+                </div>
+                <div class="day-status">
+                    <strong>2 séances</strong><br>actives
+                </div>
+            </div>
+
+            <div class="sessions">
+                <!-- Session 1 -->
+                <div class="session-card">
+                    <div class="session-content">
+                        <div class="time-range">
+                            <div class="time-slot">10:00</div>
+                            <span class="time-separator">-</span>
+                            <div class="time-slot">11:00</div>
+                        </div>
+                        <div class="session-title">Présentation des résultats</div>
+                        <div class="session-badges">
+                            <span class="badge badge-audio">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="6" cy="6" r="5" fill="currentColor"/>
+                                </svg>
+                                Audio
+                            </span>
+                        </div>
+                        <div class="participants">
+                            <svg class="participants-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 7C12.1046 7 13 6.10457 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C9 6.10457 9.89543 7 11 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 7C6.10457 7 7 6.10457 7 5C7 3.89543 6.10457 3 5 3C3.89543 3 3 3.89543 3 5C3 6.10457 3.89543 7 5 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M11 9C9.67392 9 8.40215 9.52678 7.46447 10.4645C6.52678 11.4021 6 12.6739 6 14H16C16 12.6739 15.4732 11.4021 14.5355 10.4645C13.5979 9.52678 12.3261 9 11 9Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 9C3.67392 9 2.40215 9.52678 1.46447 10.4645C0.526784 11.4021 0 12.6739 0 14H10C10 12.6739 9.47322 11.4021 8.53553 10.4645C7.59785 9.52678 6.32608 9 5 9Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span class="participants-count">175</span>
+                        </div>
+                        <div class="session-actions">
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.146 2.146C12.3413 1.95074 12.5973 1.84074 12.8648 1.83598C13.1323 1.83122 13.3918 1.93203 13.5934 2.12003C13.795 2.30803 13.9239 2.56897 13.9572 2.85003C13.9905 3.13109 13.926 3.41482 13.774 3.646L7.414 14.246C7.30584 14.4165 7.15313 14.5553 6.97181 14.6484C6.79048 14.7414 6.58692 14.7854 6.38199 14.776C6.17707 14.7666 5.97831 14.704 5.80491 14.5943C5.63151 14.4846 5.48951 14.3315 5.393 14.15L2.646 9H1C0.734783 9 0.480429 8.89464 0.292893 8.70711C0.105357 8.51957 0 8.26522 0 8C0 7.73478 0.105357 7.48043 0.292893 7.29289C0.480429 7.10536 0.734783 7 1 7H3C3.19736 7 3.39093 7.05678 3.55838 7.16414C3.72583 7.27151 3.86015 7.42521 3.944 7.606L6 11.5L11.438 2.354C11.5165 2.21927 11.6238 2.10298 11.753 2.01313C11.8822 1.92328 12.0303 1.86204 12.186 1.834L12.146 2.146Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="4" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session 2 -->
+                <div class="session-card">
+                    <div class="session-content">
+                        <div class="time-range">
+                            <div class="time-slot">16:00</div>
+                            <span class="time-separator">-</span>
+                            <div class="time-slot">17:00</div>
+                        </div>
+                        <div class="session-title">Session de clôture</div>
+                        <div class="session-badges">
+                            <span class="badge badge-audio">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="6" cy="6" r="5" fill="currentColor"/>
+                                </svg>
+                                Audio
+                            </span>
+                            <span class="badge badge-video">
+                                <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 3L10 6L2 9V3Z" fill="currentColor"/>
+                                </svg>
+                                Vidéo
+                            </span>
+                        </div>
+                        <div class="participants">
+                            <svg class="participants-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 7C12.1046 7 13 6.10457 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C9 6.10457 9.89543 7 11 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 7C6.10457 7 7 6.10457 7 5C7 3.89543 6.10457 3 5 3C3.89543 3 3 3.89543 3 5C3 6.10457 3.89543 7 5 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M11 9C9.67392 9 8.40215 9.52678 7.46447 10.4645C6.52678 11.4021 6 12.6739 6 14H16C16 12.6739 15.4732 11.4021 14.5355 10.4645C13.5979 9.52678 12.3261 9 11 9Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 9C3.67392 9 2.40215 9.52678 1.46447 10.4645C0.526784 11.4021 0 12.6739 0 14H10C10 12.6739 9.47322 11.4021 8.53553 10.4645C7.59785 9.52678 6.32608 9 5 9Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span class="participants-count">210</span>
+                        </div>
+                        <span class="badge badge-files">
+                            <svg class="badge-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 1H3C2.44772 1 2 1.44772 2 2V10C2 10.5523 2.44772 11 3 11H9C9.55228 11 10 10.5523 10 10V4L7 1Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M7 1V4H10" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            Fichiers
+                        </span>
+                        <div class="session-actions">
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.146 2.146C12.3413 1.95074 12.5973 1.84074 12.8648 1.83598C13.1323 1.83122 13.3918 1.93203 13.5934 2.12003C13.795 2.30803 13.9239 2.56897 13.9572 2.85003C13.9905 3.13109 13.926 3.41482 13.774 3.646L7.414 14.246C7.30584 14.4165 7.15313 14.5553 6.97181 14.6484C6.79048 14.7414 6.58692 14.7854 6.38199 14.776C6.17707 14.7666 5.97831 14.704 5.80491 14.5943C5.63151 14.4846 5.48951 14.3315 5.393 14.15L2.646 9H1C0.734783 9 0.480429 8.89464 0.292893 8.70711C0.105357 8.51957 0 8.26522 0 8C0 7.73478 0.105357 7.48043 0.292893 7.29289C0.480429 7.10536 0.734783 7 1 7H3C3.19736 7 3.39093 7.05678 3.55838 7.16414C3.72583 7.27151 3.86015 7.42521 3.944 7.606L6 11.5L11.438 2.354C11.5165 2.21927 11.6238 2.10298 11.753 2.01313C11.8822 1.92328 12.0303 1.86204 12.186 1.834L12.146 2.146Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                            <button class="icon-button">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="4" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+                                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="add-session-btn">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Ajouter une séance
+            </button>
+        </div>
+    </div>
+</body>
+</html>
