@@ -98,6 +98,9 @@ jobs:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          BUNNY_STORAGE_ZONE_NAME: ${{ vars.BUNNY_STORAGE_ZONE_NAME }}
+          BUNNY_PULL_ZONE_NAME: ${{ vars.BUNNY_PULL_ZONE_NAME }}
+          BUNNY_STORAGE_ZONE_PASSWORD: ${{ secrets.BUNNY_STORAGE_ZONE_PASSWORD }}
           DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
           MOJO_AUTH_API_KEY: ${{ secrets.MOJO_AUTH_API_KEY }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
