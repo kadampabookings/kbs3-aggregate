@@ -27,6 +27,107 @@ webfx-extras-bootstrap-javafx@main.css
 webfx-extras-bootstrap-web@main.css
 ```
 
+### CSS Class Namespacing
+
+**CRITICAL**: All CSS classes must be prefixed with the module name to prevent conflicts when CSS files are merged across modules.
+
+Since all CSS from different modules is combined at build time, generic class names like `.card`, `.header`, or `.title` will cause style collisions. Always prefix with a unique module identifier.
+
+#### Naming Convention
+
+**Pattern**: `.{module-prefix}-{component-name}`
+
+**Module Prefix Examples**:
+- `roomsetup-` for modality-hotel-backoffice-activity-roomsetup-plugin
+- `kitchen-` for modality-catering-kitchen
+- `booking-` for modality-booking-backoffice
+- `festival-` for kbs-backoffice-festivalcreator
+
+#### ❌ WRONG - Generic class names (will conflict)
+
+```css
+/* These WILL conflict with other modules! */
+.card {
+    -fx-background-color: white;
+}
+
+.header {
+    -fx-font-size: 20px;
+}
+
+.title {
+    -fx-font-weight: bold;
+}
+
+.panel {
+    -fx-background-radius: 12;
+}
+```
+
+#### ✅ CORRECT - Module-prefixed class names
+
+```css
+/* RoomSetup module - all classes prefixed with 'roomsetup-' */
+.roomsetup-card {
+    -fx-background-color: white;
+}
+
+.roomsetup-header {
+    -fx-font-size: 20px;
+}
+
+.roomsetup-title {
+    -fx-font-weight: bold;
+}
+
+.roomsetup-panel {
+    -fx-background-radius: 12;
+}
+
+/* Kitchen module - all classes prefixed with 'kitchen-' */
+.kitchen-meal-cell {
+    -fx-background-color: #0096D6;
+}
+
+.kitchen-date-header {
+    -fx-font-weight: bold;
+}
+```
+
+#### In Java Code
+
+```java
+// ❌ WRONG - Generic class name
+panel.getStyleClass().add("card");
+
+// ✅ CORRECT - Module-prefixed class name
+panel.getStyleClass().add("roomsetup-card");
+```
+
+#### Nested Elements
+
+For child elements, continue the naming hierarchy:
+
+```css
+/* Parent container */
+.roomsetup-pool-card {
+    -fx-background-color: white;
+}
+
+/* Child elements */
+.roomsetup-pool-card-header {
+    -fx-font-weight: bold;
+}
+
+.roomsetup-pool-card-icon {
+    -fx-background-radius: 10;
+}
+
+.roomsetup-pool-card-title {
+    -fx-font-size: 14px;
+}
+```
+
 ### CSS Syntax Differences
 
 #### JavaFX CSS
@@ -101,11 +202,491 @@ hbox.setPadding(new Insets(15));
 }
 ```
 
+### Converting JavaFX CSS to Web CSS
+
+When converting JavaFX CSS to Web CSS for WebFX/GWT compilation, you need to understand the DOM structure and CSS variable system used by WebFX.
+
+#### GWT-Generated HTML Structure (Single-Host Strategy)
+
+WebFX generates a simplified DOM with custom elements for each JavaFX component. Each Region element uses the `fx-border-overlay` attribute for CSS variable-based styling:
+
+```html
+<fx-stackpane class="kitchen-meal-count-cell kitchen-cell" fx-border-overlay>
+  <fx-label class="label" fx-border-overlay>
+    <fx-text class="text">210</fx-text>
+  </fx-label>
+</fx-stackpane>
+```
+
+**Key features:**
+- `fx-border-overlay` attribute marks elements for CSS variable-based background/border
+- Background is applied directly to the element via `--fx-background-color` CSS variable
+- Border is rendered via `::before` pseudo-element using `--fx-border-*` CSS variables
+- Children are direct descendants (no `<fx-children>` wrapper)
+- `<fx-text>` elements still exist for text content
+
+#### Key Conversion Rules
+
+**1. Property Prefix Conversion**
+
+| JavaFX CSS | Web CSS | CSS Standard |
+|------------|---------|--------------|
+| `-fx-background-color: #0096D6;` | N/A | `background-color: #0096D6;` |
+| `-fx-text-fill: white;` | N/A | `color: white;` |
+| `-fx-font-size: 14px;` | N/A | `font-size: 14px;` |
+| `-fx-font-family: "Arial";` | N/A | `font-family: "Arial";` |
+| `-fx-font-weight: bold;` | N/A | `font-weight: bold;` |
+| `-fx-border-color: #ddd;` | N/A | `border-color: #ddd;` |
+| `-fx-border-width: 1px;` | N/A | `border-width: 1px;` |
+| `-fx-border-radius: 4px;` | N/A | `border-radius: 4px;` |
+| `-fx-border-style: solid;` | N/A | `border-style: solid;` |
+| `-fx-fill: #0096D6;` (SVG) | N/A | `fill: #0096D6;` |
+
+**CRITICAL**: Web CSS must use **standard CSS properties**, not `-fx-` prefixes. The `-fx-` prefix is JavaFX-specific.
+
+**2. CSS Variables Styling Pattern**
+
+For proper rendering in the browser, use **CSS variables** for backgrounds and borders. Text styling uses the `fx-text` element or `--fx-text-fill` variable:
+
+**JavaFX CSS:**
+```css
+.kitchen-meal-count-cell {
+    -fx-background-color: #0096D6;
+}
+
+.kitchen-meal-count-cell .label {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+```
+
+**Web CSS (using CSS variables - recommended):**
+```css
+/* Background using CSS variable */
+.kitchen-meal-count-cell {
+    --fx-background-color: #0096D6;
+}
+
+/* Label styling - font properties cascade naturally */
+.kitchen-meal-count-cell .label {
+    font-family: "Arial";
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* Text color via fx-text element */
+.kitchen-meal-count-cell .label fx-text {
+    color: white;
+}
+```
+
+**Web CSS (alternative - direct CSS for backgrounds):**
+```css
+.kitchen-meal-count-cell {
+    background-color: #0096D6;
+}
+
+.kitchen-meal-count-cell .label fx-text {
+    color: white;
+}
+```
+
+**3. DOM Elements**
+
+The new single-host DOM structure uses:
+
+- The element itself - Handles background via `--fx-background-color` CSS variable
+- `::before` pseudo-element - Handles borders via `--fx-border-*` CSS variables (automatic, managed by WebFX CSS)
+- `fx-text` - Handles text content and color
+
+**Styling text with `fx-text`:**
+```css
+/* Target fx-text for text color */
+.my-label fx-text {
+    color: #333;
+}
+
+/* Or use the CSS variable */
+.my-label {
+    --fx-text-fill: #333;
+}
+```
+
+**Variable cascade prevention (automatic):**
+
+WebFX automatically prevents parent styles from leaking into nested children via built-in CSS rules:
+
+```css
+/* Built-in rule - you don't need to write this */
+:where([fx-border-overlay]) :where([fx-border-overlay]) {
+    --fx-background-color: transparent;
+    --fx-border-style: none;
+    /* etc. */
+}
+```
+
+This means you don't need to use child selectors (`>`) like in the old DOM structure.
+
+**4. Border Conversion**
+
+JavaFX supports individual border properties. Web CSS uses CSS variables with standard multi-value shorthand:
+
+**JavaFX**:
+```css
+.kitchen-meal-total-cell {
+    -fx-border-left-color: #006399;
+    -fx-border-left-width: 3px;
+}
+```
+
+**Web CSS (using CSS variables)**:
+```css
+.kitchen-meal-total-cell {
+    --fx-border-color: transparent transparent transparent #006399;
+    --fx-border-width: 0 0 0 3px;
+    --fx-border-style: solid;
+}
+```
+
+**Order**: top, right, bottom, left (clockwise from top)
+
+**Note:** Direct `border-*` properties won't work for borders - you must use the `--fx-border-*` CSS variables because borders are rendered via the `::before` pseudo-element.
+
+**5. Button Styling**
+
+Buttons use CSS variables for styling:
+
+**JavaFX**:
+```css
+.btn-primary {
+    -fx-text-fill: white;
+    -fx-background-color: #0096D6;
+}
+```
+
+**Web CSS (using CSS variables)**:
+```css
+.btn-primary {
+    --fx-background-color: #0096D6;
+    --fx-border-color: #0478e6;
+    --fx-border-width: 1px;
+    --fx-border-style: solid;
+    --fx-border-radius: 4px;
+}
+
+.btn-primary fx-text {
+    color: white;
+}
+
+.btn-primary:hover:not(.disabled) {
+    --fx-background-color: #0088d6;
+}
+```
+
+**6. Complete Conversion Example**
+
+**JavaFX CSS**:
+```css
+/* Date Headers */
+.kitchen-date-header {
+    -fx-background-color: #d4d4d4;
+}
+
+.kitchen-date-header .kitchen-date-label {
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #0096D6;
+}
+```
+
+**Web CSS (using CSS variables)**:
+```css
+/* Date Headers */
+.kitchen-date-header {
+    --fx-background-color: #d4d4d4;
+}
+
+.kitchen-date-header .kitchen-date-label {
+    font-family: "Arial";
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.kitchen-date-header .kitchen-date-label fx-text {
+    color: #0096D6;
+}
+```
+
+**Web CSS (alternative - direct CSS for background)**:
+```css
+.kitchen-date-header {
+    background-color: #d4d4d4;
+}
+
+.kitchen-date-header .kitchen-date-label {
+    font-family: "Arial";
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.kitchen-date-header .kitchen-date-label fx-text {
+    color: #0096D6;
+}
+```
+
+**7. Hover States**
+
+Hover states can be styled using CSS variables or direct CSS:
+
+**JavaFX**:
+```css
+.kitchen-cell-clickable:hover {
+    -fx-background-color: #0077b3;
+}
+```
+
+**Web CSS (using CSS variables)**:
+```css
+.kitchen-cell-clickable:hover {
+    --fx-background-color: #0077b3;
+}
+```
+
+**Web CSS (alternative - direct CSS)**:
+```css
+.kitchen-cell-clickable:hover {
+    background-color: #0077b3;
+}
+```
+
+**8. Striped/Conditional Styles**
+
+**JavaFX**:
+```css
+.kitchen-diet-value-cell {
+    -fx-background-color: white;
+}
+
+.kitchen-diet-value-cell.striped {
+    -fx-background-color: #f8f9fa;
+}
+```
+
+**Web CSS (using CSS variables)**:
+```css
+.kitchen-diet-value-cell {
+    --fx-background-color: white;
+}
+
+.kitchen-diet-value-cell.striped {
+    --fx-background-color: #f8f9fa;
+}
+```
+
+**Web CSS (alternative - direct CSS)**:
+```css
+.kitchen-diet-value-cell {
+    background-color: white;
+}
+
+.kitchen-diet-value-cell.striped {
+    background-color: #f8f9fa;
+}
+```
+
+#### Conversion Checklist
+
+When converting JavaFX CSS to Web CSS:
+
+- [ ] Replace `-fx-background-color` with `--fx-background-color` or `background-color`
+- [ ] Replace `-fx-border-*` with corresponding `--fx-border-*` CSS variables
+- [ ] Include `--fx-border-style: solid` when using borders (required!)
+- [ ] Replace `-fx-text-fill` with `--fx-text-fill` or target `fx-text { color: ...; }`
+- [ ] Use standard CSS for fonts (`font-size`, `font-family`, `font-weight`)
+- [ ] Set padding/spacing in Java code, or use `--fx-padding` CSS variable
+- [ ] Use module prefix for all class names
+- [ ] Test in browser to verify rendering
+
+#### Common Pitfalls
+
+**❌ WRONG** - Using JavaFX properties in Web CSS:
+```css
+.kitchen-meal-count-cell {
+    -fx-background-color: #0096D6;  /* Browsers don't understand -fx- */
+}
+```
+
+**✅ CORRECT** - Use CSS variables or standard CSS:
+```css
+.kitchen-meal-count-cell {
+    --fx-background-color: #0096D6;  /* CSS variable */
+    /* OR */
+    background-color: #0096D6;       /* Direct CSS (for backgrounds) */
+}
+```
+
+**❌ WRONG** - Using direct border properties:
+```css
+.kitchen-cell {
+    border-color: #dddddd;
+    border-width: 1px;
+    border-style: solid;
+}
+/* Won't work - borders must use CSS variables */
+```
+
+**✅ CORRECT** - Use CSS variables for borders:
+```css
+.kitchen-cell {
+    --fx-border-color: #dddddd;
+    --fx-border-width: 1px;
+    --fx-border-style: solid;
+}
+```
+
+**❌ WRONG** - Missing border style variable:
+```css
+.kitchen-cell {
+    --fx-border-color: #dddddd;
+    --fx-border-width: 1px;
+    /* Missing --fx-border-style! Border won't render */
+}
+```
+
+**✅ CORRECT** - Complete border styling:
+```css
+.kitchen-cell {
+    --fx-border-color: #dddddd;
+    --fx-border-width: 1px;
+    --fx-border-style: solid;  /* Required! */
+}
+```
+
+**✅ CORRECT** - Complete styling example:
+```css
+.kitchen-meal-count-cell {
+    --fx-background-color: #0096D6;
+}
+
+.kitchen-meal-count-cell .label {
+    font-family: "Arial";
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.kitchen-meal-count-cell .label fx-text {
+    color: white;
+}
+```
+
 ### CSS Best Practices
 
 1. **Use CSS variables** for colors, fonts, and reusable values
 2. **Keep platform-specific files in sync** for visual consistency
 3. **Test on both platforms** when making CSS changes
+4. **Always use dual-layer styling** in Web CSS (main class + fx-* elements)
+5. **Include border-style** when specifying borders
+
+### Dynamic Styling in WebFX (Database-Driven Colors)
+
+When colors come from the database and cannot use predefined CSS classes, special handling is required for cross-platform compatibility.
+
+#### The Problem: `setStyle()` Doesn't Work in WebFX
+
+**CRITICAL**: `setStyle("-fx-background-color: ...")` works in **JavaFX** but does **NOT** work in **WebFX/GWT**.
+
+The WebFX GWT implementation intentionally leaves the `updateStyle()` method empty, meaning any `-fx-` properties set via `setStyle()` are ignored in the browser.
+
+```java
+// ❌ WRONG - Only works in JavaFX, NOT in WebFX
+card.setStyle("-fx-background-color: " + colorFromDb + ";");
+region.setStyle("-fx-border-color: #ff0000; -fx-border-width: 2;");
+```
+
+#### Solution: Use Both Approaches
+
+For dynamic colors (from database), use **BOTH** `setStyle()` (for JavaFX) **AND** programmatic styling (for WebFX):
+
+```java
+// ✅ CORRECT - Works on BOTH platforms
+String borderColorHex = pool.getWebColor();  // Color from database
+
+// 1. For JavaFX (desktop)
+card.setStyle("-fx-border-color: " + borderColorHex + "; -fx-border-width: 2; " +
+              "-fx-border-radius: 10; -fx-background-color: white; -fx-background-radius: 10;");
+
+// 2. For WebFX (browser) - use programmatic styling
+Color borderColor = Color.web(borderColorHex);
+card.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), null)));
+card.setBorder(new Border(new BorderStroke(borderColor, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(2))));
+```
+
+#### Complete Example: Dynamic Border Based on Entity Data
+
+```java
+private VBox createRoomCard(Room room) {
+    VBox card = new VBox(8);
+
+    // Get color from database entity
+    Pool pool = room.getAllocatedPool();
+    String borderColorHex = (pool != null && pool.getWebColor() != null)
+        ? pool.getWebColor()
+        : "#10b981";  // Default green
+
+    // Apply styling for BOTH platforms
+    // JavaFX version (setStyle)
+    card.setStyle("-fx-border-color: " + borderColorHex + "; -fx-border-width: 2; " +
+                  "-fx-border-radius: 10; -fx-background-color: white; -fx-background-radius: 10;");
+
+    // WebFX version (programmatic)
+    Color borderColor = Color.web(borderColorHex);
+    card.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), null)));
+    card.setBorder(new Border(new BorderStroke(borderColor, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(2))));
+
+    return card;
+}
+```
+
+#### Timing Considerations
+
+When applying dynamic styles, the DOM peer may not exist immediately after node creation. Use deferred execution:
+
+```java
+// Option 1: Platform.runLater (standard JavaFX)
+Platform.runLater(() -> applyDynamicStyle(region, colorFromDb));
+
+// Option 2: UiScheduler.scheduleDeferred (WebFX-specific)
+UiScheduler.scheduleDeferred(() -> applyDynamicStyle(region, colorFromDb));
+```
+
+This is especially important when:
+- Setting styles immediately after creating nodes
+- Updating styles after adding nodes to the scene graph
+- Responding to selection or state changes
+
+#### Static vs Dynamic Colors Summary
+
+| Scenario | Solution |
+|----------|----------|
+| Fixed colors (compile-time known) | CSS classes with dual-layer pattern |
+| Dynamic colors (from database) | `setBackground()`/`setBorder()` + `setStyle()` |
+| Selection states with dynamic colors | Deferred execution + programmatic styling |
+
+#### Required Imports for Programmatic Styling
+
+```java
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
+```
 
 ## Internationalization (i18n)
 

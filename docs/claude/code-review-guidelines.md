@@ -7,8 +7,9 @@ This document outlines critical coding standards and best practices for the KBS3
 1. [CSS and Styling Rules](#css-and-styling-rules)
 2. [Internationalization (i18n) Rules](#internationalization-i18n-rules)
 3. [Helper Classes and Centralized Code](#helper-classes-and-centralized-code)
-4. [Code Simplicity and Documentation](#code-simplicity-and-documentation)
-5. [Common Violations and Fixes](#common-violations-and-fixes)
+4. [Entity Forms and Dialogs](#entity-forms-and-dialogs)
+5. [Code Simplicity and Documentation](#code-simplicity-and-documentation)
+6. [Common Violations and Fixes](#common-violations-and-fixes)
 
 ---
 
@@ -100,11 +101,175 @@ Button button = Bootstrap.largeSuccessButton(I18nControls.newButton(BaseI18nKeys
    - Form helpers: `createFormTextField()`, `createFormTextArea()`, `createFormDatePicker()`
    - Tab helpers: `modernTabPane()`, `wrapTabContent()`
 
+### Rule 4: CSS Class Namespacing (Module Prefix Required)
+
+**CRITICAL**: All CSS classes must be prefixed with the module name to prevent conflicts when CSS files are merged.
+
+Since all CSS from different modules is combined at build time, generic class names will cause style collisions.
+
+**Pattern**: `.{module-prefix}-{component-name}`
+
+**❌ WRONG** - Generic class names (will conflict with other modules):
+```css
+.card { ... }
+.header { ... }
+.title { ... }
+.panel { ... }
+```
+
+```java
+panel.getStyleClass().add("card");  // Will conflict!
+```
+
+**✅ CORRECT** - Module-prefixed class names:
+```css
+.roomsetup-card { ... }
+.roomsetup-header { ... }
+.roomsetup-title { ... }
+.roomsetup-panel { ... }
+```
+
+```java
+panel.getStyleClass().add("roomsetup-card");  // Safe, no conflicts
+```
+
+**Module Prefix Examples**:
+- `roomsetup-` for modality-hotel-backoffice-activity-roomsetup-plugin
+- `kitchen-` for modality-catering-kitchen
+- `booking-` for modality-booking-backoffice
+- `festival-` for kbs-backoffice-festivalcreator
+
+**See also**: [Module Conventions - CSS Class Namespacing](module-conventions.md#css-class-namespacing) for complete details.
+
+### Rule 4.1: Remove Unused CSS Classes and Verify Web CSS Properties
+
+**Purpose**: Keep CSS files clean and ensure Web CSS uses proper standard CSS properties.
+
+#### Part A: Remove Unused CSS Classes
+
+**❌ WRONG** - CSS classes defined but never used:
+```css
+/* Defined in CSS but never referenced in Java code */
+.my-fancy-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.unused-container {
+    padding: 20px;
+}
+```
+
+**✅ CORRECT** - Only keep CSS classes that are actually used:
+```css
+/* These classes are used in Java code via getStyleClass().add() */
+.kitchen-date-header {
+    background-color: #d4d4d4;
+}
+
+.kitchen-meal-count-cell {
+    background-color: #0096D6;
+}
+```
+
+**How to identify unused classes**:
+1. Search for `getStyleClass().add("class-name")` in Java files
+2. Check if each CSS class is referenced
+3. Remove classes that have no matches
+
+**Example check**:
+```bash
+# Find all classes used in Java
+grep -rh "getStyleClass" module/src/main/java/ | grep -o '"[^"]*"' | sort -u
+
+# Compare with classes in CSS
+grep -E "^\.[a-zA-Z-]+" module/src/main/webfx/css/*.css | sed 's/[: {].*//' | sort -u
+```
+
+#### Part B: Verify Web CSS Uses Standard CSS Properties or CSS Variables
+
+**❌ CRITICAL ERROR** - Using JavaFX properties in Web CSS:
+```css
+/* In modality-catering-kitchen-web@main.css - WRONG! */
+.kitchen-meal-count-cell {
+    -fx-background-color: #0096D6;  /* JavaFX property - won't work in browser! */
+    -fx-text-fill: white;           /* JavaFX property - won't work in browser! */
+}
+```
+
+**✅ CORRECT** - Using CSS variables (recommended):
+```css
+/* In modality-catering-kitchen-web@main.css - CORRECT */
+.kitchen-meal-count-cell {
+    --fx-background-color: #0096D6;  /* CSS variable for background */
+}
+
+.kitchen-meal-count-cell .label {
+    font-family: "Arial";
+    font-weight: bold;
+}
+
+.kitchen-meal-count-cell .label fx-text {
+    color: white;                    /* Text via fx-text element */
+}
+```
+
+**✅ ALTERNATIVE** - Using direct CSS for backgrounds:
+```css
+.kitchen-meal-count-cell {
+    background-color: #0096D6;      /* Standard CSS (backgrounds only) */
+}
+
+.kitchen-meal-count-cell .label fx-text {
+    color: white;
+}
+```
+
+**Common property conversions**:
+
+| ❌ JavaFX Property | ✅ CSS Variable | ✅ Standard CSS Alternative |
+|-------------------|-----------------|---------------------------|
+| `-fx-background-color` | `--fx-background-color` | `background-color` |
+| `-fx-text-fill` | `--fx-text-fill` | `color` on `fx-text` |
+| `-fx-font-size` | N/A | `font-size` |
+| `-fx-font-family` | N/A | `font-family` |
+| `-fx-font-weight` | N/A | `font-weight` |
+| `-fx-border-color` | `--fx-border-color` | N/A (must use variable) |
+| `-fx-border-width` | `--fx-border-width` | N/A (must use variable) |
+| `-fx-border-radius` | `--fx-border-radius` | N/A (must use variable) |
+| `-fx-fill` (SVG) | N/A | `fill` |
+
+**⚠️ IMPORTANT: Borders require CSS variables**:
+```css
+/* Borders must use CSS variables (rendered via ::before pseudo-element) */
+.my-button {
+    --fx-background-color: #007bff;
+    --fx-border-color: #0056b3;
+    --fx-border-width: 1px;
+    --fx-border-style: solid;  /* Required! */
+    --fx-border-radius: 4px;
+}
+
+.my-button fx-text {
+    color: white;
+}
+```
+
+**Validation checklist for Web CSS**:
+- [ ] No `-fx-` prefixed properties (except CSS variable names `--fx-*`)
+- [ ] Backgrounds use `--fx-background-color` or `background-color`
+- [ ] Borders use `--fx-border-*` CSS variables (required)
+- [ ] All borders include `--fx-border-style: solid` (or dashed/dotted)
+- [ ] Text colors target `fx-text` element or use `--fx-text-fill` variable
+- [ ] Standard CSS properties used for fonts
+
+**See also**: [Module Conventions - Converting JavaFX CSS to Web CSS](module-conventions.md#converting-javafx-css-to-web-css) for complete conversion guide.
+
 ---
 
 ## Internationalization (i18n) Rules
 
-### Rule 4: No Hardcoded Text in Java Code
+### Rule 5: No Hardcoded Text in Java Code
 
 **❌ WRONG** - Hardcoded strings:
 ```java
@@ -127,7 +292,7 @@ I18n.bindI18nTextProperty(alert.textProperty(), BaseI18nKeys.ConfirmDelete);
 - Hardcoded text cannot be translated
 - All user-facing text must be translatable
 
-### Rule 4.1: Use I18nControls for Automatic Language Binding
+### Rule 5.1: Use I18nControls for Automatic Language Binding
 
 **CRITICAL**: When creating UI elements like Labels and Buttons, **ALWAYS use `I18nControls` methods** instead of constructors + `I18n.getI18nText()`.
 
@@ -343,7 +508,7 @@ WelcomeMessage=Bienvenue dans l'application
 
 ## Helper Classes and Centralized Code
 
-### Rule 5: Use Existing Helpers Before Creating Custom Code
+### Rule 6: Use Existing Helpers Before Creating Custom Code
 
 **❌ WRONG** - Reinventing the wheel:
 ```java
@@ -480,7 +645,7 @@ tab1.setText(I18n.getI18nText(YourModuleI18nKeys.Tab1));
 tab1.setContent(ModalityStyle.wrapTabContent(content));  // Add padding
 ```
 
-### Rule 6: Create Reusable Helpers for Common Patterns
+### Rule 7: Create Reusable Helpers for Common Patterns
 
 If you find yourself writing the same code multiple times, create a helper method.
 
@@ -513,9 +678,130 @@ Button button2 = ModalityStyle.primaryCustomIconButton(I18nControls.newButton(ke
 
 ---
 
+## Entity Forms and Dialogs
+
+### Rule 8: Bind Save Button to UpdateStore.hasChangesProperty()
+
+In dialogs that use an `UpdateStore` for entity editing, **always bind the Save button's disabled property** to `EntityBindings.hasChangesProperty(updateStore).not()`. This ensures:
+- Save button is disabled when there are no changes
+- Save button automatically enables when user makes any change
+- No manual tracking or invalidation needed
+
+**❌ WRONG** - Manual BooleanBinding with invalidation:
+```java
+// Creating a custom binding that needs manual invalidation - DON'T DO THIS
+BooleanBinding hasNoChangesBinding = new BooleanBinding() {
+    @Override
+    protected boolean computeValue() {
+        return !updateStore.hasChanges();
+    }
+};
+
+// Every field listener needs to call invalidate()
+nameInput.textProperty().addListener((obs, oldVal, newVal) -> {
+    entity.setName(newVal);
+    hasNoChangesBinding.invalidate();  // Easy to forget!
+});
+
+saveButton.disableProperty().bind(hasNoChangesBinding);
+```
+
+**✅ CORRECT** - Use EntityBindings.hasChangesProperty():
+```java
+import dev.webfx.stack.orm.entity.binding.EntityBindings;
+
+// Simple field listeners - just update the entity
+nameInput.textProperty().addListener((obs, oldVal, newVal) ->
+    entity.setName(newVal != null ? newVal.trim() : null));
+
+typeSelector.selectedItemProperty().addListener((obs, oldVal, newVal) ->
+    entity.setType(newVal));
+
+// Bind save button - automatically tracks all entity changes
+saveButton.disableProperty().bind(EntityBindings.hasChangesProperty(updateStore).not());
+```
+
+**Why this is better**:
+1. **Automatic tracking** - No need to call `invalidate()` in every listener
+2. **Less error-prone** - Can't forget to track a field
+3. **Cleaner code** - Field listeners are simpler one-liners
+4. **Reactive** - UpdateStore internally notifies when changes occur
+
+**Required dependency** in `webfx.xml`:
+```xml
+<module>webfx-stack-orm-entity-binding</module>
+```
+
+### Rule 8.1: EntityButtonSelector Must Use ButtonSelectorParameters with setDialogParentGetter
+
+When using `EntityButtonSelector` for dropdown entity selection in dialogs, **always use `ButtonSelectorParameters` with `setDialogParentGetter()`**. Using the old constructor with a direct Callable<Pane> parameter will result in empty dropdowns.
+
+**❌ WRONG** - Old constructor with Callable<Pane> (dropdown will be empty!):
+```java
+EntityButtonSelector<Country> countrySelector = new EntityButtonSelector<>(
+    "{class: 'Country', columns: [{expression: 'name'}], orderBy: 'name'}",
+    new ButtonFactoryMixin() {},
+    FXMainFrameDialogArea::getDialogArea,  // This goes to setDropParentGetter - WRONG!
+    dataSourceModel
+);
+// Dropdown will be EMPTY - data doesn't load properly!
+```
+
+**✅ CORRECT** - Use ButtonSelectorParameters with setDialogParentGetter():
+```java
+ButtonSelectorParameters params = new ButtonSelectorParameters()
+    .setButtonFactory(new ButtonFactoryMixin() {})
+    .setDialogParentGetter(FXMainFrameDialogArea::getDialogArea);  // Correct method!
+
+EntityButtonSelector<Country> countrySelector = new EntityButtonSelector<>(
+    "{class: 'Country', columns: [{expression: 'name'}], orderBy: 'name'}",
+    dataSourceModel,
+    params
+);
+Button countryButton = countrySelector.getButton();
+```
+
+**Why**: The old constructor maps to `setDropParentGetter()` which is different from `setDialogParentGetter()`. The selector needs the dialog parent getter to properly show the dropdown dialog and load data.
+
+**Complete pattern for dialog with EntityButtonSelector**:
+```java
+public static void show(Organization organization, Runnable onSuccess) {
+    DataSourceModel dataSourceModel = DataSourceModelService.getDefaultDataSourceModel();
+
+    // Create stores
+    EntityStore store = organization != null ? organization.getStore() : EntityStore.create(dataSourceModel);
+    UpdateStore updateStore = UpdateStore.createAbove(store);
+
+    // Create entity button selector with ButtonSelectorParameters
+    ButtonSelectorParameters params = new ButtonSelectorParameters()
+        .setButtonFactory(new ButtonFactoryMixin() {})
+        .setDialogParentGetter(FXMainFrameDialogArea::getDialogArea);
+
+    EntityButtonSelector<OrganizationType> typeSelector = new EntityButtonSelector<>(
+        "{class: 'OrganizationType', columns: [{expression: 'name'}], orderBy: 'name'}",
+        dataSourceModel,
+        params
+    );
+
+    Button typeButton = typeSelector.getButton();
+    typeButton.setMaxWidth(Double.MAX_VALUE);
+
+    // Set initial value if editing
+    if (organization != null && organization.getType() != null) {
+        typeSelector.setSelectedItem(organization.getType());
+    }
+
+    // Add listener to update entity
+    typeSelector.selectedItemProperty().addListener((obs, oldVal, newVal) ->
+        entityToSave.setType(newVal));
+}
+```
+
+---
+
 ## Code Simplicity and Documentation
 
-### Rule 7: Keep Code Simple and Readable
+### Rule 9: Keep Code Simple and Readable
 
 **❌ WRONG** - Complex, nested, unclear code:
 ```java
@@ -564,7 +850,7 @@ private void processEvent(Event event) {
 4. **Query smarter** - Filter in DSQL query when possible
 5. **Use type-safe casts** - `EntityList<Event>` instead of `EntityList`
 
-### Rule 8: Document Complex Logic
+### Rule 10: Document Complex Logic
 
 **❌ WRONG** - No documentation:
 ```java
@@ -763,6 +1049,7 @@ private void processEventValidation(Event event, boolean forceSave) {
 When reviewing code, check for:
 
 - [ ] **No inline CSS** (`setStyle()` calls)
+- [ ] **CSS class namespacing** - all CSS classes prefixed with module name (e.g., `roomsetup-card`, not `card`)
 - [ ] **Padding/sizing in Java**, not CSS
 - [ ] **No hardcoded text** - all use i18n keys
 - [ ] **I18nControls for UI creation** - use `I18nControls.newLabel()`, `I18nControls.newButton()`, etc. (not `new Label(I18n.getI18nText())`)
@@ -791,7 +1078,9 @@ When reviewing code, check for:
 | Property binding | I18n | `I18n.bindI18nTextProperty(property, key)` |
 | Translations | properties files | `module_en.properties` |
 | Padding | Java code | `node.setPadding(new Insets(20))` |
-| Colors | CSS files | `.my-class { -fx-text-fill: blue; }` |
+| Background (Web CSS) | CSS variables | `.my-class { --fx-background-color: blue; }` |
+| Border (Web CSS) | CSS variables | `.my-class { --fx-border-color: #ddd; --fx-border-style: solid; }` |
+| Text color (Web CSS) | fx-text element | `.my-class fx-text { color: blue; }` |
 
 ---
 

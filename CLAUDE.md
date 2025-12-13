@@ -106,6 +106,7 @@ mvn package -P 'staging,vertx-fatjar,gwt-compile,gwt-sourcemaps' \
 3. **Use I18nControls for creating UI elements** (e.g., `I18nControls.newLabel(key)`) - ensures automatic language updates
 4. **Ensure submodules are on matching branches** before building
 5. **Install local parent POMs** before building to avoid Central repository versions
+6. **NEVER hard-delete entities** - Always use soft-delete by setting `removed=true` to preserve referential integrity with related records (bookings, etc.)
 
 ## Database Reference
 

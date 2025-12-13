@@ -345,6 +345,78 @@ entityStore.executeQuery("select * from Event where id=?", eventId)
 - `UpdateStore` = **WRITE** operations (INSERT/UPDATE)
 - Always create `UpdateStore` above `EntityStore`: `UpdateStore.createAbove(entityStore)`
 
+### Important: Soft-Delete Pattern
+
+**CRITICAL RULE**: NEVER hard-delete entities from the database. Always use soft-delete by setting the `removed` field to `true`.
+
+**Why soft-delete?**
+- Preserves referential integrity with related records (bookings, payments, history, etc.)
+- Maintains audit trail and historical data
+- Prevents cascade deletion issues
+- Allows for data recovery if needed
+
+**How to implement soft-delete:**
+
+```java
+// ❌ WRONG - Never hard-delete
+// entity.delete(); // Don't do this!
+
+// ❌ WRONG - Missing updateEntity() call
+EntityStore entityStore = EntityStore.create(dataSourceModel);
+UpdateStore updateStore = UpdateStore.createAbove(entityStore);
+entityStore.<Person>executeQuery("select id,removed from Person where id=?", personId)
+    .onSuccess(persons -> {
+        Person person = persons.get(0);  // ❌ This entity is not tracked by UpdateStore!
+        person.setRemoved(true);
+        updateStore.submitChanges();  // ❌ This won't work - changes not tracked!
+    });
+
+// ✅ CORRECT - Always soft-delete with updateEntity()
+EntityStore entityStore = EntityStore.create(dataSourceModel);
+UpdateStore updateStore = UpdateStore.createAbove(entityStore);
+
+// Load entity and register it in UpdateStore to track changes
+entityStore.<Person>executeQuery("select id,removed from Person where id=?", personId)
+    .onSuccess(persons -> {
+        // CRITICAL: Must call updateEntity() to track changes!
+        Person person = updateStore.updateEntity(persons.get(0));
+        person.setRemoved(true);  // Soft-delete by setting removed=true
+
+        updateStore.submitChanges()
+            .onSuccess(result -> Console.log("Person soft-deleted successfully"));
+    });
+```
+
+**Key Point**: When loading an entity from `EntityStore` that you want to modify:
+1. Load the entity via `entityStore.executeQuery()`
+2. **Call `updateStore.updateEntity(entity)`** to register it for change tracking
+3. Modify the returned entity
+4. Call `updateStore.submitChanges()` to persist changes
+
+**When querying, exclude removed records:**
+
+```java
+// Always filter out removed records in queries
+entityStore.executeQuery(
+    "select id,name,email from Person where (removed is null or removed=false)",
+    // No parameters needed for this condition
+);
+
+// With additional conditions
+entityStore.executeQuery(
+    "select * from Person where frontendAccount=? and (removed is null or removed=false)",
+    accountId
+);
+```
+
+**Common entities with `removed` field:**
+- `Person` - Customer/user records
+- `Document` - Bookings
+- `Event` - Events
+- `Organization` - Organizations
+- `Item` - Bookable items
+- And most other core entities
+
 ## Writing DSQL Queries
 
 The application uses **DSQL** (Domain-Specific Query Language) - a SQL-like syntax for querying entities. Entity field constants map directly to database columns.

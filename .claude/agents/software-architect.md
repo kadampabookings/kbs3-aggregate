@@ -1,7 +1,7 @@
 ---
 name: software-architect
 description: Use this agent when the user needs to plan new features, refactor existing code, reorganize project structure, improve code architecture, apply design patterns, or make architectural decisions. Examples:\n\n- User: "I need to add a new payment processing module to the system. How should I structure it?"\n  Assistant: "Let me use the software-architect agent to design the architecture for the payment processing module."\n  [Agent analyzes requirements and proposes modular structure following project patterns]\n\n- User: "The booking flow code is getting messy. Can you help reorganize it?"\n  Assistant: "I'll use the software-architect agent to analyze the current structure and propose a refactoring plan."\n  [Agent reviews code, identifies architectural issues, and creates reorganization plan]\n\n- User: "What's the best way to implement a notification system that works across web and mobile?"\n  Assistant: "Let me consult the software-architect agent to design a cross-platform notification architecture."\n  [Agent designs solution leveraging WebFX patterns]\n\n- User: "Should we use the Observer pattern or EventBus for this component communication?"\n  Assistant: "I'll use the software-architect agent to evaluate the design pattern options."\n  [Agent analyzes trade-offs and recommends appropriate pattern]
-model: sonnet
+model: opus
 color: red
 ---
 
