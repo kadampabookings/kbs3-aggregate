@@ -1,110 +1,9 @@
 --
--- PostgreSQL database cluster dump
---
-
-SET default_transaction_read_only = off;
-
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-
---
--- Roles
---
-
-CREATE ROLE kbs;
-ALTER ROLE kbs WITH SUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:ehgRAtYY0d/RM9Raw9QOPg==$NmUoMndScbF1SnK4se9SWI71AGtPu65rRhQnr6e8wY0=:/wRmu4ctDU6uoE4yf4UNK+vlTQOSus91xxv1Y4ay5hQ=';
-CREATE ROLE kbs3_dev_staging_server;
-ALTER ROLE kbs3_dev_staging_server WITH SUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:sFKgBp/MrBDazYa/GXygFg==$Y0ACMka07IP7S9e03Qy1DUZIfPhXAvFWer5iKmxa4jk=:ZTX1ICqqSjI8WogJTytTorqOFMzIgGnI8cYjZ+ihOww=';
-CREATE ROLE kbs3_staging_server;
-ALTER ROLE kbs3_staging_server WITH SUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:lHHwYsBf1aofn737KzICMw==$wI96wE8+T0HBkC4RWaKabazTcSA/5AxvHjGQa5wTO6k=:VhTx7/iNvQntaCn51/bRpZ89yf6Y0BS9CzdpOWkf1Bo=';
-CREATE ROLE kbs_odoo;
-ALTER ROLE kbs_odoo WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:qqAzxns7q/JvAp8fSC7+rA==$qvdnO0BMvYxAA/oqv2zpLNDJz0Zex003yCtNoHd3E2c=:ActPwy9iAlDfc6zMSVuFa/ca+TFVUXiKTNTPTv9atGM=';
-CREATE ROLE kbs_server;
-ALTER ROLE kbs_server WITH SUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:HRqkyyWAWGdPdEsU50FIIQ==$yBxgCyAlYoP3JXzTiPWO0uUx/X5WV+bagVXH8Blun40=:JDyST41m86zORqQHM4Wh7YJCba2kGDMW2Fe2g6R9XBE=';
-CREATE ROLE kbs_staging_dbeaver;
-ALTER ROLE kbs_staging_dbeaver WITH SUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:K+vBmsgcmhep2dDvybMang==$GrqqDjn4EK/EOk3/noG9i0iaQUA+Bn/qhB8hj0L5uXA=:4PhyEYit8tn1437hf9ldYuk7D7NTjKEe14lZFBLR6Zo=';
-CREATE ROLE kbs_staging_pgadmin;
-ALTER ROLE kbs_staging_pgadmin WITH SUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:MWZa3ut4UYy473GbM8ExrQ==$70lyT8MoFVUVlONtN8qovCXMBxGRXPXbqXiNkI4DtwM=:hVZWplIRcxvu565EovMybyLCwK/pzyDN6Gk2qcn4Rmw=';
-CREATE ROLE postgres;
-ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS;
-
---
--- User Configurations
---
-
-
-
-
-
-
-
-
---
--- Databases
---
-
---
--- Database "template1" dump
---
-
-\connect template1
-
---
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17.5
--- Dumped by pg_dump version 17.5
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- PostgreSQL database dump complete
---
-
---
--- Database "kbs_db" dump
---
-
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 17.5
--- Dumped by pg_dump version 17.5
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- Name: kbs_db; Type: DATABASE; Schema: -; Owner: kbs
---
-
-CREATE DATABASE kbs_db WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.UTF-8';
-
-
-ALTER DATABASE kbs_db OWNER TO kbs;
-
-\connect kbs_db
+-- Dumped from database version 17.5 (Postgres.app)
+-- Dumped by pg_dump version 17.5 (Postgres.app)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -169,12 +68,25 @@ CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;
 COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
+--
+-- Name: cleaning_state; Type: TYPE; Schema: public; Owner: bruno
+--
+
+CREATE TYPE public.cleaning_state AS ENUM (
+    'DIRTY',
+    'TO_INSPECT',
+    'READY'
+);
+
+
+ALTER TYPE public.cleaning_state OWNER TO bruno;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: attendance; Type: TABLE; Schema: public; Owner: kbs
+-- Name: attendance; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.attendance (
@@ -192,10 +104,10 @@ CREATE TABLE public.attendance (
 );
 
 
-ALTER TABLE public.attendance OWNER TO kbs;
+ALTER TABLE public.attendance OWNER TO bruno;
 
 --
--- Name: document; Type: TABLE; Schema: public; Owner: kbs
+-- Name: document; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.document (
@@ -301,14 +213,16 @@ CREATE TABLE public.document (
     person_discovery_reduced boolean DEFAULT false NOT NULL,
     person_working_visit boolean DEFAULT false NOT NULL,
     person_guest boolean DEFAULT false NOT NULL,
-    pass_to_make boolean DEFAULT false NOT NULL
+    pass_to_make boolean DEFAULT false NOT NULL,
+    checked_out boolean DEFAULT false NOT NULL,
+    group_document_id integer
 );
 
 
-ALTER TABLE public.document OWNER TO kbs;
+ALTER TABLE public.document OWNER TO bruno;
 
 --
--- Name: document_line; Type: TABLE; Schema: public; Owner: kbs
+-- Name: document_line; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.document_line (
@@ -374,49 +288,52 @@ CREATE TABLE public.document_line (
     confirmation_request_sent timestamp without time zone,
     confirmation_received timestamp without time zone,
     cleaned boolean DEFAULT false NOT NULL,
-    timeline_id integer
+    timeline_id integer,
+    start_date date,
+    end_date date,
+    has_attendance_gap boolean DEFAULT false NOT NULL
 );
 
 
-ALTER TABLE public.document_line OWNER TO kbs;
+ALTER TABLE public.document_line OWNER TO bruno;
 
 --
--- Name: COLUMN document_line.group_site_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN document_line.group_site_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.document_line.group_site_id IS 'Id of site in which to group the document line.';
 
 
 --
--- Name: COLUMN document_line.group_item_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN document_line.group_item_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.document_line.group_item_id IS 'Id of item in which to group the document line.';
 
 
 --
--- Name: COLUMN document_line.group_label_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN document_line.group_label_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.document_line.group_label_id IS 'Id of label in which to group the document line. Overrides group_item_id.';
 
 
 --
--- Name: COLUMN document_line.option_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN document_line.option_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.document_line.option_id IS 'Id of option ticked to book this document line.';
 
 
 --
--- Name: COLUMN document_line.group_family_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN document_line.group_family_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.document_line.group_family_id IS 'Id of item_family in which to group the document line. Overides item''s family.';
 
 
 --
--- Name: rate; Type: TABLE; Schema: public; Owner: kbs
+-- Name: rate; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.rate (
@@ -494,17 +411,17 @@ CREATE TABLE public.rate (
 );
 
 
-ALTER TABLE public.rate OWNER TO kbs;
+ALTER TABLE public.rate OWNER TO bruno;
 
 --
--- Name: COLUMN rate.bookings_updated; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN rate.bookings_updated; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.rate.bookings_updated IS 'Indicates when was the last time related bookings minDeposit have been updated';
 
 
 --
--- Name: compute_price_record; Type: TYPE; Schema: public; Owner: kbs
+-- Name: compute_price_record; Type: TYPE; Schema: public; Owner: bruno
 --
 
 CREATE TYPE public.compute_price_record AS (
@@ -519,10 +436,10 @@ CREATE TYPE public.compute_price_record AS (
 );
 
 
-ALTER TYPE public.compute_price_record OWNER TO kbs;
+ALTER TYPE public.compute_price_record OWNER TO bruno;
 
 --
--- Name: event_state; Type: TYPE; Schema: public; Owner: kbs
+-- Name: event_state; Type: TYPE; Schema: public; Owner: bruno
 --
 
 CREATE TYPE public.event_state AS ENUM (
@@ -541,10 +458,10 @@ CREATE TYPE public.event_state AS ENUM (
 );
 
 
-ALTER TYPE public.event_state OWNER TO kbs;
+ALTER TYPE public.event_state OWNER TO bruno;
 
 --
--- Name: media_type; Type: TYPE; Schema: public; Owner: kbs
+-- Name: media_type; Type: TYPE; Schema: public; Owner: bruno
 --
 
 CREATE TYPE public.media_type AS ENUM (
@@ -554,10 +471,10 @@ CREATE TYPE public.media_type AS ENUM (
 );
 
 
-ALTER TYPE public.media_type OWNER TO kbs;
+ALTER TYPE public.media_type OWNER TO bruno;
 
 --
--- Name: resource_availibility; Type: TYPE; Schema: public; Owner: kbs
+-- Name: resource_availibility; Type: TYPE; Schema: public; Owner: bruno
 --
 
 CREATE TYPE public.resource_availibility AS (
@@ -570,10 +487,10 @@ CREATE TYPE public.resource_availibility AS (
 );
 
 
-ALTER TYPE public.resource_availibility OWNER TO kbs;
+ALTER TYPE public.resource_availibility OWNER TO bruno;
 
 --
--- Name: resource_capacity; Type: TYPE; Schema: public; Owner: kbs
+-- Name: resource_capacity; Type: TYPE; Schema: public; Owner: bruno
 --
 
 CREATE TYPE public.resource_capacity AS (
@@ -586,10 +503,10 @@ CREATE TYPE public.resource_capacity AS (
 );
 
 
-ALTER TYPE public.resource_capacity OWNER TO kbs;
+ALTER TYPE public.resource_capacity OWNER TO bruno;
 
 --
--- Name: abc_names(text); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: abc_names(text); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.abc_names(text) RETURNS text
@@ -600,10 +517,10 @@ BEGIN
 END; $_$;
 
 
-ALTER FUNCTION public.abc_names(text) OWNER TO kbs;
+ALTER FUNCTION public.abc_names(text) OWNER TO bruno;
 
 --
--- Name: array_length(anyarray); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: array_length(anyarray); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.array_length(anyarray) RETURNS integer
@@ -615,10 +532,10 @@ END
 $_$;
 
 
-ALTER FUNCTION public.array_length(anyarray) OWNER TO kbs;
+ALTER FUNCTION public.array_length(anyarray) OWNER TO bruno;
 
 --
--- Name: money_transfer; Type: TABLE; Schema: public; Owner: kbs
+-- Name: money_transfer; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.money_transfer (
@@ -661,31 +578,31 @@ CREATE TABLE public.money_transfer (
 );
 
 
-ALTER TABLE public.money_transfer OWNER TO kbs;
+ALTER TABLE public.money_transfer OWNER TO bruno;
 
 --
--- Name: COLUMN money_transfer.gateway_accesscode; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN money_transfer.gateway_accesscode; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.money_transfer.gateway_accesscode IS 'Gateway pre-transaction unique identifier';
 
 
 --
--- Name: COLUMN money_transfer.gateway_response; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN money_transfer.gateway_response; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.money_transfer.gateway_response IS 'Transaction result response from the gateway';
 
 
 --
--- Name: COLUMN money_transfer.gateway_generate_payment_url_response; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN money_transfer.gateway_generate_payment_url_response; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.money_transfer.gateway_generate_payment_url_response IS 'Unique payment url generation response from the gateway';
 
 
 --
--- Name: autoset_money_transfer_from_account(public.money_transfer, boolean); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: autoset_money_transfer_from_account(public.money_transfer, boolean); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.autoset_money_transfer_from_account(mt public.money_transfer, update_money_transfer boolean) RETURNS integer
@@ -736,10 +653,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.autoset_money_transfer_from_account(mt public.money_transfer, update_money_transfer boolean) OWNER TO kbs;
+ALTER FUNCTION public.autoset_money_transfer_from_account(mt public.money_transfer, update_money_transfer boolean) OWNER TO bruno;
 
 --
--- Name: autoset_money_transfer_to_account(public.money_transfer, boolean); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: autoset_money_transfer_to_account(public.money_transfer, boolean); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.autoset_money_transfer_to_account(mt public.money_transfer, update_money_transfer boolean) RETURNS integer
@@ -791,10 +708,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.autoset_money_transfer_to_account(mt public.money_transfer, update_money_transfer boolean) OWNER TO kbs;
+ALTER FUNCTION public.autoset_money_transfer_to_account(mt public.money_transfer, update_money_transfer boolean) OWNER TO bruno;
 
 --
--- Name: bookings_auto_confirm(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: bookings_auto_confirm(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.bookings_auto_confirm() RETURNS integer
@@ -910,10 +827,10 @@ return updated;
 $$;
 
 
-ALTER FUNCTION public.bookings_auto_confirm() OWNER TO kbs;
+ALTER FUNCTION public.bookings_auto_confirm() OWNER TO bruno;
 
 --
--- Name: cart_messages(integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: cart_messages(integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.cart_messages(from_cart_id integer) RETURNS TABLE(document_id integer, document_ref integer, cm_id integer, label_id integer, cm_grp smallint, cm_priority smallint, cm_ord smallint)
@@ -940,10 +857,10 @@ CREATE FUNCTION public.cart_messages(from_cart_id integer) RETURNS TABLE(documen
 $$;
 
 
-ALTER FUNCTION public.cart_messages(from_cart_id integer) OWNER TO kbs;
+ALTER FUNCTION public.cart_messages(from_cart_id integer) OWNER TO bruno;
 
 --
--- Name: cart_messages(character varying); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: cart_messages(character varying); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.cart_messages(from_cart_uuid character varying) RETURNS TABLE(document_id integer, document_ref integer, cm_id integer, label_id integer, cm_grp smallint, cm_priority smallint, cm_ord smallint)
@@ -962,10 +879,10 @@ CREATE FUNCTION public.cart_messages(from_cart_uuid character varying) RETURNS T
 $$;
 
 
-ALTER FUNCTION public.cart_messages(from_cart_uuid character varying) OWNER TO kbs;
+ALTER FUNCTION public.cart_messages(from_cart_uuid character varying) OWNER TO bruno;
 
 --
--- Name: cart_messages_all(integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: cart_messages_all(integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.cart_messages_all(from_cart_id integer) RETURNS TABLE(document_id integer, document_ref integer, id integer, label_id integer, grp smallint, priority smallint, ord smallint)
@@ -1078,10 +995,10 @@ CREATE FUNCTION public.cart_messages_all(from_cart_id integer) RETURNS TABLE(doc
 $$;
 
 
-ALTER FUNCTION public.cart_messages_all(from_cart_id integer) OWNER TO kbs;
+ALTER FUNCTION public.cart_messages_all(from_cart_id integer) OWNER TO bruno;
 
 --
--- Name: cart_messages_no_conflict(integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: cart_messages_no_conflict(integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.cart_messages_no_conflict(from_cart_id integer) RETURNS TABLE(document_id integer, document_ref integer, cm_id integer, label_id integer, cm_grp smallint, cm_priority smallint, cm_ord smallint)
@@ -1124,10 +1041,10 @@ CREATE FUNCTION public.cart_messages_no_conflict(from_cart_id integer) RETURNS T
 $$;
 
 
-ALTER FUNCTION public.cart_messages_no_conflict(from_cart_id integer) OWNER TO kbs;
+ALTER FUNCTION public.cart_messages_no_conflict(from_cart_id integer) OWNER TO bruno;
 
 --
--- Name: compute_dates(date[]); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: compute_dates(date[]); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.compute_dates(dates date[]) RETURNS text
@@ -1165,10 +1082,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.compute_dates(dates date[]) OWNER TO kbs;
+ALTER FUNCTION public.compute_dates(dates date[]) OWNER TO bruno;
 
 --
--- Name: compute_document_line_pricing_quantity(public.document_line); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: compute_document_line_pricing_quantity(public.document_line); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.compute_document_line_pricing_quantity(dl public.document_line) RETURNS integer
@@ -1201,10 +1118,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.compute_document_line_pricing_quantity(dl public.document_line) OWNER TO kbs;
+ALTER FUNCTION public.compute_document_line_pricing_quantity(dl public.document_line) OWNER TO bruno;
 
 --
--- Name: compute_document_prices(integer, boolean); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: compute_document_prices(integer, boolean); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.compute_document_prices(document_id integer, trace boolean) RETURNS integer
@@ -1528,10 +1445,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.compute_document_prices(document_id integer, trace boolean) OWNER TO kbs;
+ALTER FUNCTION public.compute_document_prices(document_id integer, trace boolean) OWNER TO bruno;
 
 --
--- Name: compute_money_account_balances(integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: compute_money_account_balances(integer, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.compute_money_account_balances(money_account_id integer, from_date timestamp without time zone) RETURNS integer
@@ -1612,10 +1529,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.compute_money_account_balances(money_account_id integer, from_date timestamp without time zone) OWNER TO kbs;
+ALTER FUNCTION public.compute_money_account_balances(money_account_id integer, from_date timestamp without time zone) OWNER TO bruno;
 
 --
--- Name: compute_rate_min_deposit(public.rate, date); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: compute_rate_min_deposit(public.rate, date); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.compute_rate_min_deposit(r public.rate, d date) RETURNS smallint
@@ -1633,10 +1550,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.compute_rate_min_deposit(r public.rate, d date) OWNER TO kbs;
+ALTER FUNCTION public.compute_rate_min_deposit(r public.rate, d date) OWNER TO bruno;
 
 --
--- Name: compute_rate_non_refundable(public.rate, date); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: compute_rate_non_refundable(public.rate, date); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.compute_rate_non_refundable(r public.rate, d date) RETURNS smallint
@@ -1654,10 +1571,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.compute_rate_non_refundable(r public.rate, d date) OWNER TO kbs;
+ALTER FUNCTION public.compute_rate_non_refundable(r public.rate, d date) OWNER TO bruno;
 
 --
--- Name: compute_rate_unit_price(public.rate, public.document); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: compute_rate_unit_price(public.rate, public.document); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.compute_rate_unit_price(r public.rate, d public.document) RETURNS integer
@@ -1681,10 +1598,10 @@ DECLARE
 				price := COALESCE(r.guest_price, price * (100 - r.guest_discount) / 100, price);END IF;END IF;RETURN price;END;$$;
 
 
-ALTER FUNCTION public.compute_rate_unit_price(r public.rate, d public.document) OWNER TO kbs;
+ALTER FUNCTION public.compute_rate_unit_price(r public.rate, d public.document) OWNER TO bruno;
 
 --
--- Name: copy_date_info(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_date_info(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_date_info(src_event_id integer, src_date_info_id integer, dst_event_id integer) RETURNS integer
@@ -1711,10 +1628,10 @@ select rn.id as new_id, rs.id as src_id from row_new rn join row_src rs on rs.ro
 			new_id := new_info.new_id;end if;end loop;return new_id;END;$$;
 
 
-ALTER FUNCTION public.copy_date_info(src_event_id integer, src_date_info_id integer, dst_event_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_date_info(src_event_id integer, src_date_info_id integer, dst_event_id integer) OWNER TO bruno;
 
 --
--- Name: copy_event(integer, integer, date); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_event(integer, integer, date); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_event(src_event_id integer, dst_event_id integer, dst_event_start_date date) RETURNS integer
@@ -1773,10 +1690,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.copy_event(src_event_id integer, dst_event_id integer, dst_event_start_date date) OWNER TO kbs;
+ALTER FUNCTION public.copy_event(src_event_id integer, dst_event_id integer, dst_event_start_date date) OWNER TO bruno;
 
 --
--- Name: copy_event(integer, character varying, date); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_event(integer, character varying, date); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_event(src_event_id integer, dst_event_name character varying, dst_event_start_date date) RETURNS integer
@@ -1887,10 +1804,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.copy_event(src_event_id integer, dst_event_name character varying, dst_event_start_date date) OWNER TO kbs;
+ALTER FUNCTION public.copy_event(src_event_id integer, dst_event_name character varying, dst_event_start_date date) OWNER TO bruno;
 
 --
--- Name: copy_gateway_parameter(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_gateway_parameter(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_gateway_parameter(src_money_account_id integer, src_gateway_parameter_id integer, dst_money_account_id integer) RETURNS integer
@@ -1926,10 +1843,10 @@ CREATE FUNCTION public.copy_gateway_parameter(src_money_account_id integer, src_
 $$;
 
 
-ALTER FUNCTION public.copy_gateway_parameter(src_money_account_id integer, src_gateway_parameter_id integer, dst_money_account_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_gateway_parameter(src_money_account_id integer, src_gateway_parameter_id integer, dst_money_account_id integer) OWNER TO bruno;
 
 --
--- Name: copy_letter(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_letter(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_letter(src_event_id integer, src_letter_id integer, dst_event_id integer) RETURNS integer
@@ -1964,10 +1881,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.copy_letter(src_event_id integer, src_letter_id integer, dst_event_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_letter(src_event_id integer, src_letter_id integer, dst_event_id integer) OWNER TO bruno;
 
 --
--- Name: copy_money_account(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_money_account(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_money_account(src_event_id integer, src_money_account_id integer, dst_event_id integer) RETURNS integer
@@ -2009,10 +1926,10 @@ CREATE FUNCTION public.copy_money_account(src_event_id integer, src_money_accoun
 $$;
 
 
-ALTER FUNCTION public.copy_money_account(src_event_id integer, src_money_account_id integer, dst_event_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_money_account(src_event_id integer, src_money_account_id integer, dst_event_id integer) OWNER TO bruno;
 
 --
--- Name: copy_money_entities(integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_money_entities(integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_money_entities(src_event_id integer, dst_event_id integer) RETURNS void
@@ -2037,10 +1954,10 @@ CREATE FUNCTION public.copy_money_entities(src_event_id integer, dst_event_id in
 $$;
 
 
-ALTER FUNCTION public.copy_money_entities(src_event_id integer, dst_event_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_money_entities(src_event_id integer, dst_event_id integer) OWNER TO bruno;
 
 --
--- Name: copy_money_flows(integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_money_flows(integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_money_flows(src_event_id integer, dst_event_id integer) RETURNS integer
@@ -2078,10 +1995,10 @@ CREATE FUNCTION public.copy_money_flows(src_event_id integer, dst_event_id integ
 $$;
 
 
-ALTER FUNCTION public.copy_money_flows(src_event_id integer, dst_event_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_money_flows(src_event_id integer, dst_event_id integer) OWNER TO bruno;
 
 --
--- Name: copy_option(integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_option(integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_option(src_event_id integer, src_option_id integer, dst_event_id integer, dst_parent_id integer) RETURNS integer
@@ -2177,10 +2094,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.copy_option(src_event_id integer, src_option_id integer, dst_event_id integer, dst_parent_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_option(src_event_id integer, src_option_id integer, dst_event_id integer, dst_parent_id integer) OWNER TO bruno;
 
 --
--- Name: copy_option_condition(integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_option_condition(integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_option_condition(src_option_id integer, dst_option_id integer) RETURNS integer
@@ -2232,10 +2149,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.copy_option_condition(src_option_id integer, dst_option_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_option_condition(src_option_id integer, dst_option_id integer) OWNER TO bruno;
 
 --
--- Name: copy_rate(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_rate(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_rate(src_site_item_family_id integer, src_rate_id integer, dst_site_item_family_id integer) RETURNS integer
@@ -2277,10 +2194,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.copy_rate(src_site_item_family_id integer, src_rate_id integer, dst_site_item_family_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_rate(src_site_item_family_id integer, src_rate_id integer, dst_site_item_family_id integer) OWNER TO bruno;
 
 --
--- Name: copy_resource(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_resource(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_resource(src_site_item_family_id integer, src_resource_id integer, dst_site_item_family_id integer) RETURNS integer
@@ -2316,10 +2233,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.copy_resource(src_site_item_family_id integer, src_resource_id integer, dst_site_item_family_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_resource(src_site_item_family_id integer, src_resource_id integer, dst_site_item_family_id integer) OWNER TO bruno;
 
 --
--- Name: copy_resource_configuration(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_resource_configuration(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_resource_configuration(src_resource_id integer, src_resource_configuration_id integer, dst_resource_id integer) RETURNS integer
@@ -2346,10 +2263,10 @@ select rn.id as new_id, rs.id as src_id from row_new rn join row_src rs on rs.ro
 			new_id := new_info.new_id;end if;end loop;return new_id;END;$$;
 
 
-ALTER FUNCTION public.copy_resource_configuration(src_resource_id integer, src_resource_configuration_id integer, dst_resource_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_resource_configuration(src_resource_id integer, src_resource_configuration_id integer, dst_resource_id integer) OWNER TO bruno;
 
 --
--- Name: copy_site(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_site(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_site(src_event_id integer, src_site_id integer, dst_event_id integer) RETURNS integer
@@ -2393,10 +2310,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.copy_site(src_event_id integer, src_site_id integer, dst_event_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_site(src_event_id integer, src_site_id integer, dst_event_id integer) OWNER TO bruno;
 
 --
--- Name: copy_site_item_family(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: copy_site_item_family(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.copy_site_item_family(src_site_id integer, src_site_item_family_id integer, dst_site_id integer) RETURNS integer
@@ -2433,10 +2350,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.copy_site_item_family(src_site_id integer, src_site_item_family_id integer, dst_site_id integer) OWNER TO kbs;
+ALTER FUNCTION public.copy_site_item_family(src_site_id integer, src_site_item_family_id integer, dst_site_id integer) OWNER TO bruno;
 
 --
--- Name: deferred_allocate_document_line(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: deferred_allocate_document_line(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.deferred_allocate_document_line() RETURNS trigger
@@ -2535,10 +2452,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.deferred_allocate_document_line() OWNER TO kbs;
+ALTER FUNCTION public.deferred_allocate_document_line() OWNER TO bruno;
 
 --
--- Name: deferred_compute_document_dates(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: deferred_compute_document_dates(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.deferred_compute_document_dates() RETURNS trigger
@@ -2564,55 +2481,38 @@ END;
 $$;
 
 
-ALTER FUNCTION public.deferred_compute_document_dates() OWNER TO kbs;
+ALTER FUNCTION public.deferred_compute_document_dates() OWNER TO bruno;
 
 --
--- Name: deferred_compute_document_deposit(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: deferred_compute_document_deposit(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.deferred_compute_document_deposit() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-
-
-
-	IF (OLD.trigger_defer_compute_deposit = false and NEW.trigger_defer_compute_deposit = true) THEN
-
-
-
-	   RAISE NOTICE 'Entering trigger %.%(%)', TG_RELNAME, TG_NAME, NEW.id;
-
-
-
-	   -- compute document deposit
-
-   	update document as d set
-
-      	price_deposit = COALESCE((select sum(amount) from money_transfer where document_id=d.id and pending=false and successful=true group by document_id), 0),
-
-			trigger_defer_compute_deposit = false
-
-	      where d.id=NEW.id;
-
-
-
-   END IF;
-
-
-
-	RETURN NEW;
-
-END;
-
+    AS $$
+BEGIN
+
+	IF (OLD.trigger_defer_compute_deposit = false and NEW.trigger_defer_compute_deposit = true) THEN
+
+	   RAISE NOTICE 'Entering trigger %.%(%)', TG_RELNAME, TG_NAME, NEW.id;
+
+	   -- compute document deposit
+   	update document as d set
+      	price_deposit = COALESCE((select sum(amount) from money_transfer where document_id=d.id and pending=false and successful=true group by document_id), 0),
+			trigger_defer_compute_deposit = false
+	      where d.id=NEW.id;
+
+   END IF;
+
+	RETURN NEW;
+END;
 $$;
 
 
-ALTER FUNCTION public.deferred_compute_document_deposit() OWNER TO kbs;
+ALTER FUNCTION public.deferred_compute_document_deposit() OWNER TO bruno;
 
 --
--- Name: deferred_compute_document_lines_deposit(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: deferred_compute_document_lines_deposit(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.deferred_compute_document_lines_deposit() RETURNS trigger
@@ -2632,10 +2532,10 @@ BEGIN
 	      where d.id=NEW.id;END IF;RETURN NEW;END;$$;
 
 
-ALTER FUNCTION public.deferred_compute_document_lines_deposit() OWNER TO kbs;
+ALTER FUNCTION public.deferred_compute_document_lines_deposit() OWNER TO bruno;
 
 --
--- Name: deferred_compute_document_prices(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: deferred_compute_document_prices(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.deferred_compute_document_prices() RETURNS trigger
@@ -2701,10 +2601,10 @@ CREATE FUNCTION public.deferred_compute_document_prices() RETURNS trigger
  $$;
 
 
-ALTER FUNCTION public.deferred_compute_document_prices() OWNER TO kbs;
+ALTER FUNCTION public.deferred_compute_document_prices() OWNER TO bruno;
 
 --
--- Name: deferred_compute_money_account_balances(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: deferred_compute_money_account_balances(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.deferred_compute_money_account_balances() RETURNS trigger
@@ -2735,10 +2635,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.deferred_compute_money_account_balances() OWNER TO kbs;
+ALTER FUNCTION public.deferred_compute_money_account_balances() OWNER TO bruno;
 
 --
--- Name: deferred_send_history_email(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: deferred_send_history_email(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.deferred_send_history_email() RETURNS trigger
@@ -2760,10 +2660,10 @@ RETURN NEW;
 END $$;
 
 
-ALTER FUNCTION public.deferred_send_history_email() OWNER TO kbs;
+ALTER FUNCTION public.deferred_send_history_email() OWNER TO bruno;
 
 --
--- Name: deferred_update_spread_money_transfer(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: deferred_update_spread_money_transfer(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.deferred_update_spread_money_transfer() RETURNS trigger
@@ -2812,10 +2712,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.deferred_update_spread_money_transfer() OWNER TO kbs;
+ALTER FUNCTION public.deferred_update_spread_money_transfer() OWNER TO bruno;
 
 --
--- Name: first_agg(anyelement, anyelement); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: first_agg(anyelement, anyelement); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.first_agg(anyelement, anyelement) RETURNS anyelement
@@ -2825,10 +2725,10 @@ CREATE FUNCTION public.first_agg(anyelement, anyelement) RETURNS anyelement
 $_$;
 
 
-ALTER FUNCTION public.first_agg(anyelement, anyelement) OWNER TO kbs;
+ALTER FUNCTION public.first_agg(anyelement, anyelement) OWNER TO bruno;
 
 --
--- Name: generate_dates(date, date); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: generate_dates(date, date); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.generate_dates(date, date) RETURNS SETOF date
@@ -2836,10 +2736,10 @@ CREATE FUNCTION public.generate_dates(date, date) RETURNS SETOF date
     AS $_$select d.a::date from generate_series($1::timestamp, $2, '1 day') as d(a)$_$;
 
 
-ALTER FUNCTION public.generate_dates(date, date) OWNER TO kbs;
+ALTER FUNCTION public.generate_dates(date, date) OWNER TO bruno;
 
 --
--- Name: generate_event_dates(integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: generate_event_dates(integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.generate_event_dates(integer) RETURNS SETOF date
@@ -2847,10 +2747,10 @@ CREATE FUNCTION public.generate_event_dates(integer) RETURNS SETOF date
     AS $_$select generate_dates(coalesce(e.pre_date,e.start_date), coalesce(e.post_date,e.end_date)) from event e where e.id=$1$_$;
 
 
-ALTER FUNCTION public.generate_event_dates(integer) OWNER TO kbs;
+ALTER FUNCTION public.generate_event_dates(integer) OWNER TO bruno;
 
 --
--- Name: get_transaction_parameter(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: get_transaction_parameter(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.get_transaction_parameter() RETURNS boolean
@@ -2865,10 +2765,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.get_transaction_parameter() OWNER TO kbs;
+ALTER FUNCTION public.get_transaction_parameter() OWNER TO bruno;
 
 --
--- Name: install_table_notification(text, boolean); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: install_table_notification(text, boolean); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.install_table_notification(tname text, also_insert boolean) RETURNS text
@@ -2883,10 +2783,10 @@ DECLARE
 		s := s || format(E'\nIF (TG_OP = ''INSERT'' OR TG_OP = ''UPDATE'' AND OLD.%2$I IS DISTINCT FROM NEW.%2$I) THEN INSERT into sys_log (table_name, update, oid, column_name) values (%1$L, true, NEW.id, %2$L); END IF;', tname, ri.column_name);END LOOP;s := s || E'\nRETURN NEW;\nEND;\n\$\$ LANGUAGE plpgsql;';s := s || E'\nCREATE TRIGGER record_changes_for_notification AFTER UPDATE' || case when also_insert then ' OR INSERT' else '' end;s := s || format(E' ON %1$s FOR EACH ROW EXECUTE PROCEDURE record_changes_for_notification_%1$s();', tname);EXECUTE s;RETURN s;END;$_$;
 
 
-ALTER FUNCTION public.install_table_notification(tname text, also_insert boolean) OWNER TO kbs;
+ALTER FUNCTION public.install_table_notification(tname text, also_insert boolean) OWNER TO bruno;
 
 --
--- Name: interpret_brackets(text, integer, character); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: interpret_brackets(text, integer, character); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.interpret_brackets(txt text, docid integer, language character) RETURNS text
@@ -2913,10 +2813,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.interpret_brackets(txt text, docid integer, language character) OWNER TO kbs;
+ALTER FUNCTION public.interpret_brackets(txt text, docid integer, language character) OWNER TO bruno;
 
 --
--- Name: interpret_brackets(text, integer, character, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: interpret_brackets(text, integer, character, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.interpret_brackets(txt text, docid integer, language character, siid integer) RETURNS text
@@ -2943,10 +2843,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.interpret_brackets(txt text, docid integer, language character, siid integer) OWNER TO kbs;
+ALTER FUNCTION public.interpret_brackets(txt text, docid integer, language character, siid integer) OWNER TO bruno;
 
 --
--- Name: interpret_brakets(text, integer, character); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: interpret_brakets(text, integer, character); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.interpret_brakets(txt text, docid integer, language character) RETURNS text
@@ -2973,10 +2873,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.interpret_brakets(txt text, docid integer, language character) OWNER TO kbs;
+ALTER FUNCTION public.interpret_brakets(txt text, docid integer, language character) OWNER TO bruno;
 
 --
--- Name: is_on(boolean, timestamp without time zone, timestamp without time zone, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: is_on(boolean, timestamp without time zone, timestamp without time zone, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.is_on(current_value boolean, on_ts timestamp without time zone DEFAULT NULL::timestamp without time zone, off_ts timestamp without time zone DEFAULT NULL::timestamp without time zone, ts timestamp without time zone DEFAULT now()) RETURNS boolean
@@ -3009,10 +2909,10 @@ SELECT
 $$;
 
 
-ALTER FUNCTION public.is_on(current_value boolean, on_ts timestamp without time zone, off_ts timestamp without time zone, ts timestamp without time zone) OWNER TO kbs;
+ALTER FUNCTION public.is_on(current_value boolean, on_ts timestamp without time zone, off_ts timestamp without time zone, ts timestamp without time zone) OWNER TO bruno;
 
 --
--- Name: label(integer, text, character); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: label(integer, text, character); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.label(label_id integer, name text, lang character) RETURNS text
@@ -3027,10 +2927,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.label(label_id integer, name text, lang character) OWNER TO kbs;
+ALTER FUNCTION public.label(label_id integer, name text, lang character) OWNER TO bruno;
 
 --
--- Name: last_agg(anyelement, anyelement); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: last_agg(anyelement, anyelement); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.last_agg(anyelement, anyelement) RETURNS anyelement
@@ -3040,10 +2940,10 @@ CREATE FUNCTION public.last_agg(anyelement, anyelement) RETURNS anyelement
 $_$;
 
 
-ALTER FUNCTION public.last_agg(anyelement, anyelement) OWNER TO kbs;
+ALTER FUNCTION public.last_agg(anyelement, anyelement) OWNER TO bruno;
 
 --
--- Name: mincoalesce(integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: mincoalesce(integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.mincoalesce(integer, integer) RETURNS integer
@@ -3055,10 +2955,10 @@ CREATE FUNCTION public.mincoalesce(integer, integer) RETURNS integer
 	 END;$_$;
 
 
-ALTER FUNCTION public.mincoalesce(integer, integer) OWNER TO kbs;
+ALTER FUNCTION public.mincoalesce(integer, integer) OWNER TO bruno;
 
 --
--- Name: money_transfer_timeout(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: money_transfer_timeout(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.money_transfer_timeout() RETURNS integer
@@ -3123,17 +3023,17 @@ return updated;
 $$;
 
 
-ALTER FUNCTION public.money_transfer_timeout() OWNER TO kbs;
+ALTER FUNCTION public.money_transfer_timeout() OWNER TO bruno;
 
 --
--- Name: FUNCTION money_transfer_timeout(); Type: COMMENT; Schema: public; Owner: kbs
+-- Name: FUNCTION money_transfer_timeout(); Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON FUNCTION public.money_transfer_timeout() IS 'Updates status of timed out money_transfers';
 
 
 --
--- Name: multi_replace(text, text[]); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: multi_replace(text, text[]); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.multi_replace(text, text[]) RETURNS text
@@ -3154,10 +3054,10 @@ BEGIN
 END; $_$;
 
 
-ALTER FUNCTION public.multi_replace(text, text[]) OWNER TO kbs;
+ALTER FUNCTION public.multi_replace(text, text[]) OWNER TO bruno;
 
 --
--- Name: numbers(text); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: numbers(text); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.numbers(text) RETURNS integer[]
@@ -3168,10 +3068,10 @@ BEGIN
 END; $_$;
 
 
-ALTER FUNCTION public.numbers(text) OWNER TO kbs;
+ALTER FUNCTION public.numbers(text) OWNER TO bruno;
 
 --
--- Name: option_update_scheduled_settings(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: option_update_scheduled_settings(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.option_update_scheduled_settings() RETURNS integer
@@ -3221,33 +3121,27 @@ CREATE FUNCTION public.option_update_scheduled_settings() RETURNS integer
 $$;
 
 
-ALTER FUNCTION public.option_update_scheduled_settings() OWNER TO kbs;
+ALTER FUNCTION public.option_update_scheduled_settings() OWNER TO bruno;
 
 --
--- Name: overlaps(date, date, date, date); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: overlaps(date, date, date, date); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public."overlaps"(date, date, date, date) RETURNS boolean
     LANGUAGE sql IMMUTABLE
-    AS $_$SELECT CASE WHEN $1 is null and $2 is null or $3 is null and $4 is null THEN true
-
-			WHEN $1 is null THEN ($3 is null or $2 >= $3)
-
-			WHEN $2 is null THEN ($4 is null or $4 >= $1)
-
-			WHEN $3 is null THEN ($1 is null or $4 >= $1)
-
-			WHEN $4 is null THEN ($2 is null or $2 >= $3)
-
-			ELSE $1 <= $4 AND $2 >= $3
-
+    AS $_$SELECT CASE WHEN $1 is null and $2 is null or $3 is null and $4 is null THEN true
+			WHEN $1 is null THEN ($3 is null or $2 >= $3)
+			WHEN $2 is null THEN ($4 is null or $4 >= $1)
+			WHEN $3 is null THEN ($1 is null or $4 >= $1)
+			WHEN $4 is null THEN ($2 is null or $2 >= $3)
+			ELSE $1 <= $4 AND $2 >= $3
 	 END;$_$;
 
 
-ALTER FUNCTION public."overlaps"(date, date, date, date) OWNER TO kbs;
+ALTER FUNCTION public."overlaps"(date, date, date, date) OWNER TO bruno;
 
 --
--- Name: person_merge(integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: person_merge(integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.person_merge(person_dst_id integer, person_src_id integer) RETURNS integer
@@ -3276,10 +3170,10 @@ CREATE FUNCTION public.person_merge(person_dst_id integer, person_src_id integer
 $$;
 
 
-ALTER FUNCTION public.person_merge(person_dst_id integer, person_src_id integer) OWNER TO kbs;
+ALTER FUNCTION public.person_merge(person_dst_id integer, person_src_id integer) OWNER TO bruno;
 
 --
--- Name: rate_matches_date(public.rate, date, public.attendance[], integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: rate_matches_date(public.rate, date, public.attendance[], integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.rate_matches_date(r public.rate, d date, attendances public.attendance[], index integer) RETURNS boolean
@@ -3298,10 +3192,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rate_matches_date(r public.rate, d date, attendances public.attendance[], index integer) OWNER TO kbs;
+ALTER FUNCTION public.rate_matches_date(r public.rate, d date, attendances public.attendance[], index integer) OWNER TO bruno;
 
 --
--- Name: rate_matches_document(public.rate, public.document); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: rate_matches_document(public.rate, public.document); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.rate_matches_document(r public.rate, d public.document) RETURNS boolean
@@ -3313,10 +3207,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rate_matches_document(r public.rate, d public.document) OWNER TO kbs;
+ALTER FUNCTION public.rate_matches_document(r public.rate, d public.document) OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification() RETURNS trigger
@@ -3345,10 +3239,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.record_changes_for_notification() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_allocation_rule(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_allocation_rule(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_allocation_rule() RETURNS trigger
@@ -3381,10 +3275,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_allocation_rule() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_allocation_rule() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_document(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_document(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_document() RETURNS trigger
@@ -3488,10 +3382,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_document() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_document() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_document_line(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_document_line(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_document_line() RETURNS trigger
@@ -3555,10 +3449,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_document_line() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_document_line() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_label(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_label(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_label() RETURNS trigger
@@ -3579,10 +3473,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_label() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_label() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_letter(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_letter(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_letter() RETURNS trigger
@@ -3613,10 +3507,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_letter() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_letter() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_mail(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_mail(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_mail() RETURNS trigger
@@ -3644,10 +3538,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_mail() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_mail() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_money_account(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_money_account(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_money_account() RETURNS trigger
@@ -3669,10 +3563,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_money_account() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_money_account() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_money_transfer(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_money_transfer(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_money_transfer() RETURNS trigger
@@ -3711,10 +3605,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_money_transfer() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_money_transfer() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_multiple_booking(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_multiple_booking(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_multiple_booking() RETURNS trigger
@@ -3730,10 +3624,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_multiple_booking() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_multiple_booking() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_option(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_option(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_option() RETURNS trigger
@@ -3807,10 +3701,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_option() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_option() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_organization(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_organization(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_organization() RETURNS trigger
@@ -3829,10 +3723,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_organization() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_organization() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_person(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_person(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_person() RETURNS trigger
@@ -3884,10 +3778,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_person() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_person() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_rate(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_rate(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_rate() RETURNS trigger
@@ -3969,10 +3863,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_rate() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_rate() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_resource(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_resource(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_resource() RETURNS trigger
@@ -3990,10 +3884,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_resource() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_resource() OWNER TO bruno;
 
 --
--- Name: record_changes_for_notification_resource_configuration(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: record_changes_for_notification_resource_configuration(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.record_changes_for_notification_resource_configuration() RETURNS trigger
@@ -4016,10 +3910,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.record_changes_for_notification_resource_configuration() OWNER TO kbs;
+ALTER FUNCTION public.record_changes_for_notification_resource_configuration() OWNER TO bruno;
 
 --
--- Name: remove_table_notification(text); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: remove_table_notification(text); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.remove_table_notification(tname text) RETURNS void
@@ -4031,10 +3925,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.remove_table_notification(tname text) OWNER TO kbs;
+ALTER FUNCTION public.remove_table_notification(tname text) OWNER TO bruno;
 
 --
--- Name: resource_availability_by_event_items(integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: resource_availability_by_event_items(integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.resource_availability_by_event_items(eventid integer) RETURNS SETOF public.resource_availibility
@@ -4124,10 +4018,10 @@ select CAST(row_number() over(order by date) as int), site_id, item_id, date, CA
 $$;
 
 
-ALTER FUNCTION public.resource_availability_by_event_items(eventid integer) OWNER TO kbs;
+ALTER FUNCTION public.resource_availability_by_event_items(eventid integer) OWNER TO bruno;
 
 --
--- Name: resource_capacity_by_event_items(integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: resource_capacity_by_event_items(integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.resource_capacity_by_event_items(eventid integer) RETURNS SETOF public.resource_capacity
@@ -4189,10 +4083,10 @@ resource_info AS (
 $$;
 
 
-ALTER FUNCTION public.resource_capacity_by_event_items(eventid integer) OWNER TO kbs;
+ALTER FUNCTION public.resource_capacity_by_event_items(eventid integer) OWNER TO bruno;
 
 --
--- Name: set_transaction_parameters(boolean); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: set_transaction_parameters(boolean); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.set_transaction_parameters(backend boolean) RETURNS boolean
@@ -4206,10 +4100,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.set_transaction_parameters(backend boolean) OWNER TO kbs;
+ALTER FUNCTION public.set_transaction_parameters(backend boolean) OWNER TO bruno;
 
 --
--- Name: shift_date_time_range(character varying, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: shift_date_time_range(character varying, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.shift_date_time_range(date_time_range character varying, days_count integer) RETURNS character varying
@@ -4221,10 +4115,10 @@ DECLARE
 		select into statement 'select ''' || regexp_replace(date_time_range, '(\d\d/\d\d/\d\d\d\d)', ''' || to_char(to_date(''\1'', ''DD/MM/YYYY'') + $1, ''DD/MM/YYYY'') || ''', 'g') || '''';EXECUTE statement into new_date_time_range using days_count;end if;return new_date_time_range;END;$_$;
 
 
-ALTER FUNCTION public.shift_date_time_range(date_time_range character varying, days_count integer) OWNER TO kbs;
+ALTER FUNCTION public.shift_date_time_range(date_time_range character varying, days_count integer) OWNER TO bruno;
 
 --
--- Name: shift_event_for(integer, date); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: shift_event_for(integer, date); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.shift_event_for(event_id integer, start_date date) RETURNS integer
@@ -4234,10 +4128,10 @@ BEGIN
 	return shift_event_for(event_id, (select start_date - e.start_date from event e where id=event_id));END;$$;
 
 
-ALTER FUNCTION public.shift_event_for(event_id integer, start_date date) OWNER TO kbs;
+ALTER FUNCTION public.shift_event_for(event_id integer, start_date date) OWNER TO bruno;
 
 --
--- Name: shift_event_for(integer, integer); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: shift_event_for(integer, integer); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.shift_event_for(event_id integer, days_count integer) RETURNS integer
@@ -4300,10 +4194,10 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.shift_event_for(event_id integer, days_count integer) OWNER TO kbs;
+ALTER FUNCTION public.shift_event_for(event_id integer, days_count integer) OWNER TO bruno;
 
 --
--- Name: shift_event_to(integer, date); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: shift_event_to(integer, date); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.shift_event_to(event_id integer, new_start_date date) RETURNS integer
@@ -4313,10 +4207,10 @@ BEGIN
 	return shift_event_for(event_id, (select new_start_date - e.start_date from event e where id=event_id));END;$$;
 
 
-ALTER FUNCTION public.shift_event_to(event_id integer, new_start_date date) OWNER TO kbs;
+ALTER FUNCTION public.shift_event_to(event_id integer, new_start_date date) OWNER TO bruno;
 
 --
--- Name: trigger_allocation_rule_apply_rule(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_allocation_rule_apply_rule(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_allocation_rule_apply_rule() RETURNS trigger
@@ -4346,10 +4240,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_allocation_rule_apply_rule() OWNER TO kbs;
+ALTER FUNCTION public.trigger_allocation_rule_apply_rule() OWNER TO bruno;
 
 --
--- Name: trigger_attendance_auto_date(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_attendance_auto_date(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_attendance_auto_date() RETURNS trigger
@@ -4362,10 +4256,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_attendance_auto_date() OWNER TO kbs;
+ALTER FUNCTION public.trigger_attendance_auto_date() OWNER TO bruno;
 
 --
--- Name: trigger_attendance_auto_scheduled_item(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_attendance_auto_scheduled_item(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_attendance_auto_scheduled_item() RETURNS trigger
@@ -4373,20 +4267,26 @@ CREATE FUNCTION public.trigger_attendance_auto_scheduled_item() RETURNS trigger
     AS $$
 BEGIN
     RAISE NOTICE 'Entering trigger %.%(%)', TG_RELNAME, TG_NAME, NEW.id;
-    update attendance au set scheduled_item_id = si.id
+    update attendance au
+    set scheduled_item_id = si.id
     from attendance a
              join document_line dl on dl.id = a.document_line_id
              join document d ON dl.document_id = d.id
-             join scheduled_item si ON si.item_id = dl.item_id and si.date = a.date and si.id=si.bookable_scheduled_item_id and si.event_id=d.event_id
-    where a.id = new.id and au.id = new.id;
+             join event e on e.id = d.event_id
+             join scheduled_item si
+                  ON si.item_id = dl.item_id and si.date = a.date and si.id = si.bookable_scheduled_item_id and
+                     (si.event_id = coalesce(e.repeated_event_id, e.id) or si.event_id is null)
+    where a.id = new.id
+      and au.id = new.id;
     return new;
-END $$;
+END
+$$;
 
 
-ALTER FUNCTION public.trigger_attendance_auto_scheduled_item() OWNER TO kbs;
+ALTER FUNCTION public.trigger_attendance_auto_scheduled_item() OWNER TO bruno;
 
 --
--- Name: trigger_attendance_defer_compute_document_prices_dates(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_attendance_defer_compute_document_prices_dates(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_attendance_defer_compute_document_prices_dates() RETURNS trigger
@@ -4402,10 +4302,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_attendance_defer_compute_document_prices_dates() OWNER TO kbs;
+ALTER FUNCTION public.trigger_attendance_defer_compute_document_prices_dates() OWNER TO bruno;
 
 --
--- Name: trigger_document_auto_person_details(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_auto_person_details(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_auto_person_details() RETURNS trigger
@@ -4446,10 +4346,10 @@ END
 $$;
 
 
-ALTER FUNCTION public.trigger_document_auto_person_details() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_auto_person_details() OWNER TO bruno;
 
 --
--- Name: trigger_document_auto_ref(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_auto_ref(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_auto_ref() RETURNS trigger
@@ -4488,10 +4388,10 @@ return new;
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_auto_ref() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_auto_ref() OWNER TO bruno;
 
 --
--- Name: trigger_document_cancel_other_multiple_bookings(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_cancel_other_multiple_bookings(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_cancel_other_multiple_bookings() RETURNS trigger
@@ -4510,10 +4410,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_cancel_other_multiple_bookings() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_cancel_other_multiple_bookings() OWNER TO bruno;
 
 --
--- Name: trigger_document_cascadecancelled(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_cascadecancelled(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_cascadecancelled() RETURNS trigger
@@ -4530,10 +4430,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_cascadecancelled() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_cascadecancelled() OWNER TO bruno;
 
 --
--- Name: trigger_document_cascaderead(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_cascaderead(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_cascaderead() RETURNS trigger
@@ -4547,10 +4447,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_cascaderead() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_cascaderead() OWNER TO bruno;
 
 --
--- Name: trigger_document_check_multiple_booking(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_check_multiple_booking(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_check_multiple_booking() RETURNS trigger
@@ -4609,10 +4509,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_check_multiple_booking() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_check_multiple_booking() OWNER TO bruno;
 
 --
--- Name: trigger_document_defer_compute_lines_deposit(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_defer_compute_lines_deposit(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_defer_compute_lines_deposit() RETURNS trigger
@@ -4625,10 +4525,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_defer_compute_lines_deposit() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_defer_compute_lines_deposit() OWNER TO bruno;
 
 --
--- Name: trigger_document_defer_compute_prices(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_defer_compute_prices(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_defer_compute_prices() RETURNS trigger
@@ -4642,10 +4542,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_defer_compute_prices() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_defer_compute_prices() OWNER TO bruno;
 
 --
--- Name: trigger_document_generate_mails_on_booking(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_generate_mails_on_booking(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_generate_mails_on_booking() RETURNS trigger
@@ -4667,27 +4567,24 @@ BEGIN
 END $_$;
 
 
-ALTER FUNCTION public.trigger_document_generate_mails_on_booking() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_generate_mails_on_booking() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_auto_allocate(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_auto_allocate(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_auto_allocate() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-BEGIN	
-
-	return NEW;
-
+    AS $$
+BEGIN	
+	return NEW;
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_auto_allocate() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_auto_allocate() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_cascadeunread(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_cascadeunread(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_cascadeunread() RETURNS trigger
@@ -4699,10 +4596,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_cascadeunread() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_cascadeunread() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_defer_allocate(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_defer_allocate(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_defer_allocate() RETURNS trigger
@@ -4725,10 +4622,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_defer_allocate() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_defer_allocate() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_defer_compute_document_prices(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_defer_compute_document_prices(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_defer_compute_document_prices() RETURNS trigger
@@ -4751,10 +4648,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_defer_compute_document_prices() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_defer_compute_document_prices() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_on_cancelled_auto_release(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_on_cancelled_auto_release(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_on_cancelled_auto_release() RETURNS trigger
@@ -4766,10 +4663,10 @@ BEGIN
 		update document_line set backend_released=false, frontend_released=false where id=NEW.id;end if;return NEW;END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_on_cancelled_auto_release() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_on_cancelled_auto_release() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_on_not_system_allocated(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_on_not_system_allocated(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_on_not_system_allocated() RETURNS trigger
@@ -4781,10 +4678,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_on_not_system_allocated() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_on_not_system_allocated() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_on_owner_changes_cascade_mates(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_on_owner_changes_cascade_mates(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_on_owner_changes_cascade_mates() RETURNS trigger
@@ -4806,10 +4703,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_on_owner_changes_cascade_mates() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_on_owner_changes_cascade_mates() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_on_share_linked_copy_info(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_on_share_linked_copy_info(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_on_share_linked_copy_info() RETURNS trigger
@@ -4826,10 +4723,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_on_share_linked_copy_info() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_on_share_linked_copy_info() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_set_cancellation_date(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_set_cancellation_date(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_set_cancellation_date() RETURNS trigger
@@ -4841,10 +4738,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_set_cancellation_date() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_set_cancellation_date() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_set_donation_site(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_set_donation_site(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_set_donation_site() RETURNS trigger
@@ -4854,10 +4751,10 @@ BEGIN
 	select into NEW.site_id coalesce(site_id, NEW.site_id) from option where item_id=NEW.item_id and event_id=(select event_id from document where id=NEW.document_id);return NEW;END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_set_donation_site() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_set_donation_site() OWNER TO bruno;
 
 --
--- Name: trigger_document_line_set_lang(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_line_set_lang(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_line_set_lang() RETURNS trigger
@@ -4877,10 +4774,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_line_set_lang() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_line_set_lang() OWNER TO bruno;
 
 --
--- Name: trigger_document_merge_from_other_multiple_bookings(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_merge_from_other_multiple_bookings(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_merge_from_other_multiple_bookings() RETURNS trigger
@@ -4910,10 +4807,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_merge_from_other_multiple_bookings() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_merge_from_other_multiple_bookings() OWNER TO bruno;
 
 --
--- Name: trigger_document_read_on_confirmed_or_arrived(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_read_on_confirmed_or_arrived(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_read_on_confirmed_or_arrived() RETURNS trigger
@@ -4925,10 +4822,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_read_on_confirmed_or_arrived() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_read_on_confirmed_or_arrived() OWNER TO bruno;
 
 --
--- Name: trigger_document_send_letter(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_send_letter(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_send_letter() RETURNS trigger
@@ -4963,10 +4860,10 @@ BEGIN
 END $_$;
 
 
-ALTER FUNCTION public.trigger_document_send_letter() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_send_letter() OWNER TO bruno;
 
 --
--- Name: trigger_document_send_system_letter(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_send_system_letter(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_send_system_letter() RETURNS trigger
@@ -5009,10 +4906,10 @@ BEGIN
 END $_$;
 
 
-ALTER FUNCTION public.trigger_document_send_system_letter() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_send_system_letter() OWNER TO bruno;
 
 --
--- Name: trigger_document_set_cancellation_date(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_set_cancellation_date(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_set_cancellation_date() RETURNS trigger
@@ -5024,10 +4921,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_set_cancellation_date() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_set_cancellation_date() OWNER TO bruno;
 
 --
--- Name: trigger_document_set_person_abc_names(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_set_person_abc_names(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_set_person_abc_names() RETURNS trigger
@@ -5037,10 +4934,10 @@ BEGIN
 	NEW.person_abc_names := abc_names(NEW.person_first_name || ' ' || NEW.person_last_name);return NEW;END $$;
 
 
-ALTER FUNCTION public.trigger_document_set_person_abc_names() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_set_person_abc_names() OWNER TO bruno;
 
 --
--- Name: trigger_document_transfer_from_other_multiple_bookings(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_document_transfer_from_other_multiple_bookings(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_document_transfer_from_other_multiple_bookings() RETURNS trigger
@@ -5068,10 +4965,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_document_transfer_from_other_multiple_bookings() OWNER TO kbs;
+ALTER FUNCTION public.trigger_document_transfer_from_other_multiple_bookings() OWNER TO bruno;
 
 --
--- Name: trigger_frontend_account_generate_password_email(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_frontend_account_generate_password_email(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_frontend_account_generate_password_email() RETURNS trigger
@@ -5114,10 +5011,10 @@ BEGIN
 END $_$;
 
 
-ALTER FUNCTION public.trigger_frontend_account_generate_password_email() OWNER TO kbs;
+ALTER FUNCTION public.trigger_frontend_account_generate_password_email() OWNER TO bruno;
 
 --
--- Name: trigger_history_append_request_to_document(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_history_append_request_to_document(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_history_append_request_to_document() RETURNS trigger
@@ -5129,10 +5026,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_history_append_request_to_document() OWNER TO kbs;
+ALTER FUNCTION public.trigger_history_append_request_to_document() OWNER TO bruno;
 
 --
--- Name: trigger_history_online_defer_send_email(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_history_online_defer_send_email(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_history_online_defer_send_email() RETURNS trigger
@@ -5145,10 +5042,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_history_online_defer_send_email() OWNER TO kbs;
+ALTER FUNCTION public.trigger_history_online_defer_send_email() OWNER TO bruno;
 
 --
--- Name: trigger_history_send_online_notification_email(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_history_send_online_notification_email(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_history_send_online_notification_email() RETURNS trigger
@@ -5170,10 +5067,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_history_send_online_notification_email() OWNER TO kbs;
+ALTER FUNCTION public.trigger_history_send_online_notification_email() OWNER TO bruno;
 
 --
--- Name: trigger_label_copy_translation(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_label_copy_translation(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_label_copy_translation() RETURNS trigger
@@ -5209,10 +5106,10 @@ return new;
 END $_$;
 
 
-ALTER FUNCTION public.trigger_label_copy_translation() OWNER TO kbs;
+ALTER FUNCTION public.trigger_label_copy_translation() OWNER TO bruno;
 
 --
--- Name: trigger_mail_auto_account(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_mail_auto_account(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_mail_auto_account() RETURNS trigger
@@ -5234,10 +5131,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_mail_auto_account() OWNER TO kbs;
+ALTER FUNCTION public.trigger_mail_auto_account() OWNER TO bruno;
 
 --
--- Name: trigger_mail_auto_delete(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_mail_auto_delete(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_mail_auto_delete() RETURNS trigger
@@ -5249,10 +5146,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_mail_auto_delete() OWNER TO kbs;
+ALTER FUNCTION public.trigger_mail_auto_delete() OWNER TO bruno;
 
 --
--- Name: trigger_mail_auto_recipient(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_mail_auto_recipient(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_mail_auto_recipient() RETURNS trigger
@@ -5311,10 +5208,10 @@ BEGIN
 END $_$;
 
 
-ALTER FUNCTION public.trigger_mail_auto_recipient() OWNER TO kbs;
+ALTER FUNCTION public.trigger_mail_auto_recipient() OWNER TO bruno;
 
 --
--- Name: trigger_mail_cascadeunread(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_mail_cascadeunread(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_mail_cascadeunread() RETURNS trigger
@@ -5326,10 +5223,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_mail_cascadeunread() OWNER TO kbs;
+ALTER FUNCTION public.trigger_mail_cascadeunread() OWNER TO bruno;
 
 --
--- Name: trigger_money_flow_transfer_ready_daily_batch(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_flow_transfer_ready_daily_batch(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_flow_transfer_ready_daily_batch() RETURNS trigger
@@ -5363,10 +5260,10 @@ END
 $$;
 
 
-ALTER FUNCTION public.trigger_money_flow_transfer_ready_daily_batch() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_flow_transfer_ready_daily_batch() OWNER TO bruno;
 
 --
--- Name: trigger_money_transfer_autoset_accounts(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_transfer_autoset_accounts(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_transfer_autoset_accounts() RETURNS trigger
@@ -5389,37 +5286,29 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_money_transfer_autoset_accounts() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_transfer_autoset_accounts() OWNER TO bruno;
 
 --
--- Name: trigger_money_transfer_autoset_children(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_transfer_autoset_children(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_transfer_autoset_children() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-
-	select into NEW.method_id method_id from money_transfer mt where mt.id=NEW.parent_id;
-
-	select into NEW.payment payment from money_transfer mt where mt.id=NEW.parent_id;
-
-	select into NEW.refund refund from money_transfer mt where mt.id=NEW.parent_id;
-
-	select into NEW.pending pending from money_transfer mt where mt.id=NEW.parent_id;
-
-	select into NEW.successful successful from money_transfer mt where mt.id=NEW.parent_id;
-
-	return NEW;
-
+    AS $$
+BEGIN
+	select into NEW.method_id method_id from money_transfer mt where mt.id=NEW.parent_id;
+	select into NEW.payment payment from money_transfer mt where mt.id=NEW.parent_id;
+	select into NEW.refund refund from money_transfer mt where mt.id=NEW.parent_id;
+	select into NEW.pending pending from money_transfer mt where mt.id=NEW.parent_id;
+	select into NEW.successful successful from money_transfer mt where mt.id=NEW.parent_id;
+	return NEW;
 END $$;
 
 
-ALTER FUNCTION public.trigger_money_transfer_autoset_children() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_transfer_autoset_children() OWNER TO bruno;
 
 --
--- Name: trigger_money_transfer_cascade_children(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_transfer_cascade_children(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_transfer_cascade_children() RETURNS trigger
@@ -5438,10 +5327,10 @@ BEGIN
 		where parent_id=NEW.id;RETURN NEW;END $$;
 
 
-ALTER FUNCTION public.trigger_money_transfer_cascade_children() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_transfer_cascade_children() OWNER TO bruno;
 
 --
--- Name: trigger_money_transfer_cascadedeletetransfer(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_transfer_cascadedeletetransfer(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_transfer_cascadedeletetransfer() RETURNS trigger
@@ -5453,10 +5342,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_money_transfer_cascadedeletetransfer() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_transfer_cascadedeletetransfer() OWNER TO bruno;
 
 --
--- Name: trigger_money_transfer_cascadeunread(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_transfer_cascadeunread(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_transfer_cascadeunread() RETURNS trigger
@@ -5468,10 +5357,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_money_transfer_cascadeunread() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_transfer_cascadeunread() OWNER TO bruno;
 
 --
--- Name: trigger_money_transfer_defer_compute_document_deposit(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_transfer_defer_compute_document_deposit(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_transfer_defer_compute_document_deposit() RETURNS trigger
@@ -5497,10 +5386,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_money_transfer_defer_compute_document_deposit() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_transfer_defer_compute_document_deposit() OWNER TO bruno;
 
 --
--- Name: trigger_money_transfer_defer_compute_money_account_balances(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_transfer_defer_compute_money_account_balances(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_transfer_defer_compute_money_account_balances() RETURNS trigger
@@ -5534,10 +5423,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_money_transfer_defer_compute_money_account_balances() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_transfer_defer_compute_money_account_balances() OWNER TO bruno;
 
 --
--- Name: trigger_money_transfer_on_success_send_history_email(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_transfer_on_success_send_history_email(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_transfer_on_success_send_history_email() RETURNS trigger
@@ -5549,10 +5438,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_money_transfer_on_success_send_history_email() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_transfer_on_success_send_history_email() OWNER TO bruno;
 
 --
--- Name: trigger_money_transfer_on_verified(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_money_transfer_on_verified(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_money_transfer_on_verified() RETURNS trigger
@@ -5577,10 +5466,10 @@ BEGIN
 			where transfer_id=NEW.id;end if;RETURN NEW;END $$;
 
 
-ALTER FUNCTION public.trigger_money_transfer_on_verified() OWNER TO kbs;
+ALTER FUNCTION public.trigger_money_transfer_on_verified() OWNER TO bruno;
 
 --
--- Name: trigger_multiple_booking_update_counts(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_multiple_booking_update_counts(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_multiple_booking_update_counts() RETURNS trigger
@@ -5602,29 +5491,25 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_multiple_booking_update_counts() OWNER TO kbs;
+ALTER FUNCTION public.trigger_multiple_booking_update_counts() OWNER TO bruno;
 
 --
--- Name: trigger_option_autoset_event_from_parent(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_option_autoset_event_from_parent(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_option_autoset_event_from_parent() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-
-	SELECT INTO NEW.event_id o.event_id FROM option o where o.id=NEW.parent_id;
-
-	return NEW;
-
+    AS $$
+BEGIN
+	SELECT INTO NEW.event_id o.event_id FROM option o where o.id=NEW.parent_id;
+	return NEW;
 END $$;
 
 
-ALTER FUNCTION public.trigger_option_autoset_event_from_parent() OWNER TO kbs;
+ALTER FUNCTION public.trigger_option_autoset_event_from_parent() OWNER TO bruno;
 
 --
--- Name: trigger_person_on_email_change_update_frontend_username(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_person_on_email_change_update_frontend_username(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_person_on_email_change_update_frontend_username() RETURNS trigger
@@ -5636,31 +5521,41 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_person_on_email_change_update_frontend_username() OWNER TO kbs;
+ALTER FUNCTION public.trigger_person_on_email_change_update_frontend_username() OWNER TO bruno;
 
 --
--- Name: trigger_resource_auto_site(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_person_set_abc_names(); Type: FUNCTION; Schema: public; Owner: bruno
+--
+
+CREATE FUNCTION public.trigger_person_set_abc_names() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    NEW.abc_names := abc_names(NEW.first_name || ' ' || NEW.last_name);
+    return NEW;
+END $$;
+
+
+ALTER FUNCTION public.trigger_person_set_abc_names() OWNER TO bruno;
+
+--
+-- Name: trigger_resource_auto_site(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_resource_auto_site() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-
-   RAISE NOTICE 'Entering trigger %.%(%)', TG_RELNAME, TG_NAME, NEW.id;
-
-	select into new.site_id site_id from site_item_family where id=NEW.site_item_family_id;
-
-	return new;
-
+    AS $$
+BEGIN
+   RAISE NOTICE 'Entering trigger %.%(%)', TG_RELNAME, TG_NAME, NEW.id;
+	select into new.site_id site_id from site_item_family where id=NEW.site_item_family_id;
+	return new;
 END $$;
 
 
-ALTER FUNCTION public.trigger_resource_auto_site() OWNER TO kbs;
+ALTER FUNCTION public.trigger_resource_auto_site() OWNER TO bruno;
 
 --
--- Name: trigger_resource_auto_site_item_family(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_resource_auto_site_item_family(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_resource_auto_site_item_family() RETURNS trigger
@@ -5673,10 +5568,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_resource_auto_site_item_family() OWNER TO kbs;
+ALTER FUNCTION public.trigger_resource_auto_site_item_family() OWNER TO bruno;
 
 --
--- Name: trigger_resource_configuration_check_overlap(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_resource_configuration_check_overlap(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_resource_configuration_check_overlap() RETURNS trigger
@@ -5702,10 +5597,10 @@ BEGIN
 END $$;
 
 
-ALTER FUNCTION public.trigger_resource_configuration_check_overlap() OWNER TO kbs;
+ALTER FUNCTION public.trigger_resource_configuration_check_overlap() OWNER TO bruno;
 
 --
--- Name: trigger_resource_configuration_on_item_changed_cascade_document(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_resource_configuration_on_item_changed_cascade_document(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_resource_configuration_on_item_changed_cascade_document() RETURNS trigger
@@ -5715,10 +5610,10 @@ BEGIN
 	update document_line set item_id=NEW.item_id where not cancelled and resource_configuration_id=NEW.id;insert into history (document_id, username, comment) select document_id, (select username from sys_sync limit 1), 'Changed ''' || (select name from resource where id=NEW.resource_id limit 1) || ''' room type from ''' || (select name from item where id=OLD.item_id limit 1) || ''' to ''' || (select name from item where id=NEW.item_id limit 1) || '''' from document_line where not cancelled and resource_configuration_id=NEW.id;RETURN NEW;END $$;
 
 
-ALTER FUNCTION public.trigger_resource_configuration_on_item_changed_cascade_document() OWNER TO kbs;
+ALTER FUNCTION public.trigger_resource_configuration_on_item_changed_cascade_document() OWNER TO bruno;
 
 --
--- Name: trigger_resource_duplicate(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_resource_duplicate(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_resource_duplicate() RETURNS trigger
@@ -5743,10 +5638,10 @@ RETURN NEW;
 END $$;
 
 
-ALTER FUNCTION public.trigger_resource_duplicate() OWNER TO kbs;
+ALTER FUNCTION public.trigger_resource_duplicate() OWNER TO bruno;
 
 --
--- Name: trigger_scheduled_item_auto_bookable(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: trigger_scheduled_item_auto_bookable(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.trigger_scheduled_item_auto_bookable() RETURNS trigger
@@ -5760,10 +5655,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.trigger_scheduled_item_auto_bookable() OWNER TO kbs;
+ALTER FUNCTION public.trigger_scheduled_item_auto_bookable() OWNER TO bruno;
 
 --
--- Name: update_documents_min_deposit(); Type: FUNCTION; Schema: public; Owner: kbs
+-- Name: update_documents_min_deposit(); Type: FUNCTION; Schema: public; Owner: bruno
 --
 
 CREATE FUNCTION public.update_documents_min_deposit() RETURNS integer
@@ -5806,10 +5701,10 @@ return updated;
 $$;
 
 
-ALTER FUNCTION public.update_documents_min_deposit() OWNER TO kbs;
+ALTER FUNCTION public.update_documents_min_deposit() OWNER TO bruno;
 
 --
--- Name: first(anyelement); Type: AGGREGATE; Schema: public; Owner: kbs
+-- Name: first(anyelement); Type: AGGREGATE; Schema: public; Owner: bruno
 --
 
 CREATE AGGREGATE public.first(anyelement) (
@@ -5818,10 +5713,10 @@ CREATE AGGREGATE public.first(anyelement) (
 );
 
 
-ALTER AGGREGATE public.first(anyelement) OWNER TO kbs;
+ALTER AGGREGATE public.first(anyelement) OWNER TO bruno;
 
 --
--- Name: last(anyelement); Type: AGGREGATE; Schema: public; Owner: kbs
+-- Name: last(anyelement); Type: AGGREGATE; Schema: public; Owner: bruno
 --
 
 CREATE AGGREGATE public.last(anyelement) (
@@ -5830,10 +5725,10 @@ CREATE AGGREGATE public.last(anyelement) (
 );
 
 
-ALTER AGGREGATE public.last(anyelement) OWNER TO kbs;
+ALTER AGGREGATE public.last(anyelement) OWNER TO bruno;
 
 --
--- Name: accounting_account; Type: TABLE; Schema: public; Owner: kbs
+-- Name: accounting_account; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.accounting_account (
@@ -5846,10 +5741,10 @@ CREATE TABLE public.accounting_account (
 );
 
 
-ALTER TABLE public.accounting_account OWNER TO kbs;
+ALTER TABLE public.accounting_account OWNER TO bruno;
 
 --
--- Name: accounting_account_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: accounting_account_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.accounting_account_id_seq
@@ -5860,17 +5755,17 @@ CREATE SEQUENCE public.accounting_account_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.accounting_account_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.accounting_account_id_seq OWNER TO bruno;
 
 --
--- Name: accounting_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: accounting_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.accounting_account_id_seq OWNED BY public.accounting_account.id;
 
 
 --
--- Name: accounting_account_type; Type: TABLE; Schema: public; Owner: kbs
+-- Name: accounting_account_type; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.accounting_account_type (
@@ -5881,10 +5776,10 @@ CREATE TABLE public.accounting_account_type (
 );
 
 
-ALTER TABLE public.accounting_account_type OWNER TO kbs;
+ALTER TABLE public.accounting_account_type OWNER TO bruno;
 
 --
--- Name: accounting_account_type_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: accounting_account_type_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.accounting_account_type_id_seq
@@ -5895,17 +5790,17 @@ CREATE SEQUENCE public.accounting_account_type_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.accounting_account_type_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.accounting_account_type_id_seq OWNER TO bruno;
 
 --
--- Name: accounting_account_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: accounting_account_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.accounting_account_type_id_seq OWNED BY public.accounting_account_type.id;
 
 
 --
--- Name: accounting_model; Type: TABLE; Schema: public; Owner: kbs
+-- Name: accounting_model; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.accounting_model (
@@ -5914,10 +5809,10 @@ CREATE TABLE public.accounting_model (
 );
 
 
-ALTER TABLE public.accounting_model OWNER TO kbs;
+ALTER TABLE public.accounting_model OWNER TO bruno;
 
 --
--- Name: accounting_model_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: accounting_model_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.accounting_model_id_seq
@@ -5928,17 +5823,17 @@ CREATE SEQUENCE public.accounting_model_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.accounting_model_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.accounting_model_id_seq OWNER TO bruno;
 
 --
--- Name: accounting_model_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: accounting_model_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.accounting_model_id_seq OWNED BY public.accounting_model.id;
 
 
 --
--- Name: activity; Type: TABLE; Schema: public; Owner: kbs
+-- Name: activity; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.activity (
@@ -5950,10 +5845,10 @@ CREATE TABLE public.activity (
 );
 
 
-ALTER TABLE public.activity OWNER TO kbs;
+ALTER TABLE public.activity OWNER TO bruno;
 
 --
--- Name: activity_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: activity_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.activity_id_seq
@@ -5964,17 +5859,17 @@ CREATE SEQUENCE public.activity_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.activity_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.activity_id_seq OWNER TO bruno;
 
 --
--- Name: activity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: activity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.activity_id_seq OWNED BY public.activity.id;
 
 
 --
--- Name: activity_state; Type: TABLE; Schema: public; Owner: kbs
+-- Name: activity_state; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.activity_state (
@@ -5986,10 +5881,10 @@ CREATE TABLE public.activity_state (
 );
 
 
-ALTER TABLE public.activity_state OWNER TO kbs;
+ALTER TABLE public.activity_state OWNER TO bruno;
 
 --
--- Name: activity_state_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: activity_state_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.activity_state_id_seq
@@ -6000,17 +5895,17 @@ CREATE SEQUENCE public.activity_state_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.activity_state_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.activity_state_id_seq OWNER TO bruno;
 
 --
--- Name: activity_state_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: activity_state_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.activity_state_id_seq OWNED BY public.activity_state.id;
 
 
 --
--- Name: allocation_rule; Type: TABLE; Schema: public; Owner: kbs
+-- Name: allocation_rule; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.allocation_rule (
@@ -6039,10 +5934,10 @@ CREATE TABLE public.allocation_rule (
 );
 
 
-ALTER TABLE public.allocation_rule OWNER TO kbs;
+ALTER TABLE public.allocation_rule OWNER TO bruno;
 
 --
--- Name: allocation_rule_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: allocation_rule_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.allocation_rule_id_seq
@@ -6053,17 +5948,17 @@ CREATE SEQUENCE public.allocation_rule_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.allocation_rule_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.allocation_rule_id_seq OWNER TO bruno;
 
 --
--- Name: allocation_rule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: allocation_rule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.allocation_rule_id_seq OWNED BY public.allocation_rule.id;
 
 
 --
--- Name: attendance_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: attendance_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.attendance_id_seq
@@ -6074,17 +5969,17 @@ CREATE SEQUENCE public.attendance_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.attendance_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.attendance_id_seq OWNER TO bruno;
 
 --
--- Name: attendance_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: attendance_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.attendance_id_seq OWNED BY public.attendance.id;
 
 
 --
--- Name: authorization_assignment; Type: TABLE; Schema: public; Owner: kbs
+-- Name: authorization_assignment; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.authorization_assignment (
@@ -6099,10 +5994,10 @@ CREATE TABLE public.authorization_assignment (
 );
 
 
-ALTER TABLE public.authorization_assignment OWNER TO kbs;
+ALTER TABLE public.authorization_assignment OWNER TO bruno;
 
 --
--- Name: authorization_assignment_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: authorization_assignment_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.authorization_assignment_id_seq
@@ -6113,17 +6008,17 @@ CREATE SEQUENCE public.authorization_assignment_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.authorization_assignment_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.authorization_assignment_id_seq OWNER TO bruno;
 
 --
--- Name: authorization_assignment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: authorization_assignment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.authorization_assignment_id_seq OWNED BY public.authorization_assignment.id;
 
 
 --
--- Name: authorization_management; Type: TABLE; Schema: public; Owner: kbs
+-- Name: authorization_management; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.authorization_management (
@@ -6134,10 +6029,10 @@ CREATE TABLE public.authorization_management (
 );
 
 
-ALTER TABLE public.authorization_management OWNER TO kbs;
+ALTER TABLE public.authorization_management OWNER TO bruno;
 
 --
--- Name: authorization_management_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: authorization_management_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.authorization_management_id_seq
@@ -6148,17 +6043,91 @@ CREATE SEQUENCE public.authorization_management_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.authorization_management_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.authorization_management_id_seq OWNER TO bruno;
 
 --
--- Name: authorization_management_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: authorization_management_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.authorization_management_id_seq OWNED BY public.authorization_management.id;
 
 
 --
--- Name: authorization_role; Type: TABLE; Schema: public; Owner: kbs
+-- Name: authorization_organization_admin; Type: TABLE; Schema: public; Owner: bruno
+--
+
+CREATE TABLE public.authorization_organization_admin (
+    id integer NOT NULL,
+    organization_id integer NOT NULL,
+    admin_id integer NOT NULL
+);
+
+
+ALTER TABLE public.authorization_organization_admin OWNER TO bruno;
+
+--
+-- Name: authorization_organization_admin_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
+--
+
+CREATE SEQUENCE public.authorization_organization_admin_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.authorization_organization_admin_id_seq OWNER TO bruno;
+
+--
+-- Name: authorization_organization_admin_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
+--
+
+ALTER SEQUENCE public.authorization_organization_admin_id_seq OWNED BY public.authorization_organization_admin.id;
+
+
+--
+-- Name: authorization_organization_user_access; Type: TABLE; Schema: public; Owner: bruno
+--
+
+CREATE TABLE public.authorization_organization_user_access (
+    id integer NOT NULL,
+    date timestamp without time zone DEFAULT now() NOT NULL,
+    organization_id integer NOT NULL,
+    user_id integer NOT NULL,
+    event_id integer,
+    role_id integer NOT NULL,
+    read_only boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.authorization_organization_user_access OWNER TO bruno;
+
+--
+-- Name: authorization_organization_user_access_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
+--
+
+CREATE SEQUENCE public.authorization_organization_user_access_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.authorization_organization_user_access_id_seq OWNER TO bruno;
+
+--
+-- Name: authorization_organization_user_access_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
+--
+
+ALTER SEQUENCE public.authorization_organization_user_access_id_seq OWNED BY public.authorization_organization_user_access.id;
+
+
+--
+-- Name: authorization_role; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.authorization_role (
@@ -6167,10 +6136,10 @@ CREATE TABLE public.authorization_role (
 );
 
 
-ALTER TABLE public.authorization_role OWNER TO kbs;
+ALTER TABLE public.authorization_role OWNER TO bruno;
 
 --
--- Name: authorization_role_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: authorization_role_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.authorization_role_id_seq
@@ -6181,30 +6150,67 @@ CREATE SEQUENCE public.authorization_role_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.authorization_role_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.authorization_role_id_seq OWNER TO bruno;
 
 --
--- Name: authorization_role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: authorization_role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.authorization_role_id_seq OWNED BY public.authorization_role.id;
 
 
 --
--- Name: authorization_rule; Type: TABLE; Schema: public; Owner: kbs
+-- Name: authorization_role_operation; Type: TABLE; Schema: public; Owner: bruno
+--
+
+CREATE TABLE public.authorization_role_operation (
+    id integer NOT NULL,
+    role_id integer NOT NULL,
+    operation_id integer,
+    operation_group_id integer
+);
+
+
+ALTER TABLE public.authorization_role_operation OWNER TO bruno;
+
+--
+-- Name: authorization_role_operation_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
+--
+
+CREATE SEQUENCE public.authorization_role_operation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.authorization_role_operation_id_seq OWNER TO bruno;
+
+--
+-- Name: authorization_role_operation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
+--
+
+ALTER SEQUENCE public.authorization_role_operation_id_seq OWNED BY public.authorization_role_operation.id;
+
+
+--
+-- Name: authorization_rule; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.authorization_rule (
     id integer NOT NULL,
     name character varying(64) NOT NULL,
-    rule character varying(255) NOT NULL
+    rule character varying(255) NOT NULL,
+    role_id integer
 );
 
 
-ALTER TABLE public.authorization_rule OWNER TO kbs;
+ALTER TABLE public.authorization_rule OWNER TO bruno;
 
 --
--- Name: authorization_rule_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: authorization_rule_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.authorization_rule_id_seq
@@ -6215,17 +6221,17 @@ CREATE SEQUENCE public.authorization_rule_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.authorization_rule_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.authorization_rule_id_seq OWNER TO bruno;
 
 --
--- Name: authorization_rule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: authorization_rule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.authorization_rule_id_seq OWNED BY public.authorization_rule.id;
 
 
 --
--- Name: authorization_scope; Type: TABLE; Schema: public; Owner: kbs
+-- Name: authorization_scope; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.authorization_scope (
@@ -6234,10 +6240,10 @@ CREATE TABLE public.authorization_scope (
 );
 
 
-ALTER TABLE public.authorization_scope OWNER TO kbs;
+ALTER TABLE public.authorization_scope OWNER TO bruno;
 
 --
--- Name: authorization_scope_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: authorization_scope_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.authorization_scope_id_seq
@@ -6248,17 +6254,51 @@ CREATE SEQUENCE public.authorization_scope_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.authorization_scope_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.authorization_scope_id_seq OWNER TO bruno;
 
 --
--- Name: authorization_scope_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: authorization_scope_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.authorization_scope_id_seq OWNED BY public.authorization_scope.id;
 
 
 --
--- Name: bank; Type: TABLE; Schema: public; Owner: kbs
+-- Name: authorization_super_admin; Type: TABLE; Schema: public; Owner: bruno
+--
+
+CREATE TABLE public.authorization_super_admin (
+    id integer NOT NULL,
+    super_admin_id integer NOT NULL
+);
+
+
+ALTER TABLE public.authorization_super_admin OWNER TO bruno;
+
+--
+-- Name: authorization_super_admin_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
+--
+
+CREATE SEQUENCE public.authorization_super_admin_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.authorization_super_admin_id_seq OWNER TO bruno;
+
+--
+-- Name: authorization_super_admin_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
+--
+
+ALTER SEQUENCE public.authorization_super_admin_id_seq OWNED BY public.authorization_super_admin.id;
+
+
+--
+-- Name: bank; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.bank (
@@ -6267,10 +6307,10 @@ CREATE TABLE public.bank (
 );
 
 
-ALTER TABLE public.bank OWNER TO kbs;
+ALTER TABLE public.bank OWNER TO bruno;
 
 --
--- Name: bank_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: bank_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.bank_id_seq
@@ -6281,17 +6321,17 @@ CREATE SEQUENCE public.bank_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bank_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.bank_id_seq OWNER TO bruno;
 
 --
--- Name: bank_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: bank_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.bank_id_seq OWNED BY public.bank.id;
 
 
 --
--- Name: bank_system; Type: TABLE; Schema: public; Owner: kbs
+-- Name: bank_system; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.bank_system (
@@ -6300,10 +6340,10 @@ CREATE TABLE public.bank_system (
 );
 
 
-ALTER TABLE public.bank_system OWNER TO kbs;
+ALTER TABLE public.bank_system OWNER TO bruno;
 
 --
--- Name: bank_system_account; Type: TABLE; Schema: public; Owner: kbs
+-- Name: bank_system_account; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.bank_system_account (
@@ -6312,10 +6352,10 @@ CREATE TABLE public.bank_system_account (
 );
 
 
-ALTER TABLE public.bank_system_account OWNER TO kbs;
+ALTER TABLE public.bank_system_account OWNER TO bruno;
 
 --
--- Name: bank_system_account_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: bank_system_account_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.bank_system_account_id_seq
@@ -6326,17 +6366,17 @@ CREATE SEQUENCE public.bank_system_account_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bank_system_account_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.bank_system_account_id_seq OWNER TO bruno;
 
 --
--- Name: bank_system_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: bank_system_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.bank_system_account_id_seq OWNED BY public.bank_system_account.id;
 
 
 --
--- Name: bank_system_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: bank_system_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.bank_system_id_seq
@@ -6347,17 +6387,17 @@ CREATE SEQUENCE public.bank_system_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bank_system_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.bank_system_id_seq OWNER TO bruno;
 
 --
--- Name: bank_system_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: bank_system_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.bank_system_id_seq OWNED BY public.bank_system.id;
 
 
 --
--- Name: book; Type: TABLE; Schema: public; Owner: kbs
+-- Name: book; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.book (
@@ -6373,10 +6413,10 @@ CREATE TABLE public.book (
 );
 
 
-ALTER TABLE public.book OWNER TO kbs;
+ALTER TABLE public.book OWNER TO bruno;
 
 --
--- Name: book_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: book_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.book_id_seq
@@ -6387,17 +6427,17 @@ CREATE SEQUENCE public.book_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.book_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.book_id_seq OWNER TO bruno;
 
 --
--- Name: book_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: book_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.book_id_seq OWNED BY public.book.id;
 
 
 --
--- Name: bookable_period; Type: TABLE; Schema: public; Owner: kbs
+-- Name: bookable_period; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.bookable_period (
@@ -6410,10 +6450,10 @@ CREATE TABLE public.bookable_period (
 );
 
 
-ALTER TABLE public.bookable_period OWNER TO kbs;
+ALTER TABLE public.bookable_period OWNER TO bruno;
 
 --
--- Name: bookable_period_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: bookable_period_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.bookable_period_id_seq
@@ -6424,17 +6464,17 @@ CREATE SEQUENCE public.bookable_period_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bookable_period_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.bookable_period_id_seq OWNER TO bruno;
 
 --
--- Name: bookable_period_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: bookable_period_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.bookable_period_id_seq OWNED BY public.bookable_period.id;
 
 
 --
--- Name: booking_form_layout; Type: TABLE; Schema: public; Owner: kbs
+-- Name: booking_form_layout; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.booking_form_layout (
@@ -6450,10 +6490,10 @@ CREATE TABLE public.booking_form_layout (
 );
 
 
-ALTER TABLE public.booking_form_layout OWNER TO kbs;
+ALTER TABLE public.booking_form_layout OWNER TO bruno;
 
 --
--- Name: booking_form_layout_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: booking_form_layout_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.booking_form_layout_id_seq
@@ -6464,17 +6504,17 @@ CREATE SEQUENCE public.booking_form_layout_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.booking_form_layout_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.booking_form_layout_id_seq OWNER TO bruno;
 
 --
--- Name: booking_form_layout_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: booking_form_layout_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.booking_form_layout_id_seq OWNED BY public.booking_form_layout.id;
 
 
 --
--- Name: event; Type: TABLE; Schema: public; Owner: kbs
+-- Name: event; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.event (
@@ -6566,192 +6606,192 @@ CREATE TABLE public.event (
 );
 
 
-ALTER TABLE public.event OWNER TO kbs;
+ALTER TABLE public.event OWNER TO bruno;
 
 --
--- Name: COLUMN event.notification_cart_default_label_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.notification_cart_default_label_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.notification_cart_default_label_id IS 'Default notification to show in the cart if other notifications do not apply or there is at least one cancelled booking in the cart';
 
 
 --
--- Name: COLUMN event.notification_cart_payed_label_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.notification_cart_payed_label_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.notification_cart_payed_label_id IS 'Notification to show in the cart when booking is fully payed';
 
 
 --
--- Name: COLUMN event.notification_cart_confirmed_label_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.notification_cart_confirmed_label_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.notification_cart_confirmed_label_id IS 'Notification to show in the cart when booking is confirmed';
 
 
 --
--- Name: COLUMN event.notification_cart_payed_confirmed_label_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.notification_cart_payed_confirmed_label_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.notification_cart_payed_confirmed_label_id IS 'Notification to show in cart when booking is fully payed and confirmed';
 
 
 --
--- Name: COLUMN event.options_hide_days_outside_event; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.options_hide_days_outside_event; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.options_hide_days_outside_event IS 'KMCFE Hide days outside event.dateTimeRange from Options screen';
 
 
 --
--- Name: COLUMN event.booking_closed; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.booking_closed; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.booking_closed IS 'Prevents new bookings from front-ends';
 
 
 --
--- Name: COLUMN event.booking_closing_date; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.booking_closing_date; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.booking_closing_date IS 'Date and time at which the booking_closed field will be set to true';
 
 
 --
--- Name: COLUMN event.frontend; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.frontend; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.frontend IS 'Indicates which front-end to use for the booking form of this event';
 
 
 --
--- Name: COLUMN event.timezone; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.timezone; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.timezone IS 'IANA time zone id that applies to the event (all dates and times are recorded in UTC, this field only helps to show the dates and times in the correct time zone in the different UI)';
 
 
 --
--- Name: COLUMN event.bookings_auto_confirm; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.bookings_auto_confirm; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.bookings_auto_confirm IS 'If TRUE, the system will confirm all fully paid bookings for people who have a confirmed booking in the event of reference';
 
 
 --
--- Name: COLUMN event.bookings_auto_confirm_event_id1; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.bookings_auto_confirm_event_id1; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.bookings_auto_confirm_event_id1 IS 'Event of reference for auto confirm fully paid bookings';
 
 
 --
--- Name: COLUMN event.bookings_auto_confirm_letter_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.bookings_auto_confirm_letter_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.bookings_auto_confirm_letter_id IS 'Id of the email to send to the booker on auto confirm. Null if no email to send on auto confirm.';
 
 
 --
--- Name: COLUMN event.no_account_booking; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.no_account_booking; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.no_account_booking IS 'Allows bookings without a user account';
 
 
 --
--- Name: COLUMN event.booking_process_start; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.booking_process_start; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.booking_process_start IS 'Date and time when to start to process the queue of bookings. Null to process bookings without any delay.';
 
 
 --
--- Name: COLUMN event.terms_url_en; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.terms_url_en; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.terms_url_en IS 'English T&Cs url and jquery selector';
 
 
 --
--- Name: COLUMN event.terms_url_es; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.terms_url_es; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.terms_url_es IS 'Spanish T&Cs url and jquery selector';
 
 
 --
--- Name: COLUMN event.terms_url_fr; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.terms_url_fr; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.terms_url_fr IS 'French T&Cs url and jquery selector';
 
 
 --
--- Name: COLUMN event.terms_url_de; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.terms_url_de; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.terms_url_de IS 'German T&Cs url and jquery selector';
 
 
 --
--- Name: COLUMN event.terms_url_pt; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.terms_url_pt; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.terms_url_pt IS 'Portuguese T&Cs url and jquery selector';
 
 
 --
--- Name: COLUMN event.bookings_auto_confirm_event_id3; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.bookings_auto_confirm_event_id3; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.bookings_auto_confirm_event_id3 IS 'Event of reference for auto confirm fully paid bookings';
 
 
 --
--- Name: COLUMN event.bookings_auto_confirm_event_id2; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.bookings_auto_confirm_event_id2; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.bookings_auto_confirm_event_id2 IS 'Event of reference for auto confirm fully paid bookings';
 
 
 --
--- Name: COLUMN event.payment_closing_date; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.payment_closing_date; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.payment_closing_date IS 'Date and time after which online payments are not possible anymore';
 
 
 --
--- Name: COLUMN event.arrival_departure_from_dates_sections; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.arrival_departure_from_dates_sections; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.arrival_departure_from_dates_sections IS 'Populate list of possible arrival and departure dates from Dates Sections if any in KMC front-end';
 
 
 --
--- Name: COLUMN event.bookings_auto_confirm_event_id4; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.bookings_auto_confirm_event_id4; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.bookings_auto_confirm_event_id4 IS 'Event of reference for auto confirm fully paid bookings';
 
 
 --
--- Name: COLUMN event.accounting_exported; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.accounting_exported; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.accounting_exported IS 'Used only by KMC France through the KBS plugin';
 
 
 --
--- Name: COLUMN event.vod_expiration_date; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN event.vod_expiration_date; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.event.vod_expiration_date IS 'If null, it means the event is livestreamed only, with no recording available';
 
 
 --
--- Name: bookings; Type: VIEW; Schema: public; Owner: kbs
+-- Name: bookings; Type: VIEW; Schema: public; Owner: bruno
 --
 
 CREATE VIEW public.bookings AS
@@ -6768,10 +6808,10 @@ CREATE VIEW public.bookings AS
   ORDER BY d1.id, e2.start_date DESC;
 
 
-ALTER VIEW public.bookings OWNER TO kbs;
+ALTER VIEW public.bookings OWNER TO bruno;
 
 --
--- Name: bracket_pattern; Type: TABLE; Schema: public; Owner: kbs
+-- Name: bracket_pattern; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.bracket_pattern (
@@ -6785,10 +6825,10 @@ CREATE TABLE public.bracket_pattern (
 );
 
 
-ALTER TABLE public.bracket_pattern OWNER TO kbs;
+ALTER TABLE public.bracket_pattern OWNER TO bruno;
 
 --
--- Name: bracket_pattern_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: bracket_pattern_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.bracket_pattern_id_seq
@@ -6799,17 +6839,17 @@ CREATE SEQUENCE public.bracket_pattern_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bracket_pattern_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.bracket_pattern_id_seq OWNER TO bruno;
 
 --
--- Name: bracket_pattern_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: bracket_pattern_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.bracket_pattern_id_seq OWNED BY public.bracket_pattern.id;
 
 
 --
--- Name: buddha; Type: TABLE; Schema: public; Owner: kbs
+-- Name: buddha; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.buddha (
@@ -6821,10 +6861,10 @@ CREATE TABLE public.buddha (
 );
 
 
-ALTER TABLE public.buddha OWNER TO kbs;
+ALTER TABLE public.buddha OWNER TO bruno;
 
 --
--- Name: buddha_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: buddha_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.buddha_id_seq
@@ -6835,17 +6875,17 @@ CREATE SEQUENCE public.buddha_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.buddha_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.buddha_id_seq OWNER TO bruno;
 
 --
--- Name: buddha_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: buddha_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.buddha_id_seq OWNED BY public.buddha.id;
 
 
 --
--- Name: budget; Type: TABLE; Schema: public; Owner: kbs
+-- Name: budget; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.budget (
@@ -6854,10 +6894,10 @@ CREATE TABLE public.budget (
 );
 
 
-ALTER TABLE public.budget OWNER TO kbs;
+ALTER TABLE public.budget OWNER TO bruno;
 
 --
--- Name: budget_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: budget_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.budget_id_seq
@@ -6868,17 +6908,17 @@ CREATE SEQUENCE public.budget_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.budget_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.budget_id_seq OWNER TO bruno;
 
 --
--- Name: budget_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: budget_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.budget_id_seq OWNED BY public.budget.id;
 
 
 --
--- Name: budget_line; Type: TABLE; Schema: public; Owner: kbs
+-- Name: budget_line; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.budget_line (
@@ -6887,10 +6927,10 @@ CREATE TABLE public.budget_line (
 );
 
 
-ALTER TABLE public.budget_line OWNER TO kbs;
+ALTER TABLE public.budget_line OWNER TO bruno;
 
 --
--- Name: budget_line_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: budget_line_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.budget_line_id_seq
@@ -6901,17 +6941,17 @@ CREATE SEQUENCE public.budget_line_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.budget_line_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.budget_line_id_seq OWNER TO bruno;
 
 --
--- Name: budget_line_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: budget_line_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.budget_line_id_seq OWNED BY public.budget_line.id;
 
 
 --
--- Name: budget_transfer; Type: TABLE; Schema: public; Owner: kbs
+-- Name: budget_transfer; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.budget_transfer (
@@ -6923,10 +6963,10 @@ CREATE TABLE public.budget_transfer (
 );
 
 
-ALTER TABLE public.budget_transfer OWNER TO kbs;
+ALTER TABLE public.budget_transfer OWNER TO bruno;
 
 --
--- Name: budget_transfer_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: budget_transfer_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.budget_transfer_id_seq
@@ -6937,29 +6977,30 @@ CREATE SEQUENCE public.budget_transfer_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.budget_transfer_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.budget_transfer_id_seq OWNER TO bruno;
 
 --
--- Name: budget_transfer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: budget_transfer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.budget_transfer_id_seq OWNED BY public.budget_transfer.id;
 
 
 --
--- Name: building; Type: TABLE; Schema: public; Owner: kbs
+-- Name: building; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.building (
     id integer NOT NULL,
-    name character varying(64)
+    name character varying(64),
+    site_id integer
 );
 
 
-ALTER TABLE public.building OWNER TO kbs;
+ALTER TABLE public.building OWNER TO bruno;
 
 --
--- Name: building_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: building_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.building_id_seq
@@ -6970,17 +7011,52 @@ CREATE SEQUENCE public.building_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.building_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.building_id_seq OWNER TO bruno;
 
 --
--- Name: building_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: building_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.building_id_seq OWNED BY public.building.id;
 
 
 --
--- Name: cart; Type: TABLE; Schema: public; Owner: kbs
+-- Name: building_zone; Type: TABLE; Schema: public; Owner: bruno
+--
+
+CREATE TABLE public.building_zone (
+    id integer NOT NULL,
+    name character varying(45) NOT NULL,
+    building_id integer NOT NULL
+);
+
+
+ALTER TABLE public.building_zone OWNER TO bruno;
+
+--
+-- Name: building_zone_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
+--
+
+CREATE SEQUENCE public.building_zone_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.building_zone_id_seq OWNER TO bruno;
+
+--
+-- Name: building_zone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
+--
+
+ALTER SEQUENCE public.building_zone_id_seq OWNED BY public.building_zone.id;
+
+
+--
+-- Name: cart; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.cart (
@@ -6990,10 +7066,10 @@ CREATE TABLE public.cart (
 );
 
 
-ALTER TABLE public.cart OWNER TO kbs;
+ALTER TABLE public.cart OWNER TO bruno;
 
 --
--- Name: cart_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: cart_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.cart_id_seq
@@ -7004,17 +7080,17 @@ CREATE SEQUENCE public.cart_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.cart_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.cart_id_seq OWNER TO bruno;
 
 --
--- Name: cart_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: cart_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.cart_id_seq OWNED BY public.cart.id;
 
 
 --
--- Name: cart_message; Type: TABLE; Schema: public; Owner: kbs
+-- Name: cart_message; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.cart_message (
@@ -7032,66 +7108,66 @@ CREATE TABLE public.cart_message (
 );
 
 
-ALTER TABLE public.cart_message OWNER TO kbs;
+ALTER TABLE public.cart_message OWNER TO bruno;
 
 --
--- Name: COLUMN cart_message.show_from; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message.show_from; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message.show_from IS 'If not NULL, message will show only from this date time';
 
 
 --
--- Name: COLUMN cart_message.show_until; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message.show_until; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message.show_until IS 'If not NULL, message will show only until this date time';
 
 
 --
--- Name: COLUMN cart_message.document_cancelled; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message.document_cancelled; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message.document_cancelled IS 'Show this message for cancelled documents (yes=only cancelled documents, no=only not-cancelled documents, null=all documents)';
 
 
 --
--- Name: COLUMN cart_message.document_confirmed; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message.document_confirmed; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message.document_confirmed IS 'Show this message for confirmed documents (yes=only confirmed documents, no=only not-confirmed documents, null=all documents)';
 
 
 --
--- Name: COLUMN cart_message.document_fully_paid; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message.document_fully_paid; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message.document_fully_paid IS 'Show this message for fully paid documents (yes=only fully paid documents, no=only not fully paid documents, null=all documents)';
 
 
 --
--- Name: COLUMN cart_message.grp; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message.grp; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message.grp IS 'Only one message of a group will be shown, the one with the highest priority with all conditions true';
 
 
 --
--- Name: COLUMN cart_message.priority; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message.priority; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message.priority IS 'Priority level of the message in its group (see group field)';
 
 
 --
--- Name: COLUMN cart_message.ord; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message.ord; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message.ord IS 'Order in which to show the messages: order by ord, id';
 
 
 --
--- Name: cart_message_condition; Type: TABLE; Schema: public; Owner: kbs
+-- Name: cart_message_condition; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.cart_message_condition (
@@ -7104,38 +7180,38 @@ CREATE TABLE public.cart_message_condition (
 );
 
 
-ALTER TABLE public.cart_message_condition OWNER TO kbs;
+ALTER TABLE public.cart_message_condition OWNER TO bruno;
 
 --
--- Name: COLUMN cart_message_condition.site_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message_condition.site_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message_condition.site_id IS 'Null = any site';
 
 
 --
--- Name: COLUMN cart_message_condition.item_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message_condition.item_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message_condition.item_id IS 'Null = any item';
 
 
 --
--- Name: COLUMN cart_message_condition.date; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message_condition.date; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message_condition.date IS 'Null = any date';
 
 
 --
--- Name: COLUMN cart_message_condition.booked; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN cart_message_condition.booked; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.cart_message_condition.booked IS 'True = site/item/date must be booked; False = site/item/date must NOT be booked';
 
 
 --
--- Name: cart_message_condition_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: cart_message_condition_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.cart_message_condition_id_seq
@@ -7146,17 +7222,17 @@ CREATE SEQUENCE public.cart_message_condition_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.cart_message_condition_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.cart_message_condition_id_seq OWNER TO bruno;
 
 --
--- Name: cart_message_condition_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: cart_message_condition_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.cart_message_condition_id_seq OWNED BY public.cart_message_condition.id;
 
 
 --
--- Name: cart_message_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: cart_message_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.cart_message_id_seq
@@ -7167,17 +7243,17 @@ CREATE SEQUENCE public.cart_message_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.cart_message_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.cart_message_id_seq OWNER TO bruno;
 
 --
--- Name: cart_message_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: cart_message_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.cart_message_id_seq OWNED BY public.cart_message.id;
 
 
 --
--- Name: centre; Type: TABLE; Schema: public; Owner: kbs
+-- Name: centre; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.centre (
@@ -7196,10 +7272,10 @@ CREATE TABLE public.centre (
 );
 
 
-ALTER TABLE public.centre OWNER TO kbs;
+ALTER TABLE public.centre OWNER TO bruno;
 
 --
--- Name: centre_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: centre_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.centre_id_seq
@@ -7210,10 +7286,10 @@ CREATE SEQUENCE public.centre_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.centre_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.centre_id_seq OWNER TO bruno;
 
 --
--- Name: channel; Type: TABLE; Schema: public; Owner: kbs
+-- Name: channel; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.channel (
@@ -7224,10 +7300,10 @@ CREATE TABLE public.channel (
 );
 
 
-ALTER TABLE public.channel OWNER TO kbs;
+ALTER TABLE public.channel OWNER TO bruno;
 
 --
--- Name: channel_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: channel_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.channel_id_seq
@@ -7238,17 +7314,17 @@ CREATE SEQUENCE public.channel_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.channel_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.channel_id_seq OWNER TO bruno;
 
 --
--- Name: channel_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: channel_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.channel_id_seq OWNED BY public.channel.id;
 
 
 --
--- Name: continent; Type: TABLE; Schema: public; Owner: kbs
+-- Name: continent; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.continent (
@@ -7259,10 +7335,10 @@ CREATE TABLE public.continent (
 );
 
 
-ALTER TABLE public.continent OWNER TO kbs;
+ALTER TABLE public.continent OWNER TO bruno;
 
 --
--- Name: continent_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: continent_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.continent_id_seq
@@ -7273,17 +7349,17 @@ CREATE SEQUENCE public.continent_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.continent_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.continent_id_seq OWNER TO bruno;
 
 --
--- Name: continent_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: continent_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.continent_id_seq OWNED BY public.continent.id;
 
 
 --
--- Name: country; Type: TABLE; Schema: public; Owner: kbs
+-- Name: country; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.country (
@@ -7322,24 +7398,24 @@ CREATE TABLE public.country (
 );
 
 
-ALTER TABLE public.country OWNER TO kbs;
+ALTER TABLE public.country OWNER TO bruno;
 
 --
--- Name: COLUMN country.require_state; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN country.require_state; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.country.require_state IS 'Front-end should require a state only for countries with requireState = true and only for these countries.';
 
 
 --
--- Name: COLUMN country.require_postcode; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN country.require_postcode; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.country.require_postcode IS 'Front-end should require a postcode for countries with requirePostcode = true and only for these countries.';
 
 
 --
--- Name: country_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: country_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.country_id_seq
@@ -7350,17 +7426,17 @@ CREATE SEQUENCE public.country_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.country_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.country_id_seq OWNER TO bruno;
 
 --
--- Name: country_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: country_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.country_id_seq OWNED BY public.country.id;
 
 
 --
--- Name: css; Type: TABLE; Schema: public; Owner: kbs
+-- Name: css; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.css (
@@ -7369,10 +7445,10 @@ CREATE TABLE public.css (
 );
 
 
-ALTER TABLE public.css OWNER TO kbs;
+ALTER TABLE public.css OWNER TO bruno;
 
 --
--- Name: css_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: css_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.css_id_seq
@@ -7383,17 +7459,17 @@ CREATE SEQUENCE public.css_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.css_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.css_id_seq OWNER TO bruno;
 
 --
--- Name: css_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: css_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.css_id_seq OWNED BY public.css.id;
 
 
 --
--- Name: currency; Type: TABLE; Schema: public; Owner: kbs
+-- Name: currency; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.currency (
@@ -7404,10 +7480,10 @@ CREATE TABLE public.currency (
 );
 
 
-ALTER TABLE public.currency OWNER TO kbs;
+ALTER TABLE public.currency OWNER TO bruno;
 
 --
--- Name: currency_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: currency_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.currency_id_seq
@@ -7418,17 +7494,17 @@ CREATE SEQUENCE public.currency_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.currency_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.currency_id_seq OWNER TO bruno;
 
 --
--- Name: currency_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: currency_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.currency_id_seq OWNED BY public.currency.id;
 
 
 --
--- Name: currency_support; Type: TABLE; Schema: public; Owner: kbs
+-- Name: currency_support; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.currency_support (
@@ -7438,10 +7514,10 @@ CREATE TABLE public.currency_support (
 );
 
 
-ALTER TABLE public.currency_support OWNER TO kbs;
+ALTER TABLE public.currency_support OWNER TO bruno;
 
 --
--- Name: currency_support_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: currency_support_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.currency_support_id_seq
@@ -7452,17 +7528,17 @@ CREATE SEQUENCE public.currency_support_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.currency_support_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.currency_support_id_seq OWNER TO bruno;
 
 --
--- Name: currency_support_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: currency_support_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.currency_support_id_seq OWNED BY public.currency_support.id;
 
 
 --
--- Name: date_info; Type: TABLE; Schema: public; Owner: kbs
+-- Name: date_info; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.date_info (
@@ -7483,10 +7559,10 @@ CREATE TABLE public.date_info (
 );
 
 
-ALTER TABLE public.date_info OWNER TO kbs;
+ALTER TABLE public.date_info OWNER TO bruno;
 
 --
--- Name: date_info_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: date_info_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.date_info_id_seq
@@ -7497,17 +7573,17 @@ CREATE SEQUENCE public.date_info_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.date_info_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.date_info_id_seq OWNER TO bruno;
 
 --
--- Name: date_info_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: date_info_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.date_info_id_seq OWNED BY public.date_info.id;
 
 
 --
--- Name: day_template; Type: TABLE; Schema: public; Owner: kbs
+-- Name: day_template; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.day_template (
@@ -7518,10 +7594,10 @@ CREATE TABLE public.day_template (
 );
 
 
-ALTER TABLE public.day_template OWNER TO kbs;
+ALTER TABLE public.day_template OWNER TO bruno;
 
 --
--- Name: day_template_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: day_template_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.day_template_id_seq
@@ -7532,17 +7608,17 @@ CREATE SEQUENCE public.day_template_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.day_template_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.day_template_id_seq OWNER TO bruno;
 
 --
--- Name: day_template_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: day_template_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.day_template_id_seq OWNED BY public.day_template.id;
 
 
 --
--- Name: document_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: document_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.document_id_seq
@@ -7553,17 +7629,17 @@ CREATE SEQUENCE public.document_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.document_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.document_id_seq OWNER TO bruno;
 
 --
--- Name: document_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: document_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.document_id_seq OWNED BY public.document.id;
 
 
 --
--- Name: document_line_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: document_line_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.document_line_id_seq
@@ -7574,17 +7650,17 @@ CREATE SEQUENCE public.document_line_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.document_line_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.document_line_id_seq OWNER TO bruno;
 
 --
--- Name: document_line_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: document_line_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.document_line_id_seq OWNED BY public.document_line.id;
 
 
 --
--- Name: domain; Type: TABLE; Schema: public; Owner: kbs
+-- Name: domain; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.domain (
@@ -7601,10 +7677,10 @@ CREATE TABLE public.domain (
 );
 
 
-ALTER TABLE public.domain OWNER TO kbs;
+ALTER TABLE public.domain OWNER TO bruno;
 
 --
--- Name: domain_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: domain_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.domain_id_seq
@@ -7615,17 +7691,17 @@ CREATE SEQUENCE public.domain_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.domain_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.domain_id_seq OWNER TO bruno;
 
 --
--- Name: domain_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: domain_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.domain_id_seq OWNED BY public.domain.id;
 
 
 --
--- Name: driver; Type: TABLE; Schema: public; Owner: kbs
+-- Name: driver; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.driver (
@@ -7637,10 +7713,10 @@ CREATE TABLE public.driver (
 );
 
 
-ALTER TABLE public.driver OWNER TO kbs;
+ALTER TABLE public.driver OWNER TO bruno;
 
 --
--- Name: driver_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: driver_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.driver_id_seq
@@ -7651,17 +7727,17 @@ CREATE SEQUENCE public.driver_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.driver_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.driver_id_seq OWNER TO bruno;
 
 --
--- Name: driver_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: driver_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.driver_id_seq OWNED BY public.driver.id;
 
 
 --
--- Name: enqueued_request; Type: TABLE; Schema: public; Owner: kbs
+-- Name: enqueued_request; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.enqueued_request (
@@ -7681,10 +7757,10 @@ CREATE TABLE public.enqueued_request (
 );
 
 
-ALTER TABLE public.enqueued_request OWNER TO kbs;
+ALTER TABLE public.enqueued_request OWNER TO bruno;
 
 --
--- Name: enqueued_request_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: enqueued_request_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.enqueued_request_id_seq
@@ -7695,17 +7771,17 @@ CREATE SEQUENCE public.enqueued_request_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.enqueued_request_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.enqueued_request_id_seq OWNER TO bruno;
 
 --
--- Name: enqueued_request_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: enqueued_request_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.enqueued_request_id_seq OWNED BY public.enqueued_request.id;
 
 
 --
--- Name: error; Type: TABLE; Schema: public; Owner: kbs
+-- Name: error; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.error (
@@ -7718,10 +7794,10 @@ CREATE TABLE public.error (
 );
 
 
-ALTER TABLE public.error OWNER TO kbs;
+ALTER TABLE public.error OWNER TO bruno;
 
 --
--- Name: error_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: error_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.error_id_seq
@@ -7733,17 +7809,17 @@ CREATE SEQUENCE public.error_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.error_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.error_id_seq OWNER TO bruno;
 
 --
--- Name: error_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: error_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.error_id_seq OWNED BY public.error.id;
 
 
 --
--- Name: event_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: event_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.event_id_seq
@@ -7754,17 +7830,17 @@ CREATE SEQUENCE public.event_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.event_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.event_id_seq OWNER TO bruno;
 
 --
--- Name: event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.event_id_seq OWNED BY public.event.id;
 
 
 --
--- Name: event_type; Type: TABLE; Schema: public; Owner: kbs
+-- Name: event_type; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.event_type (
@@ -7780,10 +7856,10 @@ CREATE TABLE public.event_type (
 );
 
 
-ALTER TABLE public.event_type OWNER TO kbs;
+ALTER TABLE public.event_type OWNER TO bruno;
 
 --
--- Name: event_type_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: event_type_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.event_type_id_seq
@@ -7794,17 +7870,17 @@ CREATE SEQUENCE public.event_type_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.event_type_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.event_type_id_seq OWNER TO bruno;
 
 --
--- Name: event_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: event_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.event_type_id_seq OWNED BY public.event_type.id;
 
 
 --
--- Name: filter; Type: TABLE; Schema: public; Owner: kbs
+-- Name: filter; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.filter (
@@ -7829,10 +7905,10 @@ CREATE TABLE public.filter (
 );
 
 
-ALTER TABLE public.filter OWNER TO kbs;
+ALTER TABLE public.filter OWNER TO bruno;
 
 --
--- Name: filter_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: filter_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.filter_id_seq
@@ -7843,17 +7919,17 @@ CREATE SEQUENCE public.filter_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.filter_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.filter_id_seq OWNER TO bruno;
 
 --
--- Name: filter_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: filter_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.filter_id_seq OWNED BY public.filter.id;
 
 
 --
--- Name: frontend_account; Type: TABLE; Schema: public; Owner: kbs
+-- Name: frontend_account; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.frontend_account (
@@ -7877,24 +7953,24 @@ CREATE TABLE public.frontend_account (
 );
 
 
-ALTER TABLE public.frontend_account OWNER TO kbs;
+ALTER TABLE public.frontend_account OWNER TO bruno;
 
 --
--- Name: COLUMN frontend_account.pwdreset_token; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN frontend_account.pwdreset_token; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.frontend_account.pwdreset_token IS 'Uuid token for password reset';
 
 
 --
--- Name: COLUMN frontend_account.pwdreset_expires; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN frontend_account.pwdreset_expires; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.frontend_account.pwdreset_expires IS 'Password reset token expiration';
 
 
 --
--- Name: frontend_account_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: frontend_account_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.frontend_account_id_seq
@@ -7905,17 +7981,17 @@ CREATE SEQUENCE public.frontend_account_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.frontend_account_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.frontend_account_id_seq OWNER TO bruno;
 
 --
--- Name: frontend_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: frontend_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.frontend_account_id_seq OWNED BY public.frontend_account.id;
 
 
 --
--- Name: gateway_company; Type: TABLE; Schema: public; Owner: kbs
+-- Name: gateway_company; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.gateway_company (
@@ -7940,80 +8016,80 @@ CREATE TABLE public.gateway_company (
 );
 
 
-ALTER TABLE public.gateway_company OWNER TO kbs;
+ALTER TABLE public.gateway_company OWNER TO bruno;
 
 --
--- Name: COLUMN gateway_company."json"; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company."json"; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company."json" IS 'Indicates that the data should be a json string';
 
 
 --
--- Name: COLUMN gateway_company.generate_payment_url; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company.generate_payment_url; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company.generate_payment_url IS 'Indicates that the payment url is unique for each payment and is generated by the gateway server';
 
 
 --
--- Name: COLUMN gateway_company.generate_payment_url_accesscode; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company.generate_payment_url_accesscode; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company.generate_payment_url_accesscode IS 'Name of the parameter holding the pre-transaction access code in the gateway response';
 
 
 --
--- Name: COLUMN gateway_company.request_result; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company.request_result; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company.request_result IS 'Indicates that the system should request transactions result from the gateway';
 
 
 --
--- Name: COLUMN gateway_company.notification_cancel_response; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company.notification_cancel_response; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company.notification_cancel_response IS 'KBS server response to payment cancellation and failure notification';
 
 
 --
--- Name: COLUMN gateway_company.notification_success_response; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company.notification_success_response; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company.notification_success_response IS 'KBS server response to payment success notification';
 
 
 --
--- Name: COLUMN gateway_company.notification_cancel_cart_redirection; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company.notification_cancel_cart_redirection; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company.notification_cancel_cart_redirection IS 'Indicates that KBS server should redirect to the user cart after payment cancellation notification';
 
 
 --
--- Name: COLUMN gateway_company.notification_success_cart_redirection; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company.notification_success_cart_redirection; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company.notification_success_cart_redirection IS 'Indicates that KBS server should redirect to the user cart after payment success notification';
 
 
 --
--- Name: COLUMN gateway_company.notification_timeout; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company.notification_timeout; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company.notification_timeout IS 'Number of seconds after which a payment status is automatically set to ''failed''';
 
 
 --
--- Name: COLUMN gateway_company.alert_before_payment_label_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN gateway_company.alert_before_payment_label_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.gateway_company.alert_before_payment_label_id IS 'Text to show as an alert popup in front-end before redirecting to payment gateway page';
 
 
 --
--- Name: gateway_company_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: gateway_company_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.gateway_company_id_seq
@@ -8024,17 +8100,17 @@ CREATE SEQUENCE public.gateway_company_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.gateway_company_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.gateway_company_id_seq OWNER TO bruno;
 
 --
--- Name: gateway_company_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: gateway_company_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.gateway_company_id_seq OWNED BY public.gateway_company.id;
 
 
 --
--- Name: gateway_parameter; Type: TABLE; Schema: public; Owner: kbs
+-- Name: gateway_parameter; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.gateway_parameter (
@@ -8049,10 +8125,10 @@ CREATE TABLE public.gateway_parameter (
 );
 
 
-ALTER TABLE public.gateway_parameter OWNER TO kbs;
+ALTER TABLE public.gateway_parameter OWNER TO bruno;
 
 --
--- Name: gateway_parameter_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: gateway_parameter_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.gateway_parameter_id_seq
@@ -8063,17 +8139,17 @@ CREATE SEQUENCE public.gateway_parameter_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.gateway_parameter_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.gateway_parameter_id_seq OWNER TO bruno;
 
 --
--- Name: gateway_parameter_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: gateway_parameter_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.gateway_parameter_id_seq OWNED BY public.gateway_parameter.id;
 
 
 --
--- Name: history; Type: TABLE; Schema: public; Owner: kbs
+-- Name: history; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.history (
@@ -8091,10 +8167,10 @@ CREATE TABLE public.history (
 );
 
 
-ALTER TABLE public.history OWNER TO kbs;
+ALTER TABLE public.history OWNER TO bruno;
 
 --
--- Name: history_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: history_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.history_id_seq
@@ -8105,17 +8181,17 @@ CREATE SEQUENCE public.history_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.history_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.history_id_seq OWNER TO bruno;
 
 --
--- Name: history_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: history_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.history_id_seq OWNED BY public.history.id;
 
 
 --
--- Name: image; Type: TABLE; Schema: public; Owner: kbs
+-- Name: image; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.image (
@@ -8130,10 +8206,10 @@ CREATE TABLE public.image (
 );
 
 
-ALTER TABLE public.image OWNER TO kbs;
+ALTER TABLE public.image OWNER TO bruno;
 
 --
--- Name: image_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: image_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.image_id_seq
@@ -8144,17 +8220,61 @@ CREATE SEQUENCE public.image_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.image_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.image_id_seq OWNER TO bruno;
 
 --
--- Name: image_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: image_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.image_id_seq OWNED BY public.image.id;
 
 
 --
--- Name: item; Type: TABLE; Schema: public; Owner: kbs
+-- Name: invitation; Type: TABLE; Schema: public; Owner: bruno
+--
+
+CREATE TABLE public.invitation (
+    id integer NOT NULL,
+    creation_date timestamp without time zone DEFAULT now() NOT NULL,
+    usage_date timestamp without time zone,
+    token character varying(64) NOT NULL,
+    inviter_id integer NOT NULL,
+    invitee_id integer NOT NULL,
+    inviter_payer boolean DEFAULT false NOT NULL,
+    alias_first_name character varying(45) NOT NULL,
+    alias_last_name character varying(45) NOT NULL,
+    pending boolean DEFAULT true NOT NULL,
+    accepted boolean DEFAULT false NOT NULL,
+    created_alias_person_id integer
+);
+
+
+ALTER TABLE public.invitation OWNER TO bruno;
+
+--
+-- Name: invitation_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
+--
+
+CREATE SEQUENCE public.invitation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.invitation_id_seq OWNER TO bruno;
+
+--
+-- Name: invitation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
+--
+
+ALTER SEQUENCE public.invitation_id_seq OWNED BY public.invitation.id;
+
+
+--
+-- Name: item; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.item (
@@ -8166,7 +8286,7 @@ CREATE TABLE public.item (
     share_mate boolean DEFAULT false NOT NULL,
     organization_id integer,
     ord integer NOT NULL,
-    code character varying(10),
+    code character varying(20),
     temporal boolean DEFAULT false NOT NULL,
     per_resource_label_id integer,
     indoor boolean DEFAULT false NOT NULL,
@@ -8177,10 +8297,10 @@ CREATE TABLE public.item (
 );
 
 
-ALTER TABLE public.item OWNER TO kbs;
+ALTER TABLE public.item OWNER TO bruno;
 
 --
--- Name: item_family; Type: TABLE; Schema: public; Owner: kbs
+-- Name: item_family; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.item_family (
@@ -8196,10 +8316,10 @@ CREATE TABLE public.item_family (
 );
 
 
-ALTER TABLE public.item_family OWNER TO kbs;
+ALTER TABLE public.item_family OWNER TO bruno;
 
 --
--- Name: item_family_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: item_family_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.item_family_id_seq
@@ -8210,17 +8330,17 @@ CREATE SEQUENCE public.item_family_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.item_family_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.item_family_id_seq OWNER TO bruno;
 
 --
--- Name: item_family_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: item_family_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.item_family_id_seq OWNED BY public.item_family.id;
 
 
 --
--- Name: item_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: item_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.item_id_seq
@@ -8231,17 +8351,17 @@ CREATE SEQUENCE public.item_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.item_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.item_id_seq OWNER TO bruno;
 
 --
--- Name: item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.item_id_seq OWNED BY public.item.id;
 
 
 --
--- Name: kbs1_country; Type: TABLE; Schema: public; Owner: kbs
+-- Name: kbs1_country; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.kbs1_country (
@@ -8252,10 +8372,10 @@ CREATE TABLE public.kbs1_country (
 );
 
 
-ALTER TABLE public.kbs1_country OWNER TO kbs;
+ALTER TABLE public.kbs1_country OWNER TO bruno;
 
 --
--- Name: kdm_center; Type: TABLE; Schema: public; Owner: kbs
+-- Name: kdm_center; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.kdm_center (
@@ -8279,10 +8399,10 @@ CREATE TABLE public.kdm_center (
 );
 
 
-ALTER TABLE public.kdm_center OWNER TO kbs;
+ALTER TABLE public.kdm_center OWNER TO bruno;
 
 --
--- Name: kdm_center_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: kdm_center_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.kdm_center_id_seq
@@ -8293,17 +8413,17 @@ CREATE SEQUENCE public.kdm_center_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.kdm_center_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.kdm_center_id_seq OWNER TO bruno;
 
 --
--- Name: kdm_center_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: kdm_center_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.kdm_center_id_seq OWNED BY public.kdm_center.id;
 
 
 --
--- Name: label; Type: TABLE; Schema: public; Owner: kbs
+-- Name: label; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.label (
@@ -8323,38 +8443,38 @@ CREATE TABLE public.label (
 );
 
 
-ALTER TABLE public.label OWNER TO kbs;
+ALTER TABLE public.label OWNER TO bruno;
 
 --
--- Name: COLUMN label.zhs; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN label.zhs; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.label.zhs IS 'Simplified Chinese';
 
 
 --
--- Name: COLUMN label.zht; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN label.zht; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.label.zht IS 'Cantonese';
 
 
 --
--- Name: COLUMN label.el; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN label.el; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.label.el IS 'Greek';
 
 
 --
--- Name: COLUMN label.vi; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN label.vi; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.label.vi IS 'Vietnamese';
 
 
 --
--- Name: label_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: label_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.label_id_seq
@@ -8365,17 +8485,17 @@ CREATE SEQUENCE public.label_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.label_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.label_id_seq OWNER TO bruno;
 
 --
--- Name: label_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: label_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.label_id_seq OWNED BY public.label.id;
 
 
 --
--- Name: language; Type: TABLE; Schema: public; Owner: kbs
+-- Name: language; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.language (
@@ -8391,10 +8511,10 @@ CREATE TABLE public.language (
 );
 
 
-ALTER TABLE public.language OWNER TO kbs;
+ALTER TABLE public.language OWNER TO bruno;
 
 --
--- Name: language_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: language_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.language_id_seq
@@ -8405,17 +8525,17 @@ CREATE SEQUENCE public.language_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.language_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.language_id_seq OWNER TO bruno;
 
 --
--- Name: language_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: language_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.language_id_seq OWNED BY public.language.id;
 
 
 --
--- Name: letter; Type: TABLE; Schema: public; Owner: kbs
+-- Name: letter; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.letter (
@@ -8444,24 +8564,24 @@ CREATE TABLE public.letter (
 );
 
 
-ALTER TABLE public.letter OWNER TO kbs;
+ALTER TABLE public.letter OWNER TO bruno;
 
 --
--- Name: COLUMN letter.document_condition; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN letter.document_condition; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.letter.document_condition IS 'Required booking condition (expressed in OQL) to send the letter';
 
 
 --
--- Name: COLUMN letter.automation_enabled; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN letter.automation_enabled; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.letter.automation_enabled IS 'Enable this letter to be automatically sent according to the document condition.';
 
 
 --
--- Name: letter_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: letter_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.letter_id_seq
@@ -8472,17 +8592,17 @@ CREATE SEQUENCE public.letter_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.letter_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.letter_id_seq OWNER TO bruno;
 
 --
--- Name: letter_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: letter_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.letter_id_seq OWNED BY public.letter.id;
 
 
 --
--- Name: letter_type; Type: TABLE; Schema: public; Owner: kbs
+-- Name: letter_type; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.letter_type (
@@ -8509,10 +8629,10 @@ CREATE TABLE public.letter_type (
 );
 
 
-ALTER TABLE public.letter_type OWNER TO kbs;
+ALTER TABLE public.letter_type OWNER TO bruno;
 
 --
--- Name: letter_type_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: letter_type_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.letter_type_id_seq
@@ -8523,17 +8643,17 @@ CREATE SEQUENCE public.letter_type_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.letter_type_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.letter_type_id_seq OWNER TO bruno;
 
 --
--- Name: letter_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: letter_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.letter_type_id_seq OWNED BY public.letter_type.id;
 
 
 --
--- Name: lt_test_event; Type: TABLE; Schema: public; Owner: kbs
+-- Name: lt_test_event; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.lt_test_event (
@@ -8545,10 +8665,10 @@ CREATE TABLE public.lt_test_event (
 );
 
 
-ALTER TABLE public.lt_test_event OWNER TO kbs;
+ALTER TABLE public.lt_test_event OWNER TO bruno;
 
 --
--- Name: lt_test_event_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: lt_test_event_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.lt_test_event_id_seq
@@ -8559,17 +8679,17 @@ CREATE SEQUENCE public.lt_test_event_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.lt_test_event_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.lt_test_event_id_seq OWNER TO bruno;
 
 --
--- Name: lt_test_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: lt_test_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.lt_test_event_id_seq OWNED BY public.lt_test_event.id;
 
 
 --
--- Name: lt_test_set; Type: TABLE; Schema: public; Owner: kbs
+-- Name: lt_test_set; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.lt_test_set (
@@ -8580,10 +8700,10 @@ CREATE TABLE public.lt_test_set (
 );
 
 
-ALTER TABLE public.lt_test_set OWNER TO kbs;
+ALTER TABLE public.lt_test_set OWNER TO bruno;
 
 --
--- Name: lt_test_set_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: lt_test_set_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.lt_test_set_id_seq
@@ -8594,17 +8714,17 @@ CREATE SEQUENCE public.lt_test_set_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.lt_test_set_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.lt_test_set_id_seq OWNER TO bruno;
 
 --
--- Name: lt_test_set_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: lt_test_set_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.lt_test_set_id_seq OWNED BY public.lt_test_set.id;
 
 
 --
--- Name: magic_link; Type: TABLE; Schema: public; Owner: kbs
+-- Name: magic_link; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.magic_link (
@@ -8618,14 +8738,15 @@ CREATE TABLE public.magic_link (
     lang character(2),
     link character varying(1024) NOT NULL,
     old_email character varying(64),
-    requested_path character varying(1024)
+    requested_path character varying(1024),
+    verification_code character varying(64)
 );
 
 
-ALTER TABLE public.magic_link OWNER TO kbs;
+ALTER TABLE public.magic_link OWNER TO bruno;
 
 --
--- Name: magic_link_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: magic_link_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.magic_link_id_seq
@@ -8636,17 +8757,17 @@ CREATE SEQUENCE public.magic_link_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.magic_link_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.magic_link_id_seq OWNER TO bruno;
 
 --
--- Name: magic_link_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: magic_link_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.magic_link_id_seq OWNED BY public.magic_link.id;
 
 
 --
--- Name: mail; Type: TABLE; Schema: public; Owner: kbs
+-- Name: mail; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.mail (
@@ -8672,10 +8793,10 @@ CREATE TABLE public.mail (
 );
 
 
-ALTER TABLE public.mail OWNER TO kbs;
+ALTER TABLE public.mail OWNER TO bruno;
 
 --
--- Name: mail_account; Type: TABLE; Schema: public; Owner: kbs
+-- Name: mail_account; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.mail_account (
@@ -8690,10 +8811,10 @@ CREATE TABLE public.mail_account (
 );
 
 
-ALTER TABLE public.mail_account OWNER TO kbs;
+ALTER TABLE public.mail_account OWNER TO bruno;
 
 --
--- Name: mail_account_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: mail_account_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.mail_account_id_seq
@@ -8704,17 +8825,17 @@ CREATE SEQUENCE public.mail_account_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.mail_account_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.mail_account_id_seq OWNER TO bruno;
 
 --
--- Name: mail_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: mail_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.mail_account_id_seq OWNED BY public.mail_account.id;
 
 
 --
--- Name: mail_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: mail_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.mail_id_seq
@@ -8725,17 +8846,17 @@ CREATE SEQUENCE public.mail_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.mail_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.mail_id_seq OWNER TO bruno;
 
 --
--- Name: mail_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: mail_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.mail_id_seq OWNED BY public.mail.id;
 
 
 --
--- Name: meal_estimation; Type: TABLE; Schema: public; Owner: kbs
+-- Name: meal_estimation; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.meal_estimation (
@@ -8749,17 +8870,17 @@ CREATE TABLE public.meal_estimation (
 );
 
 
-ALTER TABLE public.meal_estimation OWNER TO kbs;
+ALTER TABLE public.meal_estimation OWNER TO bruno;
 
 --
--- Name: TABLE meal_estimation; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: TABLE meal_estimation; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON TABLE public.meal_estimation IS 'Used only by KMC France through the KBS plugin';
 
 
 --
--- Name: meal_estimation_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: meal_estimation_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.meal_estimation_id_seq
@@ -8770,17 +8891,17 @@ CREATE SEQUENCE public.meal_estimation_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.meal_estimation_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.meal_estimation_id_seq OWNER TO bruno;
 
 --
--- Name: meal_estimation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: meal_estimation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.meal_estimation_id_seq OWNED BY public.meal_estimation.id;
 
 
 --
--- Name: media; Type: TABLE; Schema: public; Owner: kbs
+-- Name: media; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.media (
@@ -8795,10 +8916,10 @@ CREATE TABLE public.media (
 );
 
 
-ALTER TABLE public.media OWNER TO kbs;
+ALTER TABLE public.media OWNER TO bruno;
 
 --
--- Name: media_consumption; Type: TABLE; Schema: public; Owner: kbs
+-- Name: media_consumption; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.media_consumption (
@@ -8814,10 +8935,10 @@ CREATE TABLE public.media_consumption (
 );
 
 
-ALTER TABLE public.media_consumption OWNER TO kbs;
+ALTER TABLE public.media_consumption OWNER TO bruno;
 
 --
--- Name: media_consumption_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: media_consumption_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.media_consumption_id_seq
@@ -8828,17 +8949,17 @@ CREATE SEQUENCE public.media_consumption_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.media_consumption_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.media_consumption_id_seq OWNER TO bruno;
 
 --
--- Name: media_consumption_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: media_consumption_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.media_consumption_id_seq OWNED BY public.media_consumption.id;
 
 
 --
--- Name: media_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: media_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.media_id_seq
@@ -8849,17 +8970,17 @@ CREATE SEQUENCE public.media_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.media_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.media_id_seq OWNER TO bruno;
 
 --
--- Name: media_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: media_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.media_id_seq OWNED BY public.media.id;
 
 
 --
--- Name: method; Type: TABLE; Schema: public; Owner: kbs
+-- Name: method; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.method (
@@ -8870,10 +8991,10 @@ CREATE TABLE public.method (
 );
 
 
-ALTER TABLE public.method OWNER TO kbs;
+ALTER TABLE public.method OWNER TO bruno;
 
 --
--- Name: method_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: method_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.method_id_seq
@@ -8884,17 +9005,17 @@ CREATE SEQUENCE public.method_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.method_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.method_id_seq OWNER TO bruno;
 
 --
--- Name: method_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: method_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.method_id_seq OWNED BY public.method.id;
 
 
 --
--- Name: method_support; Type: TABLE; Schema: public; Owner: kbs
+-- Name: method_support; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.method_support (
@@ -8906,10 +9027,10 @@ CREATE TABLE public.method_support (
 );
 
 
-ALTER TABLE public.method_support OWNER TO kbs;
+ALTER TABLE public.method_support OWNER TO bruno;
 
 --
--- Name: method_support_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: method_support_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.method_support_id_seq
@@ -8920,17 +9041,17 @@ CREATE SEQUENCE public.method_support_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.method_support_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.method_support_id_seq OWNER TO bruno;
 
 --
--- Name: method_support_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: method_support_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.method_support_id_seq OWNED BY public.method_support.id;
 
 
 --
--- Name: metrics; Type: TABLE; Schema: public; Owner: kbs
+-- Name: metrics; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.metrics (
@@ -8945,10 +9066,10 @@ CREATE TABLE public.metrics (
 );
 
 
-ALTER TABLE public.metrics OWNER TO kbs;
+ALTER TABLE public.metrics OWNER TO bruno;
 
 --
--- Name: metrics_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: metrics_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.metrics_id_seq
@@ -8959,17 +9080,17 @@ CREATE SEQUENCE public.metrics_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.metrics_id_seq OWNER TO bruno;
 
 --
--- Name: metrics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: metrics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.metrics_id_seq OWNED BY public.metrics.id;
 
 
 --
--- Name: money_account; Type: TABLE; Schema: public; Owner: kbs
+-- Name: money_account; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.money_account (
@@ -8988,10 +9109,10 @@ CREATE TABLE public.money_account (
 );
 
 
-ALTER TABLE public.money_account OWNER TO kbs;
+ALTER TABLE public.money_account OWNER TO bruno;
 
 --
--- Name: money_account_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: money_account_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.money_account_id_seq
@@ -9002,17 +9123,17 @@ CREATE SEQUENCE public.money_account_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.money_account_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.money_account_id_seq OWNER TO bruno;
 
 --
--- Name: money_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: money_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.money_account_id_seq OWNED BY public.money_account.id;
 
 
 --
--- Name: money_account_type; Type: TABLE; Schema: public; Owner: kbs
+-- Name: money_account_type; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.money_account_type (
@@ -9026,10 +9147,10 @@ CREATE TABLE public.money_account_type (
 );
 
 
-ALTER TABLE public.money_account_type OWNER TO kbs;
+ALTER TABLE public.money_account_type OWNER TO bruno;
 
 --
--- Name: money_account_type_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: money_account_type_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.money_account_type_id_seq
@@ -9040,17 +9161,17 @@ CREATE SEQUENCE public.money_account_type_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.money_account_type_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.money_account_type_id_seq OWNER TO bruno;
 
 --
--- Name: money_account_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: money_account_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.money_account_type_id_seq OWNED BY public.money_account_type.id;
 
 
 --
--- Name: money_flow; Type: TABLE; Schema: public; Owner: kbs
+-- Name: money_flow; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.money_flow (
@@ -9066,10 +9187,10 @@ CREATE TABLE public.money_flow (
 );
 
 
-ALTER TABLE public.money_flow OWNER TO kbs;
+ALTER TABLE public.money_flow OWNER TO bruno;
 
 --
--- Name: money_flow_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: money_flow_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.money_flow_id_seq
@@ -9080,17 +9201,17 @@ CREATE SEQUENCE public.money_flow_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.money_flow_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.money_flow_id_seq OWNER TO bruno;
 
 --
--- Name: money_flow_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: money_flow_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.money_flow_id_seq OWNED BY public.money_flow.id;
 
 
 --
--- Name: money_flow_priority; Type: TABLE; Schema: public; Owner: kbs
+-- Name: money_flow_priority; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.money_flow_priority (
@@ -9101,10 +9222,10 @@ CREATE TABLE public.money_flow_priority (
 );
 
 
-ALTER TABLE public.money_flow_priority OWNER TO kbs;
+ALTER TABLE public.money_flow_priority OWNER TO bruno;
 
 --
--- Name: money_flow_priority_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: money_flow_priority_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.money_flow_priority_id_seq
@@ -9115,17 +9236,17 @@ CREATE SEQUENCE public.money_flow_priority_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.money_flow_priority_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.money_flow_priority_id_seq OWNER TO bruno;
 
 --
--- Name: money_flow_priority_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: money_flow_priority_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.money_flow_priority_id_seq OWNED BY public.money_flow_priority.id;
 
 
 --
--- Name: money_flow_type; Type: TABLE; Schema: public; Owner: kbs
+-- Name: money_flow_type; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.money_flow_type (
@@ -9135,10 +9256,10 @@ CREATE TABLE public.money_flow_type (
 );
 
 
-ALTER TABLE public.money_flow_type OWNER TO kbs;
+ALTER TABLE public.money_flow_type OWNER TO bruno;
 
 --
--- Name: money_flow_type_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: money_flow_type_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.money_flow_type_id_seq
@@ -9149,17 +9270,17 @@ CREATE SEQUENCE public.money_flow_type_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.money_flow_type_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.money_flow_type_id_seq OWNER TO bruno;
 
 --
--- Name: money_flow_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: money_flow_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.money_flow_type_id_seq OWNED BY public.money_flow_type.id;
 
 
 --
--- Name: money_statement; Type: TABLE; Schema: public; Owner: kbs
+-- Name: money_statement; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.money_statement (
@@ -9171,10 +9292,10 @@ CREATE TABLE public.money_statement (
 );
 
 
-ALTER TABLE public.money_statement OWNER TO kbs;
+ALTER TABLE public.money_statement OWNER TO bruno;
 
 --
--- Name: money_statement_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: money_statement_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.money_statement_id_seq
@@ -9185,17 +9306,17 @@ CREATE SEQUENCE public.money_statement_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.money_statement_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.money_statement_id_seq OWNER TO bruno;
 
 --
--- Name: money_statement_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: money_statement_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.money_statement_id_seq OWNED BY public.money_statement.id;
 
 
 --
--- Name: money_transfer_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: money_transfer_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.money_transfer_id_seq
@@ -9206,17 +9327,17 @@ CREATE SEQUENCE public.money_transfer_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.money_transfer_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.money_transfer_id_seq OWNER TO bruno;
 
 --
--- Name: money_transfer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: money_transfer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.money_transfer_id_seq OWNED BY public.money_transfer.id;
 
 
 --
--- Name: multiple_booking; Type: TABLE; Schema: public; Owner: kbs
+-- Name: multiple_booking; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.multiple_booking (
@@ -9228,10 +9349,10 @@ CREATE TABLE public.multiple_booking (
 );
 
 
-ALTER TABLE public.multiple_booking OWNER TO kbs;
+ALTER TABLE public.multiple_booking OWNER TO bruno;
 
 --
--- Name: multiple_booking_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: multiple_booking_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.multiple_booking_id_seq
@@ -9242,17 +9363,17 @@ CREATE SEQUENCE public.multiple_booking_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.multiple_booking_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.multiple_booking_id_seq OWNER TO bruno;
 
 --
--- Name: multiple_booking_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: multiple_booking_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.multiple_booking_id_seq OWNED BY public.multiple_booking.id;
 
 
 --
--- Name: news; Type: TABLE; Schema: public; Owner: kbs
+-- Name: news; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.news (
@@ -9271,10 +9392,10 @@ CREATE TABLE public.news (
 );
 
 
-ALTER TABLE public.news OWNER TO kbs;
+ALTER TABLE public.news OWNER TO bruno;
 
 --
--- Name: news_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: news_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.news_id_seq
@@ -9285,17 +9406,17 @@ CREATE SEQUENCE public.news_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.news_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.news_id_seq OWNER TO bruno;
 
 --
--- Name: news_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: news_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.news_id_seq OWNED BY public.news.id;
 
 
 --
--- Name: operation; Type: TABLE; Schema: public; Owner: kbs
+-- Name: operation; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.operation (
@@ -9309,14 +9430,49 @@ CREATE TABLE public.operation (
     public boolean DEFAULT false NOT NULL,
     read_only boolean DEFAULT false NOT NULL,
     grant_route character varying(255),
-    guest boolean DEFAULT false NOT NULL
+    guest boolean DEFAULT false NOT NULL,
+    group_id integer
 );
 
 
-ALTER TABLE public.operation OWNER TO kbs;
+ALTER TABLE public.operation OWNER TO bruno;
 
 --
--- Name: operation_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: operation_group; Type: TABLE; Schema: public; Owner: bruno
+--
+
+CREATE TABLE public.operation_group (
+    id integer NOT NULL,
+    name character varying(256) NOT NULL
+);
+
+
+ALTER TABLE public.operation_group OWNER TO bruno;
+
+--
+-- Name: operation_group_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
+--
+
+CREATE SEQUENCE public.operation_group_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.operation_group_id_seq OWNER TO bruno;
+
+--
+-- Name: operation_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
+--
+
+ALTER SEQUENCE public.operation_group_id_seq OWNED BY public.operation_group.id;
+
+
+--
+-- Name: operation_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.operation_id_seq
@@ -9327,17 +9483,17 @@ CREATE SEQUENCE public.operation_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.operation_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.operation_id_seq OWNER TO bruno;
 
 --
--- Name: operation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: operation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.operation_id_seq OWNED BY public.operation.id;
 
 
 --
--- Name: option; Type: TABLE; Schema: public; Owner: kbs
+-- Name: option; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.option (
@@ -9426,101 +9582,101 @@ CREATE TABLE public.option (
 );
 
 
-ALTER TABLE public.option OWNER TO kbs;
+ALTER TABLE public.option OWNER TO bruno;
 
 --
--- Name: COLUMN option.cart_group_site_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.cart_group_site_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.cart_group_site_id IS 'Id of site in which to show the option in the cart and summary';
 
 
 --
--- Name: COLUMN option.cart_group_item_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.cart_group_item_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.cart_group_item_id IS 'Id of item in which to show the option in the cart and summary';
 
 
 --
--- Name: COLUMN option.cart_group_label_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.cart_group_label_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.cart_group_label_id IS 'Id of label in which to show the option in the cart and summary. Overrides cart_group_item_id. Used when no item correspond.';
 
 
 --
--- Name: COLUMN option.cart_group_family_id; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.cart_group_family_id; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.cart_group_family_id IS 'Id of item_family in which to show the option in the cart and summary. Overrides item''s family.';
 
 
 --
--- Name: COLUMN option.selected; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.selected; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.selected IS '(KMC front-end) Default state (selected or not) for root options';
 
 
 --
--- Name: COLUMN option.online_on; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.online_on; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.online_on IS 'When to set automatically online to true';
 
 
 --
--- Name: COLUMN option.online_off; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.online_off; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.online_off IS 'When to set automatically online to false';
 
 
 --
--- Name: COLUMN option.force_soldout_on; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.force_soldout_on; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.force_soldout_on IS 'When to set automatically force_soldout to true';
 
 
 --
--- Name: COLUMN option.force_soldout_off; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.force_soldout_off; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.force_soldout_off IS 'When to set automatically force_soldout to false';
 
 
 --
--- Name: COLUMN option.first_pass_on; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.first_pass_on; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.first_pass_on IS 'When to set automatically first_pass to true';
 
 
 --
--- Name: COLUMN option.first_pass_off; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.first_pass_off; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.first_pass_off IS 'When to set automatically first_pass to false';
 
 
 --
--- Name: COLUMN option.second_pass_on; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.second_pass_on; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.second_pass_on IS 'When to set automatically second_pass to true';
 
 
 --
--- Name: COLUMN option.second_pass_off; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN option.second_pass_off; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.option.second_pass_off IS 'When to set automatically second_pass to false';
 
 
 --
--- Name: option_condition; Type: TABLE; Schema: public; Owner: kbs
+-- Name: option_condition; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.option_condition (
@@ -9541,10 +9697,10 @@ CREATE TABLE public.option_condition (
 );
 
 
-ALTER TABLE public.option_condition OWNER TO kbs;
+ALTER TABLE public.option_condition OWNER TO bruno;
 
 --
--- Name: option_condition_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: option_condition_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.option_condition_id_seq
@@ -9555,17 +9711,17 @@ CREATE SEQUENCE public.option_condition_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.option_condition_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.option_condition_id_seq OWNER TO bruno;
 
 --
--- Name: option_condition_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: option_condition_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.option_condition_id_seq OWNED BY public.option_condition.id;
 
 
 --
--- Name: option_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: option_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.option_id_seq
@@ -9576,17 +9732,17 @@ CREATE SEQUENCE public.option_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.option_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.option_id_seq OWNER TO bruno;
 
 --
--- Name: option_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: option_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.option_id_seq OWNED BY public.option.id;
 
 
 --
--- Name: organization; Type: TABLE; Schema: public; Owner: kbs
+-- Name: organization; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.organization (
@@ -9613,56 +9769,57 @@ CREATE TABLE public.organization (
     street character varying(128),
     post_code character varying(32),
     city_name character varying(64),
-    language_id integer
+    language_id integer,
+    global_site_id integer
 );
 
 
-ALTER TABLE public.organization OWNER TO kbs;
+ALTER TABLE public.organization OWNER TO bruno;
 
 --
--- Name: COLUMN organization.timezone; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN organization.timezone; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.organization.timezone IS 'IANA time zone id to use as a default for new events of this organization';
 
 
 --
--- Name: COLUMN organization.terms_url_en; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN organization.terms_url_en; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.organization.terms_url_en IS 'Default english T&Cs url and jquery selector for events of this organization';
 
 
 --
--- Name: COLUMN organization.terms_url_es; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN organization.terms_url_es; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.organization.terms_url_es IS 'Default spanish T&Cs url and jquery selector for events of this organization';
 
 
 --
--- Name: COLUMN organization.terms_url_fr; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN organization.terms_url_fr; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.organization.terms_url_fr IS 'Default french T&Cs url and jquery selector for events of this organization';
 
 
 --
--- Name: COLUMN organization.terms_url_de; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN organization.terms_url_de; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.organization.terms_url_de IS 'Default german T&Cs url and jquery selector for events of this organization';
 
 
 --
--- Name: COLUMN organization.terms_url_pt; Type: COMMENT; Schema: public; Owner: kbs
+-- Name: COLUMN organization.terms_url_pt; Type: COMMENT; Schema: public; Owner: bruno
 --
 
 COMMENT ON COLUMN public.organization.terms_url_pt IS 'Default portuguese T&Cs url and jquery selector for events of this organization';
 
 
 --
--- Name: organization_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: organization_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.organization_id_seq
@@ -9673,17 +9830,17 @@ CREATE SEQUENCE public.organization_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.organization_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.organization_id_seq OWNER TO bruno;
 
 --
--- Name: organization_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: organization_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.organization_id_seq OWNED BY public.organization.id;
 
 
 --
--- Name: organization_type; Type: TABLE; Schema: public; Owner: kbs
+-- Name: organization_type; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.organization_type (
@@ -9694,10 +9851,10 @@ CREATE TABLE public.organization_type (
 );
 
 
-ALTER TABLE public.organization_type OWNER TO kbs;
+ALTER TABLE public.organization_type OWNER TO bruno;
 
 --
--- Name: organization_type_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: organization_type_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.organization_type_id_seq
@@ -9708,17 +9865,17 @@ CREATE SEQUENCE public.organization_type_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.organization_type_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.organization_type_id_seq OWNER TO bruno;
 
 --
--- Name: organization_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: organization_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.organization_type_id_seq OWNED BY public.organization_type.id;
 
 
 --
--- Name: package; Type: TABLE; Schema: public; Owner: kbs
+-- Name: package; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.package (
@@ -9727,10 +9884,10 @@ CREATE TABLE public.package (
 );
 
 
-ALTER TABLE public.package OWNER TO kbs;
+ALTER TABLE public.package OWNER TO bruno;
 
 --
--- Name: package_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: package_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.package_id_seq
@@ -9741,17 +9898,17 @@ CREATE SEQUENCE public.package_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.package_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.package_id_seq OWNER TO bruno;
 
 --
--- Name: package_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: package_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.package_id_seq OWNED BY public.package.id;
 
 
 --
--- Name: package_item; Type: TABLE; Schema: public; Owner: kbs
+-- Name: package_item; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.package_item (
@@ -9761,10 +9918,10 @@ CREATE TABLE public.package_item (
 );
 
 
-ALTER TABLE public.package_item OWNER TO kbs;
+ALTER TABLE public.package_item OWNER TO bruno;
 
 --
--- Name: package_item_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: package_item_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.package_item_id_seq
@@ -9775,17 +9932,17 @@ CREATE SEQUENCE public.package_item_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.package_item_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.package_item_id_seq OWNER TO bruno;
 
 --
--- Name: package_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: package_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.package_item_id_seq OWNED BY public.package_item.id;
 
 
 --
--- Name: person; Type: TABLE; Schema: public; Owner: kbs
+-- Name: person; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.person (
@@ -9835,10 +9992,10 @@ CREATE TABLE public.person (
 );
 
 
-ALTER TABLE public.person OWNER TO kbs;
+ALTER TABLE public.person OWNER TO bruno;
 
 --
--- Name: person_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: person_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.person_id_seq
@@ -9849,17 +10006,17 @@ CREATE SEQUENCE public.person_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.person_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.person_id_seq OWNER TO bruno;
 
 --
--- Name: person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.person_id_seq OWNED BY public.person.id;
 
 
 --
--- Name: playlist; Type: TABLE; Schema: public; Owner: kbs
+-- Name: playlist; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.playlist (
@@ -9868,10 +10025,10 @@ CREATE TABLE public.playlist (
 );
 
 
-ALTER TABLE public.playlist OWNER TO kbs;
+ALTER TABLE public.playlist OWNER TO bruno;
 
 --
--- Name: playlist_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: playlist_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.playlist_id_seq
@@ -9882,17 +10039,17 @@ CREATE SEQUENCE public.playlist_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.playlist_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.playlist_id_seq OWNER TO bruno;
 
 --
--- Name: playlist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: playlist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.playlist_id_seq OWNED BY public.playlist.id;
 
 
 --
--- Name: podcast; Type: TABLE; Schema: public; Owner: kbs
+-- Name: podcast; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.podcast (
@@ -9910,10 +10067,10 @@ CREATE TABLE public.podcast (
 );
 
 
-ALTER TABLE public.podcast OWNER TO kbs;
+ALTER TABLE public.podcast OWNER TO bruno;
 
 --
--- Name: podcast_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: podcast_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.podcast_id_seq
@@ -9924,17 +10081,98 @@ CREATE SEQUENCE public.podcast_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.podcast_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.podcast_id_seq OWNER TO bruno;
 
 --
--- Name: podcast_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: podcast_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.podcast_id_seq OWNED BY public.podcast.id;
 
 
 --
--- Name: rate_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: pool; Type: TABLE; Schema: public; Owner: bruno
+--
+
+CREATE TABLE public.pool (
+    id integer NOT NULL,
+    name character varying(45) NOT NULL,
+    label_id integer,
+    description character varying(512),
+    description_label_id integer,
+    web_color character varying(45),
+    graphic character varying(4096),
+    event_type_id integer,
+    event_pool boolean DEFAULT false NOT NULL,
+    bookable boolean DEFAULT true NOT NULL,
+    ord integer
+);
+
+
+ALTER TABLE public.pool OWNER TO bruno;
+
+--
+-- Name: pool_allocation; Type: TABLE; Schema: public; Owner: bruno
+--
+
+CREATE TABLE public.pool_allocation (
+    id integer NOT NULL,
+    pool_id integer NOT NULL,
+    event_id integer,
+    resource_id integer,
+    person_id integer,
+    quantity integer
+);
+
+
+ALTER TABLE public.pool_allocation OWNER TO bruno;
+
+--
+-- Name: pool_allocation_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
+--
+
+CREATE SEQUENCE public.pool_allocation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.pool_allocation_id_seq OWNER TO bruno;
+
+--
+-- Name: pool_allocation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
+--
+
+ALTER SEQUENCE public.pool_allocation_id_seq OWNED BY public.pool_allocation.id;
+
+
+--
+-- Name: pool_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
+--
+
+CREATE SEQUENCE public.pool_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.pool_id_seq OWNER TO bruno;
+
+--
+-- Name: pool_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
+--
+
+ALTER SEQUENCE public.pool_id_seq OWNED BY public.pool.id;
+
+
+--
+-- Name: rate_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.rate_id_seq
@@ -9945,17 +10183,17 @@ CREATE SEQUENCE public.rate_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.rate_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.rate_id_seq OWNER TO bruno;
 
 --
--- Name: rate_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: rate_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.rate_id_seq OWNED BY public.rate.id;
 
 
 --
--- Name: recipient; Type: TABLE; Schema: public; Owner: kbs
+-- Name: recipient; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.recipient (
@@ -9973,10 +10211,10 @@ CREATE TABLE public.recipient (
 );
 
 
-ALTER TABLE public.recipient OWNER TO kbs;
+ALTER TABLE public.recipient OWNER TO bruno;
 
 --
--- Name: recipient_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: recipient_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.recipient_id_seq
@@ -9987,17 +10225,17 @@ CREATE SEQUENCE public.recipient_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.recipient_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.recipient_id_seq OWNER TO bruno;
 
 --
--- Name: recipient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: recipient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.recipient_id_seq OWNED BY public.recipient.id;
 
 
 --
--- Name: resource; Type: TABLE; Schema: public; Owner: kbs
+-- Name: resource; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.resource (
@@ -10007,14 +10245,19 @@ CREATE TABLE public.resource (
     name character varying(64) NOT NULL,
     trigger_duplicate smallint,
     site_item_family_code character varying(10),
-    building_id integer
+    building_id integer,
+    last_cleaning_date timestamp without time zone,
+    last_inspection_date timestamp without time zone,
+    cleaning_state public.cleaning_state,
+    building_zone_id integer,
+    kbs2_to_kbs3_global_resource_id integer
 );
 
 
-ALTER TABLE public.resource OWNER TO kbs;
+ALTER TABLE public.resource OWNER TO bruno;
 
 --
--- Name: resource_configuration; Type: TABLE; Schema: public; Owner: kbs
+-- Name: resource_configuration; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.resource_configuration (
@@ -10036,14 +10279,15 @@ CREATE TABLE public.resource_configuration (
     allows_special_guest boolean DEFAULT false NOT NULL,
     allows_volunteer boolean DEFAULT false NOT NULL,
     allows_resident boolean DEFAULT false NOT NULL,
-    allows_resident_family boolean DEFAULT false NOT NULL
+    allows_resident_family boolean DEFAULT false NOT NULL,
+    event_id integer
 );
 
 
-ALTER TABLE public.resource_configuration OWNER TO kbs;
+ALTER TABLE public.resource_configuration OWNER TO bruno;
 
 --
--- Name: resource_configuration_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: resource_configuration_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.resource_configuration_id_seq
@@ -10054,17 +10298,17 @@ CREATE SEQUENCE public.resource_configuration_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.resource_configuration_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.resource_configuration_id_seq OWNER TO bruno;
 
 --
--- Name: resource_configuration_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: resource_configuration_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.resource_configuration_id_seq OWNED BY public.resource_configuration.id;
 
 
 --
--- Name: resource_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: resource_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.resource_id_seq
@@ -10075,17 +10319,17 @@ CREATE SEQUENCE public.resource_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.resource_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.resource_id_seq OWNER TO bruno;
 
 --
--- Name: resource_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: resource_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.resource_id_seq OWNED BY public.resource.id;
 
 
 --
--- Name: role; Type: TABLE; Schema: public; Owner: kbs
+-- Name: role; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.role (
@@ -10097,10 +10341,10 @@ CREATE TABLE public.role (
 );
 
 
-ALTER TABLE public.role OWNER TO kbs;
+ALTER TABLE public.role OWNER TO bruno;
 
 --
--- Name: role_attribution; Type: TABLE; Schema: public; Owner: kbs
+-- Name: role_attribution; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.role_attribution (
@@ -10113,10 +10357,10 @@ CREATE TABLE public.role_attribution (
 );
 
 
-ALTER TABLE public.role_attribution OWNER TO kbs;
+ALTER TABLE public.role_attribution OWNER TO bruno;
 
 --
--- Name: role_attribution_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: role_attribution_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.role_attribution_id_seq
@@ -10127,17 +10371,17 @@ CREATE SEQUENCE public.role_attribution_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.role_attribution_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.role_attribution_id_seq OWNER TO bruno;
 
 --
--- Name: role_attribution_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: role_attribution_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.role_attribution_id_seq OWNED BY public.role_attribution.id;
 
 
 --
--- Name: role_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: role_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.role_id_seq
@@ -10148,17 +10392,17 @@ CREATE SEQUENCE public.role_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.role_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.role_id_seq OWNER TO bruno;
 
 --
--- Name: role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.role_id_seq OWNED BY public.role.id;
 
 
 --
--- Name: room_cleaning; Type: TABLE; Schema: public; Owner: kbs
+-- Name: room_cleaning; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.room_cleaning (
@@ -10172,10 +10416,10 @@ CREATE TABLE public.room_cleaning (
 );
 
 
-ALTER TABLE public.room_cleaning OWNER TO kbs;
+ALTER TABLE public.room_cleaning OWNER TO bruno;
 
 --
--- Name: room_cleaning_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: room_cleaning_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.room_cleaning_id_seq
@@ -10186,17 +10430,17 @@ CREATE SEQUENCE public.room_cleaning_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.room_cleaning_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.room_cleaning_id_seq OWNER TO bruno;
 
 --
--- Name: room_cleaning_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: room_cleaning_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.room_cleaning_id_seq OWNED BY public.room_cleaning.id;
 
 
 --
--- Name: scheduled_item; Type: TABLE; Schema: public; Owner: kbs
+-- Name: scheduled_item; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.scheduled_item (
@@ -10225,10 +10469,10 @@ CREATE TABLE public.scheduled_item (
 );
 
 
-ALTER TABLE public.scheduled_item OWNER TO kbs;
+ALTER TABLE public.scheduled_item OWNER TO bruno;
 
 --
--- Name: scheduled_item_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: scheduled_item_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.scheduled_item_id_seq
@@ -10239,17 +10483,17 @@ CREATE SEQUENCE public.scheduled_item_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.scheduled_item_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.scheduled_item_id_seq OWNER TO bruno;
 
 --
--- Name: scheduled_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: scheduled_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.scheduled_item_id_seq OWNED BY public.scheduled_item.id;
 
 
 --
--- Name: scheduled_resource; Type: TABLE; Schema: public; Owner: kbs
+-- Name: scheduled_resource; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.scheduled_resource (
@@ -10264,10 +10508,10 @@ CREATE TABLE public.scheduled_resource (
 );
 
 
-ALTER TABLE public.scheduled_resource OWNER TO kbs;
+ALTER TABLE public.scheduled_resource OWNER TO bruno;
 
 --
--- Name: scheduled_resource_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: scheduled_resource_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.scheduled_resource_id_seq
@@ -10278,17 +10522,17 @@ CREATE SEQUENCE public.scheduled_resource_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.scheduled_resource_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.scheduled_resource_id_seq OWNER TO bruno;
 
 --
--- Name: scheduled_resource_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: scheduled_resource_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.scheduled_resource_id_seq OWNED BY public.scheduled_resource.id;
 
 
 --
--- Name: sector; Type: TABLE; Schema: public; Owner: kbs
+-- Name: sector; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.sector (
@@ -10297,10 +10541,10 @@ CREATE TABLE public.sector (
 );
 
 
-ALTER TABLE public.sector OWNER TO kbs;
+ALTER TABLE public.sector OWNER TO bruno;
 
 --
--- Name: sector_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: sector_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.sector_id_seq
@@ -10311,17 +10555,17 @@ CREATE SEQUENCE public.sector_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.sector_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.sector_id_seq OWNER TO bruno;
 
 --
--- Name: sector_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: sector_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.sector_id_seq OWNED BY public.sector.id;
 
 
 --
--- Name: session_agent; Type: TABLE; Schema: public; Owner: kbs
+-- Name: session_agent; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.session_agent (
@@ -10334,10 +10578,10 @@ CREATE TABLE public.session_agent (
 );
 
 
-ALTER TABLE public.session_agent OWNER TO kbs;
+ALTER TABLE public.session_agent OWNER TO bruno;
 
 --
--- Name: session_agent_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: session_agent_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.session_agent_id_seq
@@ -10348,17 +10592,17 @@ CREATE SEQUENCE public.session_agent_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.session_agent_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.session_agent_id_seq OWNER TO bruno;
 
 --
--- Name: session_agent_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: session_agent_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.session_agent_id_seq OWNED BY public.session_agent.id;
 
 
 --
--- Name: session_application; Type: TABLE; Schema: public; Owner: kbs
+-- Name: session_application; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.session_application (
@@ -10378,10 +10622,10 @@ CREATE TABLE public.session_application (
 );
 
 
-ALTER TABLE public.session_application OWNER TO kbs;
+ALTER TABLE public.session_application OWNER TO bruno;
 
 --
--- Name: session_application_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: session_application_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.session_application_id_seq
@@ -10392,17 +10636,17 @@ CREATE SEQUENCE public.session_application_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.session_application_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.session_application_id_seq OWNER TO bruno;
 
 --
--- Name: session_application_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: session_application_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.session_application_id_seq OWNED BY public.session_application.id;
 
 
 --
--- Name: session_connection; Type: TABLE; Schema: public; Owner: kbs
+-- Name: session_connection; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.session_connection (
@@ -10415,10 +10659,10 @@ CREATE TABLE public.session_connection (
 );
 
 
-ALTER TABLE public.session_connection OWNER TO kbs;
+ALTER TABLE public.session_connection OWNER TO bruno;
 
 --
--- Name: session_connection_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: session_connection_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.session_connection_id_seq
@@ -10429,17 +10673,17 @@ CREATE SEQUENCE public.session_connection_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.session_connection_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.session_connection_id_seq OWNER TO bruno;
 
 --
--- Name: session_connection_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: session_connection_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.session_connection_id_seq OWNED BY public.session_connection.id;
 
 
 --
--- Name: session_process; Type: TABLE; Schema: public; Owner: kbs
+-- Name: session_process; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.session_process (
@@ -10452,10 +10696,10 @@ CREATE TABLE public.session_process (
 );
 
 
-ALTER TABLE public.session_process OWNER TO kbs;
+ALTER TABLE public.session_process OWNER TO bruno;
 
 --
--- Name: session_process_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: session_process_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.session_process_id_seq
@@ -10466,17 +10710,17 @@ CREATE SEQUENCE public.session_process_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.session_process_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.session_process_id_seq OWNER TO bruno;
 
 --
--- Name: session_process_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: session_process_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.session_process_id_seq OWNED BY public.session_process.id;
 
 
 --
--- Name: session_user; Type: TABLE; Schema: public; Owner: kbs
+-- Name: session_user; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public."session_user" (
@@ -10490,10 +10734,10 @@ CREATE TABLE public."session_user" (
 );
 
 
-ALTER TABLE public."session_user" OWNER TO kbs;
+ALTER TABLE public."session_user" OWNER TO bruno;
 
 --
--- Name: session_user_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: session_user_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.session_user_id_seq
@@ -10504,17 +10748,17 @@ CREATE SEQUENCE public.session_user_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.session_user_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.session_user_id_seq OWNER TO bruno;
 
 --
--- Name: session_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: session_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.session_user_id_seq OWNED BY public."session_user".id;
 
 
 --
--- Name: site; Type: TABLE; Schema: public; Owner: kbs
+-- Name: site; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.site (
@@ -10539,10 +10783,10 @@ CREATE TABLE public.site (
 );
 
 
-ALTER TABLE public.site OWNER TO kbs;
+ALTER TABLE public.site OWNER TO bruno;
 
 --
--- Name: site_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: site_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.site_id_seq
@@ -10553,17 +10797,17 @@ CREATE SEQUENCE public.site_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.site_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.site_id_seq OWNER TO bruno;
 
 --
--- Name: site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.site_id_seq OWNED BY public.site.id;
 
 
 --
--- Name: site_item_family; Type: TABLE; Schema: public; Owner: kbs
+-- Name: site_item_family; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.site_item_family (
@@ -10574,10 +10818,10 @@ CREATE TABLE public.site_item_family (
 );
 
 
-ALTER TABLE public.site_item_family OWNER TO kbs;
+ALTER TABLE public.site_item_family OWNER TO bruno;
 
 --
--- Name: site_item_family_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: site_item_family_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.site_item_family_id_seq
@@ -10588,17 +10832,17 @@ CREATE SEQUENCE public.site_item_family_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.site_item_family_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.site_item_family_id_seq OWNER TO bruno;
 
 --
--- Name: site_item_family_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: site_item_family_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.site_item_family_id_seq OWNED BY public.site_item_family.id;
 
 
 --
--- Name: smtp_account; Type: TABLE; Schema: public; Owner: kbs
+-- Name: smtp_account; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.smtp_account (
@@ -10613,10 +10857,10 @@ CREATE TABLE public.smtp_account (
 );
 
 
-ALTER TABLE public.smtp_account OWNER TO kbs;
+ALTER TABLE public.smtp_account OWNER TO bruno;
 
 --
--- Name: smtp_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: smtp_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.smtp_id_seq
@@ -10627,17 +10871,17 @@ CREATE SEQUENCE public.smtp_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.smtp_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.smtp_id_seq OWNER TO bruno;
 
 --
--- Name: smtp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: smtp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.smtp_id_seq OWNED BY public.smtp_account.id;
 
 
 --
--- Name: smtp_quota; Type: TABLE; Schema: public; Owner: kbs
+-- Name: smtp_quota; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.smtp_quota (
@@ -10646,10 +10890,10 @@ CREATE TABLE public.smtp_quota (
 );
 
 
-ALTER TABLE public.smtp_quota OWNER TO kbs;
+ALTER TABLE public.smtp_quota OWNER TO bruno;
 
 --
--- Name: smtp_quota_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: smtp_quota_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.smtp_quota_id_seq
@@ -10660,17 +10904,17 @@ CREATE SEQUENCE public.smtp_quota_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.smtp_quota_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.smtp_quota_id_seq OWNER TO bruno;
 
 --
--- Name: smtp_quota_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: smtp_quota_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.smtp_quota_id_seq OWNED BY public.smtp_quota.id;
 
 
 --
--- Name: stock; Type: TABLE; Schema: public; Owner: kbs
+-- Name: stock; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.stock (
@@ -10684,10 +10928,10 @@ CREATE TABLE public.stock (
 );
 
 
-ALTER TABLE public.stock OWNER TO kbs;
+ALTER TABLE public.stock OWNER TO bruno;
 
 --
--- Name: stock_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: stock_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.stock_id_seq
@@ -10698,17 +10942,17 @@ CREATE SEQUENCE public.stock_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.stock_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.stock_id_seq OWNER TO bruno;
 
 --
--- Name: stock_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: stock_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.stock_id_seq OWNED BY public.stock.id;
 
 
 --
--- Name: stock_transfer; Type: TABLE; Schema: public; Owner: kbs
+-- Name: stock_transfer; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.stock_transfer (
@@ -10726,10 +10970,10 @@ CREATE TABLE public.stock_transfer (
 );
 
 
-ALTER TABLE public.stock_transfer OWNER TO kbs;
+ALTER TABLE public.stock_transfer OWNER TO bruno;
 
 --
--- Name: stock_transfer_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: stock_transfer_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.stock_transfer_id_seq
@@ -10740,17 +10984,17 @@ CREATE SEQUENCE public.stock_transfer_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.stock_transfer_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.stock_transfer_id_seq OWNER TO bruno;
 
 --
--- Name: stock_transfer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: stock_transfer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.stock_transfer_id_seq OWNED BY public.stock_transfer.id;
 
 
 --
--- Name: subscription; Type: TABLE; Schema: public; Owner: kbs
+-- Name: subscription; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.subscription (
@@ -10765,10 +11009,10 @@ CREATE TABLE public.subscription (
 );
 
 
-ALTER TABLE public.subscription OWNER TO kbs;
+ALTER TABLE public.subscription OWNER TO bruno;
 
 --
--- Name: subscription_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: subscription_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.subscription_id_seq
@@ -10779,17 +11023,17 @@ CREATE SEQUENCE public.subscription_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.subscription_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.subscription_id_seq OWNER TO bruno;
 
 --
--- Name: subscription_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: subscription_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.subscription_id_seq OWNED BY public.subscription.id;
 
 
 --
--- Name: sys_log; Type: TABLE; Schema: public; Owner: kbs
+-- Name: sys_log; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE UNLOGGED TABLE public.sys_log (
@@ -10803,10 +11047,10 @@ CREATE UNLOGGED TABLE public.sys_log (
 );
 
 
-ALTER TABLE public.sys_log OWNER TO kbs;
+ALTER TABLE public.sys_log OWNER TO bruno;
 
 --
--- Name: sys_log_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: sys_log_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.sys_log_id_seq
@@ -10817,17 +11061,17 @@ CREATE SEQUENCE public.sys_log_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.sys_log_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.sys_log_id_seq OWNER TO bruno;
 
 --
--- Name: sys_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: sys_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.sys_log_id_seq OWNED BY public.sys_log.id;
 
 
 --
--- Name: sys_sync; Type: TABLE; Schema: public; Owner: kbs
+-- Name: sys_sync; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.sys_sync (
@@ -10835,10 +11079,10 @@ CREATE TABLE public.sys_sync (
 );
 
 
-ALTER TABLE public.sys_sync OWNER TO kbs;
+ALTER TABLE public.sys_sync OWNER TO bruno;
 
 --
--- Name: tag; Type: TABLE; Schema: public; Owner: kbs
+-- Name: tag; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.tag (
@@ -10849,10 +11093,10 @@ CREATE TABLE public.tag (
 );
 
 
-ALTER TABLE public.tag OWNER TO kbs;
+ALTER TABLE public.tag OWNER TO bruno;
 
 --
--- Name: tag_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: tag_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.tag_id_seq
@@ -10863,17 +11107,17 @@ CREATE SEQUENCE public.tag_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.tag_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.tag_id_seq OWNER TO bruno;
 
 --
--- Name: tag_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: tag_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.tag_id_seq OWNED BY public.tag.id;
 
 
 --
--- Name: tagged; Type: TABLE; Schema: public; Owner: kbs
+-- Name: tagged; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.tagged (
@@ -10883,10 +11127,10 @@ CREATE TABLE public.tagged (
 );
 
 
-ALTER TABLE public.tagged OWNER TO kbs;
+ALTER TABLE public.tagged OWNER TO bruno;
 
 --
--- Name: tagged_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: tagged_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.tagged_id_seq
@@ -10897,17 +11141,17 @@ CREATE SEQUENCE public.tagged_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.tagged_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.tagged_id_seq OWNER TO bruno;
 
 --
--- Name: tagged_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: tagged_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.tagged_id_seq OWNED BY public.tagged.id;
 
 
 --
--- Name: task_metrics; Type: TABLE; Schema: public; Owner: kbs
+-- Name: task_metrics; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.task_metrics (
@@ -10931,10 +11175,10 @@ CREATE TABLE public.task_metrics (
 );
 
 
-ALTER TABLE public.task_metrics OWNER TO kbs;
+ALTER TABLE public.task_metrics OWNER TO bruno;
 
 --
--- Name: task_metrics_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: task_metrics_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.task_metrics_id_seq
@@ -10945,17 +11189,17 @@ CREATE SEQUENCE public.task_metrics_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.task_metrics_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.task_metrics_id_seq OWNER TO bruno;
 
 --
--- Name: task_metrics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: task_metrics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.task_metrics_id_seq OWNED BY public.task_metrics.id;
 
 
 --
--- Name: teacher; Type: TABLE; Schema: public; Owner: kbs
+-- Name: teacher; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.teacher (
@@ -10971,10 +11215,10 @@ CREATE TABLE public.teacher (
 );
 
 
-ALTER TABLE public.teacher OWNER TO kbs;
+ALTER TABLE public.teacher OWNER TO bruno;
 
 --
--- Name: teacher_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: teacher_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.teacher_id_seq
@@ -10985,17 +11229,17 @@ CREATE SEQUENCE public.teacher_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.teacher_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.teacher_id_seq OWNER TO bruno;
 
 --
--- Name: teacher_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: teacher_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.teacher_id_seq OWNED BY public.teacher.id;
 
 
 --
--- Name: third_party; Type: TABLE; Schema: public; Owner: kbs
+-- Name: third_party; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.third_party (
@@ -11006,10 +11250,10 @@ CREATE TABLE public.third_party (
 );
 
 
-ALTER TABLE public.third_party OWNER TO kbs;
+ALTER TABLE public.third_party OWNER TO bruno;
 
 --
--- Name: third_party_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: third_party_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.third_party_id_seq
@@ -11020,17 +11264,17 @@ CREATE SEQUENCE public.third_party_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.third_party_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.third_party_id_seq OWNER TO bruno;
 
 --
--- Name: third_party_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: third_party_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.third_party_id_seq OWNED BY public.third_party.id;
 
 
 --
--- Name: timeline; Type: TABLE; Schema: public; Owner: kbs
+-- Name: timeline; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.timeline (
@@ -11051,10 +11295,10 @@ CREATE TABLE public.timeline (
 );
 
 
-ALTER TABLE public.timeline OWNER TO kbs;
+ALTER TABLE public.timeline OWNER TO bruno;
 
 --
--- Name: timeline_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: timeline_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.timeline_id_seq
@@ -11065,17 +11309,17 @@ CREATE SEQUENCE public.timeline_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.timeline_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.timeline_id_seq OWNER TO bruno;
 
 --
--- Name: timeline_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: timeline_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.timeline_id_seq OWNED BY public.timeline.id;
 
 
 --
--- Name: timezone; Type: TABLE; Schema: public; Owner: kbs
+-- Name: timezone; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.timezone (
@@ -11088,10 +11332,10 @@ CREATE TABLE public.timezone (
 );
 
 
-ALTER TABLE public.timezone OWNER TO kbs;
+ALTER TABLE public.timezone OWNER TO bruno;
 
 --
--- Name: timezone_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: timezone_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.timezone_id_seq
@@ -11102,17 +11346,17 @@ CREATE SEQUENCE public.timezone_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.timezone_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.timezone_id_seq OWNER TO bruno;
 
 --
--- Name: timezone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: timezone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.timezone_id_seq OWNED BY public.timezone.id;
 
 
 --
--- Name: topic; Type: TABLE; Schema: public; Owner: kbs
+-- Name: topic; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.topic (
@@ -11125,10 +11369,10 @@ CREATE TABLE public.topic (
 );
 
 
-ALTER TABLE public.topic OWNER TO kbs;
+ALTER TABLE public.topic OWNER TO bruno;
 
 --
--- Name: topic_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: topic_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.topic_id_seq
@@ -11139,17 +11383,17 @@ CREATE SEQUENCE public.topic_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.topic_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.topic_id_seq OWNER TO bruno;
 
 --
--- Name: topic_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: topic_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.topic_id_seq OWNED BY public.topic.id;
 
 
 --
--- Name: vat; Type: TABLE; Schema: public; Owner: kbs
+-- Name: vat; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.vat (
@@ -11159,10 +11403,10 @@ CREATE TABLE public.vat (
 );
 
 
-ALTER TABLE public.vat OWNER TO kbs;
+ALTER TABLE public.vat OWNER TO bruno;
 
 --
--- Name: vat_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: vat_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.vat_id_seq
@@ -11173,17 +11417,17 @@ CREATE SEQUENCE public.vat_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.vat_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.vat_id_seq OWNER TO bruno;
 
 --
--- Name: vat_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: vat_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.vat_id_seq OWNED BY public.vat.id;
 
 
 --
--- Name: video; Type: TABLE; Schema: public; Owner: kbs
+-- Name: video; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.video (
@@ -11207,10 +11451,10 @@ CREATE TABLE public.video (
 );
 
 
-ALTER TABLE public.video OWNER TO kbs;
+ALTER TABLE public.video OWNER TO bruno;
 
 --
--- Name: video_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: video_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.video_id_seq
@@ -11221,71 +11465,28 @@ CREATE SEQUENCE public.video_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.video_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.video_id_seq OWNER TO bruno;
 
 --
--- Name: video_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: video_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.video_id_seq OWNED BY public.video.id;
 
 
 --
--- Name: visibility; Type: TABLE; Schema: public; Owner: kbs
+-- Name: visibility; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.visibility (
     id integer NOT NULL
 );
 
-create table operation_group (
-    id             serial primary key,
-    name           varchar(256) not null
-);
 
-alter table operation add column group_id int;
-alter table operation add constraint operation_group_id_fkey foreign key (group_id) references operation_group (id);
-
-create table authorization_role (
-    id             serial primary key,
-    name           varchar(256) not null
-);
-
-create table authorization_role_operation (
-    id                 serial primary key,
-    role_id            int not null,
-    operation_id       int,
-    operation_group_id int,
-    constraint role_operation_role_id_fkey foreign key (role_id) references authorization_role (id),
-    constraint role_operation_operation_id_fkey foreign key (operation_id) references operation (id),
-    constraint role_operation_operation_group_id_fkey foreign key (operation_group_id) references operation_group (id)
-);
-
-create table authorization_organization_admin (
-    id                 serial primary key,
-    organization_id    int not null,
-    admin_id           int not null,
-    constraint organization_admin_organization_id_fkey foreign key (organization_id) references organization (id),
-    constraint organization_admin_admin_id_fkey foreign key (admin_id) references person (id)
-);
-
-create table authorization_organization_user_access (
-    id                 serial primary key,
-    organization_id    int not null,
-    user_id            int not null,
-    event_id           int,
-    role_id            int not null,
-    read_only          bool not null default false,
-    constraint organization_user_access_organization_id_fkey foreign key (organization_id) references organization (id),
-    constraint organization_user_access_user_id_fkey foreign key (user_id) references person (id),
-    constraint organization_user_access_event_id_fkey foreign key (event_id) references event (id),
-    constraint organization_user_access_role_id_fkey foreign key (role_id) references authorization_role (id)
-);
-
-ALTER TABLE public.visibility OWNER TO kbs;
+ALTER TABLE public.visibility OWNER TO bruno;
 
 --
--- Name: visibility_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: visibility_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.visibility_id_seq
@@ -11296,17 +11497,17 @@ CREATE SEQUENCE public.visibility_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.visibility_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.visibility_id_seq OWNER TO bruno;
 
 --
--- Name: visibility_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: visibility_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.visibility_id_seq OWNED BY public.visibility.id;
 
 
 --
--- Name: warehouse; Type: TABLE; Schema: public; Owner: kbs
+-- Name: warehouse; Type: TABLE; Schema: public; Owner: bruno
 --
 
 CREATE TABLE public.warehouse (
@@ -11316,10 +11517,10 @@ CREATE TABLE public.warehouse (
 );
 
 
-ALTER TABLE public.warehouse OWNER TO kbs;
+ALTER TABLE public.warehouse OWNER TO bruno;
 
 --
--- Name: warehouse_id_seq; Type: SEQUENCE; Schema: public; Owner: kbs
+-- Name: warehouse_id_seq; Type: SEQUENCE; Schema: public; Owner: bruno
 --
 
 CREATE SEQUENCE public.warehouse_id_seq
@@ -11330,913 +11531,976 @@ CREATE SEQUENCE public.warehouse_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.warehouse_id_seq OWNER TO kbs;
+ALTER SEQUENCE public.warehouse_id_seq OWNER TO bruno;
 
 --
--- Name: warehouse_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kbs
+-- Name: warehouse_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bruno
 --
 
 ALTER SEQUENCE public.warehouse_id_seq OWNED BY public.warehouse.id;
 
 
 --
--- Name: accounting_account id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: accounting_account id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_account ALTER COLUMN id SET DEFAULT nextval('public.accounting_account_id_seq'::regclass);
 
 
 --
--- Name: accounting_account_type id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: accounting_account_type id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_account_type ALTER COLUMN id SET DEFAULT nextval('public.accounting_account_type_id_seq'::regclass);
 
 
 --
--- Name: accounting_model id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: accounting_model id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_model ALTER COLUMN id SET DEFAULT nextval('public.accounting_model_id_seq'::regclass);
 
 
 --
--- Name: activity id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: activity id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.activity ALTER COLUMN id SET DEFAULT nextval('public.activity_id_seq'::regclass);
 
 
 --
--- Name: activity_state id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: activity_state id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.activity_state ALTER COLUMN id SET DEFAULT nextval('public.activity_state_id_seq'::regclass);
 
 
 --
--- Name: allocation_rule id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: allocation_rule id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule ALTER COLUMN id SET DEFAULT nextval('public.allocation_rule_id_seq'::regclass);
 
 
 --
--- Name: allocation_rule ord; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: allocation_rule ord; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule ALTER COLUMN ord SET DEFAULT currval('public.allocation_rule_id_seq'::regclass);
 
 
 --
--- Name: attendance id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: attendance id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.attendance ALTER COLUMN id SET DEFAULT nextval('public.attendance_id_seq'::regclass);
 
 
 --
--- Name: authorization_assignment id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: authorization_assignment id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_assignment ALTER COLUMN id SET DEFAULT nextval('public.authorization_assignment_id_seq'::regclass);
 
 
 --
--- Name: authorization_management id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: authorization_management id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_management ALTER COLUMN id SET DEFAULT nextval('public.authorization_management_id_seq'::regclass);
 
 
 --
--- Name: authorization_role id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: authorization_organization_admin id; Type: DEFAULT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_admin ALTER COLUMN id SET DEFAULT nextval('public.authorization_organization_admin_id_seq'::regclass);
+
+
+--
+-- Name: authorization_organization_user_access id; Type: DEFAULT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_user_access ALTER COLUMN id SET DEFAULT nextval('public.authorization_organization_user_access_id_seq'::regclass);
+
+
+--
+-- Name: authorization_role id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_role ALTER COLUMN id SET DEFAULT nextval('public.authorization_role_id_seq'::regclass);
 
 
 --
--- Name: authorization_rule id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: authorization_role_operation id; Type: DEFAULT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_role_operation ALTER COLUMN id SET DEFAULT nextval('public.authorization_role_operation_id_seq'::regclass);
+
+
+--
+-- Name: authorization_rule id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_rule ALTER COLUMN id SET DEFAULT nextval('public.authorization_rule_id_seq'::regclass);
 
 
 --
--- Name: authorization_scope id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: authorization_scope id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_scope ALTER COLUMN id SET DEFAULT nextval('public.authorization_scope_id_seq'::regclass);
 
 
 --
--- Name: bank id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: authorization_super_admin id; Type: DEFAULT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_super_admin ALTER COLUMN id SET DEFAULT nextval('public.authorization_super_admin_id_seq'::regclass);
+
+
+--
+-- Name: bank id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bank ALTER COLUMN id SET DEFAULT nextval('public.bank_id_seq'::regclass);
 
 
 --
--- Name: bank_system id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: bank_system id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bank_system ALTER COLUMN id SET DEFAULT nextval('public.bank_system_id_seq'::regclass);
 
 
 --
--- Name: bank_system_account id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: bank_system_account id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bank_system_account ALTER COLUMN id SET DEFAULT nextval('public.bank_system_account_id_seq'::regclass);
 
 
 --
--- Name: book id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: book id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.book ALTER COLUMN id SET DEFAULT nextval('public.book_id_seq'::regclass);
 
 
 --
--- Name: bookable_period id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: bookable_period id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bookable_period ALTER COLUMN id SET DEFAULT nextval('public.bookable_period_id_seq'::regclass);
 
 
 --
--- Name: booking_form_layout id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: booking_form_layout id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.booking_form_layout ALTER COLUMN id SET DEFAULT nextval('public.booking_form_layout_id_seq'::regclass);
 
 
 --
--- Name: bracket_pattern id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: bracket_pattern id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bracket_pattern ALTER COLUMN id SET DEFAULT nextval('public.bracket_pattern_id_seq'::regclass);
 
 
 --
--- Name: bracket_pattern ord; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: bracket_pattern ord; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bracket_pattern ALTER COLUMN ord SET DEFAULT currval('public.bracket_pattern_id_seq'::regclass);
 
 
 --
--- Name: buddha id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: buddha id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.buddha ALTER COLUMN id SET DEFAULT nextval('public.buddha_id_seq'::regclass);
 
 
 --
--- Name: budget id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: budget id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget ALTER COLUMN id SET DEFAULT nextval('public.budget_id_seq'::regclass);
 
 
 --
--- Name: budget_line id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: budget_line id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget_line ALTER COLUMN id SET DEFAULT nextval('public.budget_line_id_seq'::regclass);
 
 
 --
--- Name: budget_transfer id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: budget_transfer id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget_transfer ALTER COLUMN id SET DEFAULT nextval('public.budget_transfer_id_seq'::regclass);
 
 
 --
--- Name: building id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: building id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.building ALTER COLUMN id SET DEFAULT nextval('public.building_id_seq'::regclass);
 
 
 --
--- Name: cart id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: building_zone id; Type: DEFAULT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.building_zone ALTER COLUMN id SET DEFAULT nextval('public.building_zone_id_seq'::regclass);
+
+
+--
+-- Name: cart id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart ALTER COLUMN id SET DEFAULT nextval('public.cart_id_seq'::regclass);
 
 
 --
--- Name: cart_message id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: cart_message id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart_message ALTER COLUMN id SET DEFAULT nextval('public.cart_message_id_seq'::regclass);
 
 
 --
--- Name: cart_message_condition id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: cart_message_condition id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart_message_condition ALTER COLUMN id SET DEFAULT nextval('public.cart_message_condition_id_seq'::regclass);
 
 
 --
--- Name: channel id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: channel id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.channel ALTER COLUMN id SET DEFAULT nextval('public.channel_id_seq'::regclass);
 
 
 --
--- Name: continent id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: continent id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.continent ALTER COLUMN id SET DEFAULT nextval('public.continent_id_seq'::regclass);
 
 
 --
--- Name: country id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: country id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.country ALTER COLUMN id SET DEFAULT nextval('public.country_id_seq'::regclass);
 
 
 --
--- Name: css id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: css id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.css ALTER COLUMN id SET DEFAULT nextval('public.css_id_seq'::regclass);
 
 
 --
--- Name: currency id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: currency id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.currency ALTER COLUMN id SET DEFAULT nextval('public.currency_id_seq'::regclass);
 
 
 --
--- Name: currency_support id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: currency_support id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.currency_support ALTER COLUMN id SET DEFAULT nextval('public.currency_support_id_seq'::regclass);
 
 
 --
--- Name: date_info id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: date_info id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.date_info ALTER COLUMN id SET DEFAULT nextval('public.date_info_id_seq'::regclass);
 
 
 --
--- Name: day_template id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: day_template id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.day_template ALTER COLUMN id SET DEFAULT nextval('public.day_template_id_seq'::regclass);
 
 
 --
--- Name: document id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: document id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document ALTER COLUMN id SET DEFAULT nextval('public.document_id_seq'::regclass);
 
 
 --
--- Name: document_line id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: document_line id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line ALTER COLUMN id SET DEFAULT nextval('public.document_line_id_seq'::regclass);
 
 
 --
--- Name: domain id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: domain id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.domain ALTER COLUMN id SET DEFAULT nextval('public.domain_id_seq'::regclass);
 
 
 --
--- Name: driver id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: driver id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.driver ALTER COLUMN id SET DEFAULT nextval('public.driver_id_seq'::regclass);
 
 
 --
--- Name: enqueued_request id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: enqueued_request id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.enqueued_request ALTER COLUMN id SET DEFAULT nextval('public.enqueued_request_id_seq'::regclass);
 
 
 --
--- Name: error id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: error id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.error ALTER COLUMN id SET DEFAULT nextval('public.error_id_seq'::regclass);
 
 
 --
--- Name: event id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: event id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event ALTER COLUMN id SET DEFAULT nextval('public.event_id_seq'::regclass);
 
 
 --
--- Name: event_type id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: event_type id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event_type ALTER COLUMN id SET DEFAULT nextval('public.event_type_id_seq'::regclass);
 
 
 --
--- Name: event_type ord; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: event_type ord; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event_type ALTER COLUMN ord SET DEFAULT currval('public.event_type_id_seq'::regclass);
 
 
 --
--- Name: filter id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: filter id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.filter ALTER COLUMN id SET DEFAULT nextval('public.filter_id_seq'::regclass);
 
 
 --
--- Name: frontend_account id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: frontend_account id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.frontend_account ALTER COLUMN id SET DEFAULT nextval('public.frontend_account_id_seq'::regclass);
 
 
 --
--- Name: gateway_company id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: gateway_company id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.gateway_company ALTER COLUMN id SET DEFAULT nextval('public.gateway_company_id_seq'::regclass);
 
 
 --
--- Name: gateway_parameter id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: gateway_parameter id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.gateway_parameter ALTER COLUMN id SET DEFAULT nextval('public.gateway_parameter_id_seq'::regclass);
 
 
 --
--- Name: history id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: history id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.history ALTER COLUMN id SET DEFAULT nextval('public.history_id_seq'::regclass);
 
 
 --
--- Name: image id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: image id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.image ALTER COLUMN id SET DEFAULT nextval('public.image_id_seq'::regclass);
 
 
 --
--- Name: item id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: invitation id; Type: DEFAULT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.invitation ALTER COLUMN id SET DEFAULT nextval('public.invitation_id_seq'::regclass);
+
+
+--
+-- Name: item id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item ALTER COLUMN id SET DEFAULT nextval('public.item_id_seq'::regclass);
 
 
 --
--- Name: item ord; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: item ord; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item ALTER COLUMN ord SET DEFAULT currval('public.item_id_seq'::regclass);
 
 
 --
--- Name: item_family id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: item_family id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item_family ALTER COLUMN id SET DEFAULT nextval('public.item_family_id_seq'::regclass);
 
 
 --
--- Name: item_family ord; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: item_family ord; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item_family ALTER COLUMN ord SET DEFAULT currval('public.item_family_id_seq'::regclass);
 
 
 --
--- Name: kdm_center id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: kdm_center id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.kdm_center ALTER COLUMN id SET DEFAULT nextval('public.kdm_center_id_seq'::regclass);
 
 
 --
--- Name: label id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: label id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.label ALTER COLUMN id SET DEFAULT nextval('public.label_id_seq'::regclass);
 
 
 --
--- Name: language id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: language id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.language ALTER COLUMN id SET DEFAULT nextval('public.language_id_seq'::regclass);
 
 
 --
--- Name: letter id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: letter id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter ALTER COLUMN id SET DEFAULT nextval('public.letter_id_seq'::regclass);
 
 
 --
--- Name: letter_type id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: letter_type id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter_type ALTER COLUMN id SET DEFAULT nextval('public.letter_type_id_seq'::regclass);
 
 
 --
--- Name: letter_type ord; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: letter_type ord; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter_type ALTER COLUMN ord SET DEFAULT currval('public.letter_type_id_seq'::regclass);
 
 
 --
--- Name: lt_test_event id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: lt_test_event id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.lt_test_event ALTER COLUMN id SET DEFAULT nextval('public.lt_test_event_id_seq'::regclass);
 
 
 --
--- Name: lt_test_set id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: lt_test_set id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.lt_test_set ALTER COLUMN id SET DEFAULT nextval('public.lt_test_set_id_seq'::regclass);
 
 
 --
--- Name: magic_link id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: magic_link id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.magic_link ALTER COLUMN id SET DEFAULT nextval('public.magic_link_id_seq'::regclass);
 
 
 --
--- Name: mail id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: mail id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail ALTER COLUMN id SET DEFAULT nextval('public.mail_id_seq'::regclass);
 
 
 --
--- Name: mail_account id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: mail_account id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail_account ALTER COLUMN id SET DEFAULT nextval('public.mail_account_id_seq'::regclass);
 
 
 --
--- Name: meal_estimation id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: meal_estimation id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.meal_estimation ALTER COLUMN id SET DEFAULT nextval('public.meal_estimation_id_seq'::regclass);
 
 
 --
--- Name: media id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: media id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.media ALTER COLUMN id SET DEFAULT nextval('public.media_id_seq'::regclass);
 
 
 --
--- Name: media_consumption id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: media_consumption id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.media_consumption ALTER COLUMN id SET DEFAULT nextval('public.media_consumption_id_seq'::regclass);
 
 
 --
--- Name: method id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: method id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.method ALTER COLUMN id SET DEFAULT nextval('public.method_id_seq'::regclass);
 
 
 --
--- Name: method_support id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: method_support id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.method_support ALTER COLUMN id SET DEFAULT nextval('public.method_support_id_seq'::regclass);
 
 
 --
--- Name: metrics id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: metrics id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.metrics ALTER COLUMN id SET DEFAULT nextval('public.metrics_id_seq'::regclass);
 
 
 --
--- Name: money_account id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: money_account id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account ALTER COLUMN id SET DEFAULT nextval('public.money_account_id_seq'::regclass);
 
 
 --
--- Name: money_account_type id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: money_account_type id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account_type ALTER COLUMN id SET DEFAULT nextval('public.money_account_type_id_seq'::regclass);
 
 
 --
--- Name: money_flow id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: money_flow id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow ALTER COLUMN id SET DEFAULT nextval('public.money_flow_id_seq'::regclass);
 
 
 --
--- Name: money_flow_priority id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: money_flow_priority id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow_priority ALTER COLUMN id SET DEFAULT nextval('public.money_flow_priority_id_seq'::regclass);
 
 
 --
--- Name: money_flow_type id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: money_flow_type id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow_type ALTER COLUMN id SET DEFAULT nextval('public.money_flow_type_id_seq'::regclass);
 
 
 --
--- Name: money_statement id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: money_statement id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_statement ALTER COLUMN id SET DEFAULT nextval('public.money_statement_id_seq'::regclass);
 
 
 --
--- Name: money_transfer id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: money_transfer id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer ALTER COLUMN id SET DEFAULT nextval('public.money_transfer_id_seq'::regclass);
 
 
 --
--- Name: multiple_booking id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: multiple_booking id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.multiple_booking ALTER COLUMN id SET DEFAULT nextval('public.multiple_booking_id_seq'::regclass);
 
 
 --
--- Name: news id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: news id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.news ALTER COLUMN id SET DEFAULT nextval('public.news_id_seq'::regclass);
 
 
 --
--- Name: operation id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: operation id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.operation ALTER COLUMN id SET DEFAULT nextval('public.operation_id_seq'::regclass);
 
 
 --
--- Name: option id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: operation_group id; Type: DEFAULT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.operation_group ALTER COLUMN id SET DEFAULT nextval('public.operation_group_id_seq'::regclass);
+
+
+--
+-- Name: option id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option ALTER COLUMN id SET DEFAULT nextval('public.option_id_seq'::regclass);
 
 
 --
--- Name: option ord; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: option ord; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option ALTER COLUMN ord SET DEFAULT currval('public.option_id_seq'::regclass);
 
 
 --
--- Name: option_condition id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: option_condition id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition ALTER COLUMN id SET DEFAULT nextval('public.option_condition_id_seq'::regclass);
 
 
 --
--- Name: organization id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: organization id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization ALTER COLUMN id SET DEFAULT nextval('public.organization_id_seq'::regclass);
 
 
 --
--- Name: organization_type id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: organization_type id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization_type ALTER COLUMN id SET DEFAULT nextval('public.organization_type_id_seq'::regclass);
 
 
 --
--- Name: package id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: package id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.package ALTER COLUMN id SET DEFAULT nextval('public.package_id_seq'::regclass);
 
 
 --
--- Name: package_item id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: package_item id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.package_item ALTER COLUMN id SET DEFAULT nextval('public.package_item_id_seq'::regclass);
 
 
 --
--- Name: person id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: person id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person ALTER COLUMN id SET DEFAULT nextval('public.person_id_seq'::regclass);
 
 
 --
--- Name: playlist id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: playlist id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.playlist ALTER COLUMN id SET DEFAULT nextval('public.playlist_id_seq'::regclass);
 
 
 --
--- Name: podcast id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: podcast id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.podcast ALTER COLUMN id SET DEFAULT nextval('public.podcast_id_seq'::regclass);
 
 
 --
--- Name: rate id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: pool id; Type: DEFAULT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool ALTER COLUMN id SET DEFAULT nextval('public.pool_id_seq'::regclass);
+
+
+--
+-- Name: pool_allocation id; Type: DEFAULT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool_allocation ALTER COLUMN id SET DEFAULT nextval('public.pool_allocation_id_seq'::regclass);
+
+
+--
+-- Name: rate id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate ALTER COLUMN id SET DEFAULT nextval('public.rate_id_seq'::regclass);
 
 
 --
--- Name: recipient id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: recipient id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.recipient ALTER COLUMN id SET DEFAULT nextval('public.recipient_id_seq'::regclass);
 
 
 --
--- Name: resource id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: resource id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.resource ALTER COLUMN id SET DEFAULT nextval('public.resource_id_seq'::regclass);
 
 
 --
--- Name: resource_configuration id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: resource_configuration id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.resource_configuration ALTER COLUMN id SET DEFAULT nextval('public.resource_configuration_id_seq'::regclass);
 
 
 --
--- Name: role id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: role id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.role ALTER COLUMN id SET DEFAULT nextval('public.role_id_seq'::regclass);
 
 
 --
--- Name: role_attribution id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: role_attribution id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.role_attribution ALTER COLUMN id SET DEFAULT nextval('public.role_attribution_id_seq'::regclass);
 
 
 --
--- Name: room_cleaning id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: room_cleaning id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.room_cleaning ALTER COLUMN id SET DEFAULT nextval('public.room_cleaning_id_seq'::regclass);
 
 
 --
--- Name: scheduled_item id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: scheduled_item id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item ALTER COLUMN id SET DEFAULT nextval('public.scheduled_item_id_seq'::regclass);
 
 
 --
--- Name: scheduled_resource id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: scheduled_resource id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_resource ALTER COLUMN id SET DEFAULT nextval('public.scheduled_resource_id_seq'::regclass);
 
 
 --
--- Name: sector id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: sector id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.sector ALTER COLUMN id SET DEFAULT nextval('public.sector_id_seq'::regclass);
 
 
 --
--- Name: session_agent id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: session_agent id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_agent ALTER COLUMN id SET DEFAULT nextval('public.session_agent_id_seq'::regclass);
 
 
 --
--- Name: session_application id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: session_application id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_application ALTER COLUMN id SET DEFAULT nextval('public.session_application_id_seq'::regclass);
 
 
 --
--- Name: session_connection id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: session_connection id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_connection ALTER COLUMN id SET DEFAULT nextval('public.session_connection_id_seq'::regclass);
 
 
 --
--- Name: session_process id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: session_process id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_process ALTER COLUMN id SET DEFAULT nextval('public.session_process_id_seq'::regclass);
 
 
 --
--- Name: session_user id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: session_user id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public."session_user" ALTER COLUMN id SET DEFAULT nextval('public.session_user_id_seq'::regclass);
 
 
 --
--- Name: site id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: site id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site ALTER COLUMN id SET DEFAULT nextval('public.site_id_seq'::regclass);
 
 
 --
--- Name: site_item_family id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: site_item_family id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site_item_family ALTER COLUMN id SET DEFAULT nextval('public.site_item_family_id_seq'::regclass);
 
 
 --
--- Name: smtp_account id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: smtp_account id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.smtp_account ALTER COLUMN id SET DEFAULT nextval('public.smtp_id_seq'::regclass);
 
 
 --
--- Name: smtp_quota id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: smtp_quota id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.smtp_quota ALTER COLUMN id SET DEFAULT nextval('public.smtp_quota_id_seq'::regclass);
 
 
 --
--- Name: stock id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: stock id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock ALTER COLUMN id SET DEFAULT nextval('public.stock_id_seq'::regclass);
 
 
 --
--- Name: stock_transfer id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: stock_transfer id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock_transfer ALTER COLUMN id SET DEFAULT nextval('public.stock_transfer_id_seq'::regclass);
 
 
 --
--- Name: subscription id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: subscription id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.subscription ALTER COLUMN id SET DEFAULT nextval('public.subscription_id_seq'::regclass);
 
 
 --
--- Name: sys_log id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: sys_log id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.sys_log ALTER COLUMN id SET DEFAULT nextval('public.sys_log_id_seq'::regclass);
 
 
 --
--- Name: tag id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: tag id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.tag ALTER COLUMN id SET DEFAULT nextval('public.tag_id_seq'::regclass);
 
 
 --
--- Name: tagged id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: tagged id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.tagged ALTER COLUMN id SET DEFAULT nextval('public.tagged_id_seq'::regclass);
 
 
 --
--- Name: task_metrics id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: task_metrics id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.task_metrics ALTER COLUMN id SET DEFAULT nextval('public.task_metrics_id_seq'::regclass);
 
 
 --
--- Name: teacher id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: teacher id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.teacher ALTER COLUMN id SET DEFAULT nextval('public.teacher_id_seq'::regclass);
 
 
 --
--- Name: third_party id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: third_party id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.third_party ALTER COLUMN id SET DEFAULT nextval('public.third_party_id_seq'::regclass);
 
 
 --
--- Name: timeline id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: timeline id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline ALTER COLUMN id SET DEFAULT nextval('public.timeline_id_seq'::regclass);
 
 
 --
--- Name: timezone id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: timezone id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timezone ALTER COLUMN id SET DEFAULT nextval('public.timezone_id_seq'::regclass);
 
 
 --
--- Name: topic id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: topic id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.topic ALTER COLUMN id SET DEFAULT nextval('public.topic_id_seq'::regclass);
 
 
 --
--- Name: vat id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: vat id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.vat ALTER COLUMN id SET DEFAULT nextval('public.vat_id_seq'::regclass);
 
 
 --
--- Name: video id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: video id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.video ALTER COLUMN id SET DEFAULT nextval('public.video_id_seq'::regclass);
 
 
 --
--- Name: visibility id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: visibility id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.visibility ALTER COLUMN id SET DEFAULT nextval('public.visibility_id_seq'::regclass);
 
 
 --
--- Name: warehouse id; Type: DEFAULT; Schema: public; Owner: kbs
+-- Name: warehouse id; Type: DEFAULT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.warehouse ALTER COLUMN id SET DEFAULT nextval('public.warehouse_id_seq'::regclass);
 
 
 --
--- Name: accounting_account accounting_account_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: accounting_account accounting_account_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_account
@@ -12244,7 +12508,7 @@ ALTER TABLE ONLY public.accounting_account
 
 
 --
--- Name: accounting_account_type accounting_account_type_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: accounting_account_type accounting_account_type_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_account_type
@@ -12252,7 +12516,7 @@ ALTER TABLE ONLY public.accounting_account_type
 
 
 --
--- Name: accounting_model accounting_model_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: accounting_model accounting_model_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_model
@@ -12260,7 +12524,7 @@ ALTER TABLE ONLY public.accounting_model
 
 
 --
--- Name: activity activity_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: activity activity_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.activity
@@ -12268,7 +12532,7 @@ ALTER TABLE ONLY public.activity
 
 
 --
--- Name: activity_state activity_state_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: activity_state activity_state_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.activity_state
@@ -12276,7 +12540,7 @@ ALTER TABLE ONLY public.activity_state
 
 
 --
--- Name: allocation_rule allocation_rule_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -12284,7 +12548,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: attendance attendance_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: attendance attendance_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.attendance
@@ -12292,7 +12556,7 @@ ALTER TABLE ONLY public.attendance
 
 
 --
--- Name: authorization_assignment authorization_assignment_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_assignment authorization_assignment_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_assignment
@@ -12300,7 +12564,7 @@ ALTER TABLE ONLY public.authorization_assignment
 
 
 --
--- Name: authorization_management authorization_management_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_management authorization_management_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_management
@@ -12308,7 +12572,31 @@ ALTER TABLE ONLY public.authorization_management
 
 
 --
--- Name: authorization_role authorization_role_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_organization_admin authorization_organization_admin_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_admin
+    ADD CONSTRAINT authorization_organization_admin_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: authorization_organization_user_access authorization_organization_user_access_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_user_access
+    ADD CONSTRAINT authorization_organization_user_access_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: authorization_role_operation authorization_role_operation_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_role_operation
+    ADD CONSTRAINT authorization_role_operation_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: authorization_role authorization_role_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_role
@@ -12316,7 +12604,7 @@ ALTER TABLE ONLY public.authorization_role
 
 
 --
--- Name: authorization_rule authorization_rule_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_rule authorization_rule_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_rule
@@ -12324,7 +12612,7 @@ ALTER TABLE ONLY public.authorization_rule
 
 
 --
--- Name: authorization_scope authorization_scope_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_scope authorization_scope_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_scope
@@ -12332,7 +12620,15 @@ ALTER TABLE ONLY public.authorization_scope
 
 
 --
--- Name: bank bank_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_super_admin authorization_super_admin_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_super_admin
+    ADD CONSTRAINT authorization_super_admin_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bank bank_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bank
@@ -12340,7 +12636,7 @@ ALTER TABLE ONLY public.bank
 
 
 --
--- Name: bank_system_account bank_system_account_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: bank_system_account bank_system_account_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bank_system_account
@@ -12348,7 +12644,7 @@ ALTER TABLE ONLY public.bank_system_account
 
 
 --
--- Name: bank_system bank_system_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: bank_system bank_system_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bank_system
@@ -12356,7 +12652,7 @@ ALTER TABLE ONLY public.bank_system
 
 
 --
--- Name: book book_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: book book_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.book
@@ -12364,7 +12660,7 @@ ALTER TABLE ONLY public.book
 
 
 --
--- Name: bookable_period bookable_period_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: bookable_period bookable_period_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bookable_period
@@ -12372,7 +12668,7 @@ ALTER TABLE ONLY public.bookable_period
 
 
 --
--- Name: booking_form_layout booking_form_layout_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: booking_form_layout booking_form_layout_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.booking_form_layout
@@ -12380,7 +12676,7 @@ ALTER TABLE ONLY public.booking_form_layout
 
 
 --
--- Name: bracket_pattern bracket_pattern_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: bracket_pattern bracket_pattern_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bracket_pattern
@@ -12388,7 +12684,7 @@ ALTER TABLE ONLY public.bracket_pattern
 
 
 --
--- Name: buddha buddha_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: buddha buddha_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.buddha
@@ -12396,7 +12692,7 @@ ALTER TABLE ONLY public.buddha
 
 
 --
--- Name: budget_line budget_line_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: budget_line budget_line_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget_line
@@ -12404,7 +12700,7 @@ ALTER TABLE ONLY public.budget_line
 
 
 --
--- Name: budget budget_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: budget budget_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget
@@ -12412,7 +12708,7 @@ ALTER TABLE ONLY public.budget
 
 
 --
--- Name: budget_transfer budget_transfer_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: budget_transfer budget_transfer_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget_transfer
@@ -12420,7 +12716,7 @@ ALTER TABLE ONLY public.budget_transfer
 
 
 --
--- Name: building building_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: building building_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.building
@@ -12428,7 +12724,15 @@ ALTER TABLE ONLY public.building
 
 
 --
--- Name: cart_message_condition cart_message_condition_pk; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: building_zone building_zone_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.building_zone
+    ADD CONSTRAINT building_zone_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cart_message_condition cart_message_condition_pk; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart_message_condition
@@ -12436,7 +12740,7 @@ ALTER TABLE ONLY public.cart_message_condition
 
 
 --
--- Name: cart_message cart_message_pk; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: cart_message cart_message_pk; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart_message
@@ -12444,7 +12748,7 @@ ALTER TABLE ONLY public.cart_message
 
 
 --
--- Name: cart cart_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: cart cart_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart
@@ -12452,7 +12756,7 @@ ALTER TABLE ONLY public.cart
 
 
 --
--- Name: cart cart_uuid_key; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: cart cart_uuid_key; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart
@@ -12460,7 +12764,7 @@ ALTER TABLE ONLY public.cart
 
 
 --
--- Name: channel channel_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: channel channel_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.channel
@@ -12468,7 +12772,7 @@ ALTER TABLE ONLY public.channel
 
 
 --
--- Name: continent continent_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: continent continent_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.continent
@@ -12476,7 +12780,7 @@ ALTER TABLE ONLY public.continent
 
 
 --
--- Name: country country_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: country country_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.country
@@ -12484,7 +12788,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- Name: css css_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: css css_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.css
@@ -12492,7 +12796,7 @@ ALTER TABLE ONLY public.css
 
 
 --
--- Name: currency currency_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: currency currency_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.currency
@@ -12500,7 +12804,7 @@ ALTER TABLE ONLY public.currency
 
 
 --
--- Name: currency_support currency_support_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: currency_support currency_support_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.currency_support
@@ -12508,7 +12812,7 @@ ALTER TABLE ONLY public.currency_support
 
 
 --
--- Name: date_info date_info_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: date_info date_info_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.date_info
@@ -12516,7 +12820,7 @@ ALTER TABLE ONLY public.date_info
 
 
 --
--- Name: day_template day_template_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: day_template day_template_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.day_template
@@ -12524,7 +12828,7 @@ ALTER TABLE ONLY public.day_template
 
 
 --
--- Name: document_line document_line_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -12532,7 +12836,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document document_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -12540,7 +12844,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: domain domain_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: domain domain_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.domain
@@ -12548,7 +12852,7 @@ ALTER TABLE ONLY public.domain
 
 
 --
--- Name: driver driver_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: driver driver_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.driver
@@ -12556,7 +12860,7 @@ ALTER TABLE ONLY public.driver
 
 
 --
--- Name: enqueued_request enqueued_request_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: enqueued_request enqueued_request_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.enqueued_request
@@ -12564,7 +12868,7 @@ ALTER TABLE ONLY public.enqueued_request
 
 
 --
--- Name: error error_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: error error_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.error
@@ -12572,7 +12876,7 @@ ALTER TABLE ONLY public.error
 
 
 --
--- Name: event event_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -12580,7 +12884,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event_type event_type_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event_type event_type_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event_type
@@ -12588,7 +12892,7 @@ ALTER TABLE ONLY public.event_type
 
 
 --
--- Name: filter filter_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: filter filter_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.filter
@@ -12596,7 +12900,7 @@ ALTER TABLE ONLY public.filter
 
 
 --
--- Name: frontend_account frontend_account_corporation_id_username; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: frontend_account frontend_account_corporation_id_username; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.frontend_account
@@ -12604,7 +12908,7 @@ ALTER TABLE ONLY public.frontend_account
 
 
 --
--- Name: frontend_account frontend_account_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: frontend_account frontend_account_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.frontend_account
@@ -12612,7 +12916,7 @@ ALTER TABLE ONLY public.frontend_account
 
 
 --
--- Name: gateway_company gateway_company_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: gateway_company gateway_company_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.gateway_company
@@ -12620,7 +12924,7 @@ ALTER TABLE ONLY public.gateway_company
 
 
 --
--- Name: gateway_parameter gateway_parameter_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: gateway_parameter gateway_parameter_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.gateway_parameter
@@ -12628,7 +12932,7 @@ ALTER TABLE ONLY public.gateway_parameter
 
 
 --
--- Name: history history_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: history history_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.history
@@ -12636,7 +12940,7 @@ ALTER TABLE ONLY public.history
 
 
 --
--- Name: image image_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: image image_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.image
@@ -12644,7 +12948,15 @@ ALTER TABLE ONLY public.image
 
 
 --
--- Name: item_family item_family_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: invitation invitation_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.invitation
+    ADD CONSTRAINT invitation_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: item_family item_family_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item_family
@@ -12652,7 +12964,7 @@ ALTER TABLE ONLY public.item_family
 
 
 --
--- Name: item item_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item item_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item
@@ -12660,7 +12972,7 @@ ALTER TABLE ONLY public.item
 
 
 --
--- Name: kdm_center kdm_center_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: kdm_center kdm_center_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.kdm_center
@@ -12668,7 +12980,7 @@ ALTER TABLE ONLY public.kdm_center
 
 
 --
--- Name: label label_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: label label_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.label
@@ -12676,7 +12988,7 @@ ALTER TABLE ONLY public.label
 
 
 --
--- Name: language language_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: language language_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.language
@@ -12684,7 +12996,7 @@ ALTER TABLE ONLY public.language
 
 
 --
--- Name: letter letter_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: letter letter_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter
@@ -12692,7 +13004,7 @@ ALTER TABLE ONLY public.letter
 
 
 --
--- Name: letter_type letter_type_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: letter_type letter_type_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter_type
@@ -12700,7 +13012,7 @@ ALTER TABLE ONLY public.letter_type
 
 
 --
--- Name: lt_test_event lt_test_event_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: lt_test_event lt_test_event_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.lt_test_event
@@ -12708,7 +13020,7 @@ ALTER TABLE ONLY public.lt_test_event
 
 
 --
--- Name: lt_test_set lt_test_set_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: lt_test_set lt_test_set_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.lt_test_set
@@ -12716,7 +13028,7 @@ ALTER TABLE ONLY public.lt_test_set
 
 
 --
--- Name: magic_link magic_link_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: magic_link magic_link_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.magic_link
@@ -12724,7 +13036,7 @@ ALTER TABLE ONLY public.magic_link
 
 
 --
--- Name: mail_account mail_account_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail_account mail_account_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail_account
@@ -12732,7 +13044,7 @@ ALTER TABLE ONLY public.mail_account
 
 
 --
--- Name: mail mail_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail mail_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail
@@ -12740,7 +13052,7 @@ ALTER TABLE ONLY public.mail
 
 
 --
--- Name: meal_estimation meal_estimation_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: meal_estimation meal_estimation_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.meal_estimation
@@ -12748,7 +13060,7 @@ ALTER TABLE ONLY public.meal_estimation
 
 
 --
--- Name: media_consumption media_consumption_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: media_consumption media_consumption_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.media_consumption
@@ -12756,7 +13068,7 @@ ALTER TABLE ONLY public.media_consumption
 
 
 --
--- Name: media media_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: media media_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.media
@@ -12764,7 +13076,7 @@ ALTER TABLE ONLY public.media
 
 
 --
--- Name: method method_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: method method_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.method
@@ -12772,7 +13084,7 @@ ALTER TABLE ONLY public.method
 
 
 --
--- Name: method_support method_support_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: method_support method_support_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.method_support
@@ -12780,7 +13092,7 @@ ALTER TABLE ONLY public.method_support
 
 
 --
--- Name: metrics metrics_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: metrics metrics_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.metrics
@@ -12788,7 +13100,7 @@ ALTER TABLE ONLY public.metrics
 
 
 --
--- Name: money_account money_account_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account money_account_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account
@@ -12796,7 +13108,7 @@ ALTER TABLE ONLY public.money_account
 
 
 --
--- Name: money_account_type money_account_type_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account_type money_account_type_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account_type
@@ -12804,7 +13116,7 @@ ALTER TABLE ONLY public.money_account_type
 
 
 --
--- Name: money_flow money_flow_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow money_flow_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow
@@ -12812,7 +13124,7 @@ ALTER TABLE ONLY public.money_flow
 
 
 --
--- Name: money_flow_priority money_flow_priority_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow_priority money_flow_priority_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow_priority
@@ -12820,7 +13132,7 @@ ALTER TABLE ONLY public.money_flow_priority
 
 
 --
--- Name: money_flow_type money_flow_type_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow_type money_flow_type_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow_type
@@ -12828,7 +13140,7 @@ ALTER TABLE ONLY public.money_flow_type
 
 
 --
--- Name: money_statement money_statement_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_statement money_statement_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_statement
@@ -12836,7 +13148,7 @@ ALTER TABLE ONLY public.money_statement
 
 
 --
--- Name: money_transfer money_transfer_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_transfer money_transfer_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer
@@ -12844,7 +13156,7 @@ ALTER TABLE ONLY public.money_transfer
 
 
 --
--- Name: multiple_booking multiple_booking_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: multiple_booking multiple_booking_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.multiple_booking
@@ -12852,7 +13164,7 @@ ALTER TABLE ONLY public.multiple_booking
 
 
 --
--- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.news
@@ -12860,7 +13172,15 @@ ALTER TABLE ONLY public.news
 
 
 --
--- Name: operation operation_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: operation_group operation_group_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.operation_group
+    ADD CONSTRAINT operation_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: operation operation_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.operation
@@ -12868,7 +13188,7 @@ ALTER TABLE ONLY public.operation
 
 
 --
--- Name: option_condition option_condition_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -12876,7 +13196,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option option_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -12884,7 +13204,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: organization organization_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: organization organization_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization
@@ -12892,7 +13212,7 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- Name: organization_type organization_type_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: organization_type organization_type_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization_type
@@ -12900,7 +13220,7 @@ ALTER TABLE ONLY public.organization_type
 
 
 --
--- Name: package_item package_item_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: package_item package_item_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.package_item
@@ -12908,7 +13228,7 @@ ALTER TABLE ONLY public.package_item
 
 
 --
--- Name: package package_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: package package_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.package
@@ -12916,7 +13236,7 @@ ALTER TABLE ONLY public.package
 
 
 --
--- Name: person person_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -12924,7 +13244,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: playlist playlist_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: playlist playlist_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.playlist
@@ -12932,7 +13252,7 @@ ALTER TABLE ONLY public.playlist
 
 
 --
--- Name: podcast podcast_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: podcast podcast_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.podcast
@@ -12940,7 +13260,23 @@ ALTER TABLE ONLY public.podcast
 
 
 --
--- Name: rate rate_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: pool_allocation pool_allocation_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool_allocation
+    ADD CONSTRAINT pool_allocation_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pool pool_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool
+    ADD CONSTRAINT pool_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rate rate_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -12948,7 +13284,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: recipient recipient_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: recipient recipient_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.recipient
@@ -12956,7 +13292,7 @@ ALTER TABLE ONLY public.recipient
 
 
 --
--- Name: resource_configuration resource_configuration_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: resource_configuration resource_configuration_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.resource_configuration
@@ -12964,7 +13300,7 @@ ALTER TABLE ONLY public.resource_configuration
 
 
 --
--- Name: resource resource_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: resource resource_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.resource
@@ -12972,7 +13308,7 @@ ALTER TABLE ONLY public.resource
 
 
 --
--- Name: role_attribution role_attribution_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: role_attribution role_attribution_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.role_attribution
@@ -12980,7 +13316,7 @@ ALTER TABLE ONLY public.role_attribution
 
 
 --
--- Name: role role_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: role role_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.role
@@ -12988,7 +13324,7 @@ ALTER TABLE ONLY public.role
 
 
 --
--- Name: room_cleaning room_cleaning_pk; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: room_cleaning room_cleaning_pk; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.room_cleaning
@@ -12996,7 +13332,7 @@ ALTER TABLE ONLY public.room_cleaning
 
 
 --
--- Name: scheduled_item scheduled_item_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_item scheduled_item_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -13004,7 +13340,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_resource scheduled_resource_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_resource scheduled_resource_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_resource
@@ -13012,7 +13348,7 @@ ALTER TABLE ONLY public.scheduled_resource
 
 
 --
--- Name: sector sector_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: sector sector_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.sector
@@ -13020,7 +13356,7 @@ ALTER TABLE ONLY public.sector
 
 
 --
--- Name: session_agent session_agent_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_agent session_agent_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_agent
@@ -13028,7 +13364,7 @@ ALTER TABLE ONLY public.session_agent
 
 
 --
--- Name: session_application session_application_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_application session_application_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_application
@@ -13036,7 +13372,7 @@ ALTER TABLE ONLY public.session_application
 
 
 --
--- Name: session_connection session_connection_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_connection session_connection_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_connection
@@ -13044,7 +13380,7 @@ ALTER TABLE ONLY public.session_connection
 
 
 --
--- Name: session_process session_process_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_process session_process_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_process
@@ -13052,7 +13388,7 @@ ALTER TABLE ONLY public.session_process
 
 
 --
--- Name: session_user session_user_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_user session_user_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public."session_user"
@@ -13060,7 +13396,7 @@ ALTER TABLE ONLY public."session_user"
 
 
 --
--- Name: site_item_family site_item_family_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site_item_family site_item_family_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site_item_family
@@ -13068,7 +13404,7 @@ ALTER TABLE ONLY public.site_item_family
 
 
 --
--- Name: site site_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site site_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site
@@ -13076,7 +13412,7 @@ ALTER TABLE ONLY public.site
 
 
 --
--- Name: smtp_account smtp_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: smtp_account smtp_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.smtp_account
@@ -13084,7 +13420,7 @@ ALTER TABLE ONLY public.smtp_account
 
 
 --
--- Name: smtp_quota smtp_quota_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: smtp_quota smtp_quota_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.smtp_quota
@@ -13092,7 +13428,7 @@ ALTER TABLE ONLY public.smtp_quota
 
 
 --
--- Name: stock stock_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: stock stock_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock
@@ -13100,7 +13436,7 @@ ALTER TABLE ONLY public.stock
 
 
 --
--- Name: stock_transfer stock_transfer_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: stock_transfer stock_transfer_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock_transfer
@@ -13108,7 +13444,7 @@ ALTER TABLE ONLY public.stock_transfer
 
 
 --
--- Name: subscription subscription_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: subscription subscription_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.subscription
@@ -13116,7 +13452,7 @@ ALTER TABLE ONLY public.subscription
 
 
 --
--- Name: sys_log sys_log_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: sys_log sys_log_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.sys_log
@@ -13124,7 +13460,7 @@ ALTER TABLE ONLY public.sys_log
 
 
 --
--- Name: tag tag_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: tag tag_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.tag
@@ -13132,7 +13468,7 @@ ALTER TABLE ONLY public.tag
 
 
 --
--- Name: tagged tagged_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: tagged tagged_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.tagged
@@ -13140,7 +13476,7 @@ ALTER TABLE ONLY public.tagged
 
 
 --
--- Name: task_metrics task_metrics_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: task_metrics task_metrics_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.task_metrics
@@ -13148,7 +13484,7 @@ ALTER TABLE ONLY public.task_metrics
 
 
 --
--- Name: teacher teacher_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: teacher teacher_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.teacher
@@ -13156,7 +13492,7 @@ ALTER TABLE ONLY public.teacher
 
 
 --
--- Name: third_party third_party_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: third_party third_party_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.third_party
@@ -13164,7 +13500,7 @@ ALTER TABLE ONLY public.third_party
 
 
 --
--- Name: timeline timeline_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timeline timeline_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline
@@ -13172,7 +13508,7 @@ ALTER TABLE ONLY public.timeline
 
 
 --
--- Name: timezone timezone_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timezone timezone_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timezone
@@ -13180,7 +13516,7 @@ ALTER TABLE ONLY public.timezone
 
 
 --
--- Name: topic topic_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: topic topic_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.topic
@@ -13188,7 +13524,7 @@ ALTER TABLE ONLY public.topic
 
 
 --
--- Name: vat vat_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: vat vat_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.vat
@@ -13196,7 +13532,7 @@ ALTER TABLE ONLY public.vat
 
 
 --
--- Name: video video_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: video video_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.video
@@ -13204,7 +13540,7 @@ ALTER TABLE ONLY public.video
 
 
 --
--- Name: visibility visibility_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: visibility visibility_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.visibility
@@ -13212,7 +13548,7 @@ ALTER TABLE ONLY public.visibility
 
 
 --
--- Name: warehouse warehouse_pkey; Type: CONSTRAINT; Schema: public; Owner: kbs
+-- Name: warehouse warehouse_pkey; Type: CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.warehouse
@@ -13220,1169 +13556,1176 @@ ALTER TABLE ONLY public.warehouse
 
 
 --
--- Name: allocation_rule_event_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: allocation_rule_event_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX allocation_rule_event_idx ON public.allocation_rule USING btree (event_id);
 
 
 --
--- Name: attendance_date_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: attendance_date_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX attendance_date_idx ON public.attendance USING btree (date);
 
 
 --
--- Name: attendance_document_line_date_present_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: attendance_document_line_date_present_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX attendance_document_line_date_present_idx ON public.attendance USING btree (document_line_id, date) WHERE present;
 
 
 --
--- Name: attendance_document_line_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: attendance_document_line_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX attendance_document_line_id_idx ON public.attendance USING btree (document_line_id);
 
 
 --
--- Name: attendance_scheduled_item_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: attendance_scheduled_item_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX attendance_scheduled_item_idx ON public.attendance USING btree (scheduled_item_id);
 
 
 --
--- Name: attendance_scheduled_resource_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: attendance_scheduled_resource_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX attendance_scheduled_resource_idx ON public.attendance USING btree (scheduled_resource_id);
 
 
 --
--- Name: cart_message_condition_cart_message_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: cart_message_condition_cart_message_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX cart_message_condition_cart_message_id_idx ON public.cart_message_condition USING btree (cart_message_id);
 
 
 --
--- Name: cart_message_event_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: cart_message_event_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX cart_message_event_id_idx ON public.cart_message USING btree (event_id);
 
 
 --
--- Name: document_carer1_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_carer1_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_carer1_idx ON public.document USING btree (person_carer1_document_id);
 
 
 --
--- Name: document_carer2_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_carer2_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_carer2_idx ON public.document USING btree (person_carer2_document_id);
 
 
 --
--- Name: document_cart_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_cart_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_cart_id_idx ON public.document USING btree (cart_id);
 
 
 --
--- Name: document_event_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_event_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_event_id_idx ON public.document USING btree (event_id);
 
 
 --
--- Name: document_line_document_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_line_document_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_line_document_id_idx ON public.document_line USING btree (document_id);
 
 
 --
--- Name: document_line_item_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_line_item_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_line_item_id_idx ON public.document_line USING btree (item_id);
 
 
 --
--- Name: document_line_resource_configuration_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_line_resource_configuration_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_line_resource_configuration_id_idx ON public.document_line USING btree (resource_configuration_id);
 
 
 --
--- Name: document_line_resource_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_line_resource_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_line_resource_id_idx ON public.document_line USING btree (resource_id);
 
 
 --
--- Name: document_line_share_mate_owner_document_line_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_line_share_mate_owner_document_line_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_line_share_mate_owner_document_line_id_idx ON public.document_line USING btree (share_mate_owner_document_line_id);
 
 
 --
--- Name: document_line_site_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_line_site_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_line_site_id_idx ON public.document_line USING btree (site_id);
 
 
 --
--- Name: document_multiple_booking_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_multiple_booking_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_multiple_booking_id_idx ON public.document USING btree (multiple_booking_id);
 
 
 --
--- Name: document_person_carer1_id_not_null_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_person_carer1_id_not_null_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_person_carer1_id_not_null_idx ON public.person USING btree (carer1_id) WHERE (carer1_id IS NOT NULL);
 
 
 --
--- Name: document_person_carer2_id_not_null_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_person_carer2_id_not_null_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_person_carer2_id_not_null_idx ON public.person USING btree (carer2_id) WHERE (carer2_id IS NOT NULL);
 
 
 --
--- Name: document_person_country_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_person_country_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_person_country_id_idx ON public.document USING btree (person_country_id);
 
 
 --
--- Name: document_person_email_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_person_email_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_person_email_idx ON public.document USING btree (person_email, person_abc_names);
 
 
 --
--- Name: document_person_email_lower_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_person_email_lower_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_person_email_lower_idx ON public.document USING btree (lower((person_email)::text) varchar_pattern_ops, lower((person_abc_names)::text) varchar_pattern_ops);
 
 
 --
--- Name: document_person_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_person_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_person_id_idx ON public.document USING btree (person_id);
 
 
 --
--- Name: document_person_organization_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: document_person_organization_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX document_person_organization_id_idx ON public.document USING btree (person_organization_id);
 
 
 --
--- Name: event_booking_closing_date_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: event_booking_closing_date_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX event_booking_closing_date_idx ON public.event USING btree (booking_closing_date, booking_closed);
 
 
 --
--- Name: event_corporation_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: event_corporation_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX event_corporation_id_idx ON public.event USING btree (corporation_id);
 
 
 --
--- Name: event_organization_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: event_organization_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX event_organization_id_idx ON public.event USING btree (organization_id);
 
 
 --
--- Name: frontend_account_corporation_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: frontend_account_corporation_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX frontend_account_corporation_id_idx ON public.frontend_account USING btree (corporation_id);
 
 
 --
--- Name: frontend_account_pwdreset_token_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: frontend_account_pwdreset_token_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX frontend_account_pwdreset_token_idx ON public.frontend_account USING btree (pwdreset_token, username);
 
 
 --
--- Name: history_date_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: history_date_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX history_date_idx ON public.history USING btree (date);
 
 
 --
--- Name: history_document_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: history_document_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX history_document_id_idx ON public.history USING btree (document_id);
 
 
 --
--- Name: history_mail_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: history_mail_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX history_mail_idx ON public.history USING btree (mail_id);
 
 
 --
--- Name: history_money_transfer_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: history_money_transfer_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX history_money_transfer_idx ON public.history USING btree (money_transfer_id);
 
 
 --
--- Name: history_user_person_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: history_user_person_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX history_user_person_id_idx ON public.history USING btree (user_person_id);
 
 
 --
--- Name: item_family_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: item_family_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX item_family_id_idx ON public.item USING btree (family_id);
 
 
 --
--- Name: letter_event_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: letter_event_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX letter_event_id_idx ON public.letter USING btree (event_id);
 
 
 --
--- Name: mail_account_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: mail_account_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX mail_account_id_idx ON public.mail USING btree (account_id);
 
 
 --
--- Name: mail_date_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: mail_date_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX mail_date_idx ON public.mail USING btree (date);
 
 
 --
--- Name: mail_document_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: mail_document_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX mail_document_id_idx ON public.mail USING btree (document_id);
 
 
 --
--- Name: mail_letter_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: mail_letter_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX mail_letter_id_idx ON public.mail USING btree (letter_id);
 
 
 --
--- Name: money_account_currency_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_account_currency_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_account_currency_id_idx ON public.money_account USING btree (currency_id);
 
 
 --
--- Name: money_account_organization_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_account_organization_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_account_organization_id_idx ON public.money_account USING btree (organization_id);
 
 
 --
--- Name: money_account_type_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_account_type_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_account_type_id_idx ON public.money_account USING btree (type_id);
 
 
 --
--- Name: money_flow_from_money_account_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_flow_from_money_account_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_flow_from_money_account_id_idx ON public.money_flow USING btree (from_money_account_id);
 
 
 --
--- Name: money_flow_organization_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_flow_organization_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_flow_organization_id_idx ON public.money_flow USING btree (organization_id);
 
 
 --
--- Name: money_flow_priority_flow_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_flow_priority_flow_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_flow_priority_flow_id_idx ON public.money_flow_priority USING btree (flow_id);
 
 
 --
--- Name: money_flow_to_money_account_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_flow_to_money_account_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_flow_to_money_account_id_idx ON public.money_flow USING btree (to_money_account_id);
 
 
 --
--- Name: money_transfer_date_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_date_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_date_idx ON public.money_transfer USING btree (date);
 
 
 --
--- Name: money_transfer_document_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_document_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_document_id_idx ON public.money_transfer USING btree (document_id);
 
 
 --
--- Name: money_transfer_from_money_account_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_from_money_account_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_from_money_account_id_idx ON public.money_transfer USING btree (from_money_account_id);
 
 
 --
--- Name: money_transfer_gateway_accesscode_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_gateway_accesscode_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_gateway_accesscode_idx ON public.money_transfer USING btree (gateway_accesscode);
 
 
 --
--- Name: money_transfer_method_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_method_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_method_id_idx ON public.money_transfer USING btree (method_id);
 
 
 --
--- Name: money_transfer_parent_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_parent_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_parent_id_idx ON public.money_transfer USING btree (parent_id);
 
 
 --
--- Name: money_transfer_pending_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_pending_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_pending_idx ON public.money_transfer USING btree (pending);
 
 
 --
--- Name: money_transfer_receipts_transfer_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_receipts_transfer_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_receipts_transfer_idx ON public.money_transfer USING btree (receipts_transfer);
 
 
 --
--- Name: money_transfer_successful_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_successful_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_successful_idx ON public.money_transfer USING btree (successful);
 
 
 --
--- Name: money_transfer_to_money_account_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_to_money_account_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_to_money_account_id_idx ON public.money_transfer USING btree (to_money_account_id);
 
 
 --
--- Name: money_transfer_transaction_ref_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_transaction_ref_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_transaction_ref_idx ON public.money_transfer USING btree (transaction_ref);
 
 
 --
--- Name: money_transfer_transfer_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: money_transfer_transfer_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX money_transfer_transfer_id_idx ON public.money_transfer USING btree (transfer_id);
 
 
 --
--- Name: option_condition_if_option_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: option_condition_if_option_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX option_condition_if_option_id_idx ON public.option_condition USING btree (if_option_id);
 
 
 --
--- Name: option_condition_option_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: option_condition_option_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX option_condition_option_id_idx ON public.option_condition USING btree (option_id);
 
 
 --
--- Name: option_condition_parent_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: option_condition_parent_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX option_condition_parent_id_idx ON public.option_condition USING btree (parent_id);
 
 
 --
--- Name: option_event_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: option_event_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX option_event_idx ON public.option USING btree (event_id);
 
 
 --
--- Name: option_item_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: option_item_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX option_item_idx ON public.option USING btree (item_id) WHERE (item_id IS NOT NULL);
 
 
 --
--- Name: option_parent_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: option_parent_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX option_parent_idx ON public.option USING btree (parent_id);
 
 
 --
--- Name: option_site_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: option_site_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX option_site_idx ON public.option USING btree (site_id) WHERE (site_id IS NOT NULL);
 
 
 --
--- Name: person_frontend_account_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: person_frontend_account_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX person_frontend_account_id_idx ON public.person USING btree (frontend_account_id);
 
 
 --
--- Name: rate_site_item_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: rate_site_item_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX rate_site_item_idx ON public.rate USING btree (site_id, item_id);
 
 
 --
--- Name: recipient_mail_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: recipient_mail_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX recipient_mail_idx ON public.recipient USING btree (mail_id);
 
 
 --
--- Name: recipient_person_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: recipient_person_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX recipient_person_id_idx ON public.recipient USING btree (person_id);
 
 
 --
--- Name: resource_configuration_dates_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: resource_configuration_dates_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX resource_configuration_dates_idx ON public.resource_configuration USING btree (start_date, end_date);
 
 
 --
--- Name: resource_configuration_item_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: resource_configuration_item_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX resource_configuration_item_id_idx ON public.resource_configuration USING btree (item_id);
 
 
 --
--- Name: resource_configuration_resource_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: resource_configuration_resource_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX resource_configuration_resource_id_idx ON public.resource_configuration USING btree (resource_id);
 
 
 --
--- Name: resource_site_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: resource_site_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX resource_site_id_idx ON public.resource USING btree (site_id);
 
 
 --
--- Name: scheduled_item_bookable_scheduled_item_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: scheduled_item_bookable_scheduled_item_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX scheduled_item_bookable_scheduled_item_idx ON public.scheduled_item USING btree (bookable_scheduled_item_id);
 
 
 --
--- Name: scheduled_item_comment_label_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: scheduled_item_comment_label_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX scheduled_item_comment_label_idx ON public.scheduled_item USING btree (comment_label_id);
 
 
 --
--- Name: scheduled_item_event_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: scheduled_item_event_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX scheduled_item_event_idx ON public.scheduled_item USING btree (event_id);
 
 
 --
--- Name: scheduled_item_item_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: scheduled_item_item_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX scheduled_item_item_idx ON public.scheduled_item USING btree (item_id);
 
 
 --
--- Name: scheduled_item_label_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: scheduled_item_label_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX scheduled_item_label_idx ON public.scheduled_item USING btree (label_id);
 
 
 --
--- Name: scheduled_item_site_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: scheduled_item_site_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX scheduled_item_site_idx ON public.scheduled_item USING btree (site_id);
 
 
 --
--- Name: scheduled_item_teacher_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: scheduled_item_teacher_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX scheduled_item_teacher_idx ON public.scheduled_item USING btree (teacher_id);
 
 
 --
--- Name: scheduled_item_timeline_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: scheduled_item_timeline_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX scheduled_item_timeline_idx ON public.scheduled_item USING btree (timeline_id);
 
 
 --
--- Name: site_event_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: site_event_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX site_event_id_idx ON public.site USING btree (event_id);
 
 
 --
--- Name: site_organization_id_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: site_organization_id_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX site_organization_id_idx ON public.site USING btree (organization_id);
 
 
 --
--- Name: task_metrics_parent_idx; Type: INDEX; Schema: public; Owner: kbs
+-- Name: task_metrics_parent_idx; Type: INDEX; Schema: public; Owner: bruno
 --
 
 CREATE INDEX task_metrics_parent_idx ON public.task_metrics USING btree (parent_id);
 
 
 --
--- Name: history append_request_to_document; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: history append_request_to_document; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER append_request_to_document AFTER INSERT ON public.history FOR EACH ROW WHEN (((new.request IS NOT NULL) AND ((new.request)::text <> ''::text) AND ((new.username)::text = 'online'::text))) EXECUTE FUNCTION public.trigger_history_append_request_to_document();
 
 
 --
--- Name: allocation_rule apply_rule; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: allocation_rule apply_rule; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER apply_rule AFTER UPDATE OF trigger_allocate ON public.allocation_rule FOR EACH ROW WHEN (((old.trigger_allocate = false) AND (new.trigger_allocate = true))) EXECUTE FUNCTION public.trigger_allocation_rule_apply_rule();
 
 
 --
--- Name: mail auto_account; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: mail auto_account; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_account BEFORE INSERT ON public.mail FOR EACH ROW WHEN ((new.account_id IS NULL)) EXECUTE FUNCTION public.trigger_mail_auto_account();
 
 
 --
--- Name: scheduled_item auto_bookable; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: scheduled_item auto_bookable; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_bookable BEFORE INSERT ON public.scheduled_item FOR EACH ROW WHEN ((new.bookable_scheduled_item_id IS NULL)) EXECUTE FUNCTION public.trigger_scheduled_item_auto_bookable();
 
 
 --
--- Name: attendance auto_date; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: attendance auto_date; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_date BEFORE INSERT ON public.attendance FOR EACH ROW WHEN (((new.date IS NULL) AND (new.scheduled_item_id IS NOT NULL))) EXECUTE FUNCTION public.trigger_attendance_auto_date();
 
 
 --
--- Name: mail auto_delete; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: mail auto_delete; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_delete AFTER UPDATE OF transmitted ON public.mail FOR EACH ROW WHEN ((new.auto_delete AND new.transmitted AND (new.error IS NULL))) EXECUTE FUNCTION public.trigger_mail_auto_delete();
 
 
 --
--- Name: document auto_person_details; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document auto_person_details; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_person_details BEFORE INSERT ON public.document FOR EACH ROW WHEN (((new.person_first_name IS NULL) AND (new.person_id IS NOT NULL))) EXECUTE FUNCTION public.trigger_document_auto_person_details();
 
 
 --
--- Name: mail auto_recipient; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: mail auto_recipient; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_recipient AFTER INSERT ON public.mail FOR EACH ROW EXECUTE FUNCTION public.trigger_mail_auto_recipient();
 
 
 --
--- Name: document auto_ref; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document auto_ref; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_ref BEFORE INSERT ON public.document FOR EACH ROW EXECUTE FUNCTION public.trigger_document_auto_ref();
 
 
 --
--- Name: attendance auto_scheduled_item; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: attendance auto_scheduled_item; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_scheduled_item AFTER INSERT ON public.attendance FOR EACH ROW WHEN (((new.date IS NOT NULL) AND (new.scheduled_item_id IS NULL))) EXECUTE FUNCTION public.trigger_attendance_auto_scheduled_item();
 
 
 --
--- Name: resource auto_site; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: resource auto_site; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_site BEFORE INSERT ON public.resource FOR EACH ROW WHEN ((new.site_id IS NULL)) EXECUTE FUNCTION public.trigger_resource_auto_site();
 
 
 --
--- Name: resource auto_site_item_family; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: resource auto_site_item_family; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER auto_site_item_family BEFORE INSERT ON public.resource FOR EACH ROW WHEN ((new.site_item_family_code IS NOT NULL)) EXECUTE FUNCTION public.trigger_resource_auto_site_item_family();
 
 
 --
--- Name: money_transfer autoset_accounts; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer autoset_accounts; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER autoset_accounts AFTER INSERT OR UPDATE OF method_id ON public.money_transfer FOR EACH ROW WHEN ((new.parent_id IS NULL)) EXECUTE FUNCTION public.trigger_money_transfer_autoset_accounts();
 
 
 --
--- Name: money_transfer autoset_children; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer autoset_children; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER autoset_children BEFORE INSERT ON public.money_transfer FOR EACH ROW WHEN ((new.parent_id IS NOT NULL)) EXECUTE FUNCTION public.trigger_money_transfer_autoset_children();
 
 
 --
--- Name: option autoset_event_from_parent; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: option autoset_event_from_parent; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER autoset_event_from_parent BEFORE INSERT ON public.option FOR EACH ROW WHEN ((new.event_id IS NULL)) EXECUTE FUNCTION public.trigger_option_autoset_event_from_parent();
 
 
 --
--- Name: document cancel_other_multiple_bookings; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document cancel_other_multiple_bookings; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER cancel_other_multiple_bookings AFTER UPDATE OF trigger_cancel_other_multiple_bookings ON public.document FOR EACH ROW EXECUTE FUNCTION public.trigger_document_cancel_other_multiple_bookings();
 
 
 --
--- Name: money_transfer cascade_children; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer cascade_children; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER cascade_children AFTER UPDATE OF date, method_id, payment, refund, pending, successful, read, verified ON public.money_transfer FOR EACH ROW WHEN (new.spread) EXECUTE FUNCTION public.trigger_money_transfer_cascade_children();
 
 
 --
--- Name: document cascadecancelled; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document cascadecancelled; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER cascadecancelled AFTER UPDATE OF cancelled, price_deposit ON public.document FOR EACH ROW EXECUTE FUNCTION public.trigger_document_cascadecancelled();
 
 
 --
--- Name: money_transfer cascadedeletetransfer; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer cascadedeletetransfer; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER cascadedeletetransfer BEFORE DELETE ON public.money_transfer FOR EACH ROW WHEN ((old.parent_id IS NOT NULL)) EXECUTE FUNCTION public.trigger_money_transfer_cascadedeletetransfer();
 
 
 --
--- Name: document cascaderead; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document cascaderead; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER cascaderead AFTER UPDATE OF read ON public.document FOR EACH ROW WHEN ((new.read = true)) EXECUTE FUNCTION public.trigger_document_cascaderead();
 
 
 --
--- Name: document_line cascadeunread; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line cascadeunread; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER cascadeunread AFTER INSERT OR UPDATE OF read ON public.document_line FOR EACH ROW WHEN ((NOT new.read)) EXECUTE FUNCTION public.trigger_document_line_cascadeunread();
 
 
 --
--- Name: mail cascadeunread; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: mail cascadeunread; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER cascadeunread AFTER INSERT OR UPDATE OF read ON public.mail FOR EACH ROW WHEN ((new.read = false)) EXECUTE FUNCTION public.trigger_mail_cascadeunread();
 
 
 --
--- Name: money_transfer cascadeunread; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer cascadeunread; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER cascadeunread AFTER INSERT OR UPDATE OF read ON public.money_transfer FOR EACH ROW WHEN ((new.read = false)) EXECUTE FUNCTION public.trigger_money_transfer_cascadeunread();
 
 
 --
--- Name: document check_multiple_booking; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document check_multiple_booking; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER check_multiple_booking AFTER INSERT OR UPDATE OF trigger_check_multiple_booking, not_multiple_booking_id ON public.document FOR EACH ROW EXECUTE FUNCTION public.trigger_document_check_multiple_booking();
 
 
 --
--- Name: resource_configuration check_overlap; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: resource_configuration check_overlap; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER check_overlap BEFORE INSERT OR UPDATE OF resource_id, start_date, end_date ON public.resource_configuration FOR EACH ROW EXECUTE FUNCTION public.trigger_resource_configuration_check_overlap();
 
 
 --
--- Name: document_line defer_allocate; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line defer_allocate; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER defer_allocate AFTER INSERT OR UPDATE OF site_id, item_id, private, dates ON public.document_line FOR EACH ROW WHEN ((new.share_mate_owner_document_line_id IS NULL)) EXECUTE FUNCTION public.trigger_document_line_defer_allocate();
 
 
 --
--- Name: money_transfer defer_compute_document_deposit; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer defer_compute_document_deposit; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER defer_compute_document_deposit AFTER INSERT OR DELETE OR UPDATE OF amount, successful, document_id ON public.money_transfer FOR EACH ROW EXECUTE FUNCTION public.trigger_money_transfer_defer_compute_document_deposit();
 
 
 --
--- Name: document_line defer_compute_document_prices; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line defer_compute_document_prices; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER defer_compute_document_prices AFTER INSERT OR DELETE OR UPDATE OF price, price_net, price_is_custom, price_custom, price_discount, price_min_deposit, price_non_refundable, site_id, item_id, rate_id, share_owner_quantity, share_mate, share_mate_charged, cancelled, abandoned, cancellation_date ON public.document_line FOR EACH ROW EXECUTE FUNCTION public.trigger_document_line_defer_compute_document_prices();
 
 
 --
--- Name: attendance defer_compute_document_prices_dates; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: attendance defer_compute_document_prices_dates; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER defer_compute_document_prices_dates AFTER INSERT OR DELETE OR UPDATE OF date, charged, present ON public.attendance FOR EACH ROW EXECUTE FUNCTION public.trigger_attendance_defer_compute_document_prices_dates();
 
 
 --
--- Name: document defer_compute_lines_deposit; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document defer_compute_lines_deposit; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER defer_compute_lines_deposit AFTER UPDATE OF price_net, price_min_deposit, price_deposit ON public.document FOR EACH ROW EXECUTE FUNCTION public.trigger_document_defer_compute_lines_deposit();
 
 
 --
--- Name: money_transfer defer_compute_money_account_balances; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer defer_compute_money_account_balances; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER defer_compute_money_account_balances AFTER INSERT OR DELETE OR UPDATE OF date, from_money_account_id, to_money_account_id, amount, pending, successful ON public.money_transfer FOR EACH ROW EXECUTE FUNCTION public.trigger_money_transfer_defer_compute_money_account_balances();
 
 
 --
--- Name: document defer_compute_prices; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document defer_compute_prices; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER defer_compute_prices AFTER UPDATE OF person_age, person_resident, person_resident2, person_unemployed, person_facility_fee, person_discovery, person_discovery_reduced, person_working_visit, person_guest ON public.document FOR EACH ROW EXECUTE FUNCTION public.trigger_document_defer_compute_prices();
 
 
 --
--- Name: document_line deferred_allocate_document_line; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line deferred_allocate_document_line; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE CONSTRAINT TRIGGER deferred_allocate_document_line AFTER UPDATE OF trigger_defer_allocate ON public.document_line DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION public.deferred_allocate_document_line();
 
 
 --
--- Name: document deferred_compute_document_dates; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document deferred_compute_document_dates; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE CONSTRAINT TRIGGER deferred_compute_document_dates AFTER INSERT OR UPDATE OF trigger_defer_compute_dates ON public.document DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION public.deferred_compute_document_dates();
 
 
 --
--- Name: document deferred_compute_document_deposit; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document deferred_compute_document_deposit; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE CONSTRAINT TRIGGER deferred_compute_document_deposit AFTER UPDATE OF trigger_defer_compute_deposit ON public.document DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION public.deferred_compute_document_deposit();
 
 
 --
--- Name: document deferred_compute_document_lines_deposit; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document deferred_compute_document_lines_deposit; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE CONSTRAINT TRIGGER deferred_compute_document_lines_deposit AFTER UPDATE OF trigger_defer_compute_lines_deposit ON public.document DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION public.deferred_compute_document_lines_deposit();
 
 
 --
--- Name: document deferred_compute_document_price; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document deferred_compute_document_price; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE CONSTRAINT TRIGGER deferred_compute_document_price AFTER INSERT OR UPDATE OF trigger_defer_compute_prices ON public.document DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION public.deferred_compute_document_prices();
 
 
 --
--- Name: money_account deferred_compute_money_account_balances; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_account deferred_compute_money_account_balances; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE CONSTRAINT TRIGGER deferred_compute_money_account_balances AFTER UPDATE OF trigger_defer_compute_balances ON public.money_account DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION public.deferred_compute_money_account_balances();
 
 
 --
--- Name: history deferred_send_history_email; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: history deferred_send_history_email; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE CONSTRAINT TRIGGER deferred_send_history_email AFTER UPDATE OF trigger_defer_send_email ON public.history DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION public.deferred_send_history_email();
 
 
 --
--- Name: money_transfer deferred_update_spread_money_transfer; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer deferred_update_spread_money_transfer; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE CONSTRAINT TRIGGER deferred_update_spread_money_transfer AFTER UPDATE OF trigger_defer_update_spread_money_transfer ON public.money_transfer DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION public.deferred_update_spread_money_transfer();
 
 
 --
--- Name: resource duplicate; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: resource duplicate; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER duplicate AFTER UPDATE OF trigger_duplicate ON public.resource FOR EACH ROW EXECUTE FUNCTION public.trigger_resource_duplicate();
 
 
 --
--- Name: document generate_mails_on_booking; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document generate_mails_on_booking; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER generate_mails_on_booking AFTER INSERT ON public.document FOR EACH ROW WHEN (((new.event_id IS NOT NULL) AND (new.person_email IS NOT NULL))) EXECUTE FUNCTION public.trigger_document_generate_mails_on_booking();
 
 
 --
--- Name: frontend_account generate_password_email; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: frontend_account generate_password_email; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER generate_password_email AFTER UPDATE OF trigger_send_password, trigger_send_password_event_id ON public.frontend_account FOR EACH ROW WHEN (((new.trigger_send_password = true) OR (new.trigger_send_password_event_id IS NOT NULL))) EXECUTE FUNCTION public.trigger_frontend_account_generate_password_email();
 
 
 --
--- Name: document merge_from_other_multiple_bookings; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document merge_from_other_multiple_bookings; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER merge_from_other_multiple_bookings AFTER UPDATE OF trigger_merge_from_other_multiple_bookings ON public.document FOR EACH ROW EXECUTE FUNCTION public.trigger_document_merge_from_other_multiple_bookings();
 
 
 --
--- Name: document_line on_cancelled_auto_release; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line on_cancelled_auto_release; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER on_cancelled_auto_release AFTER UPDATE OF cancelled ON public.document_line FOR EACH ROW EXECUTE FUNCTION public.trigger_document_line_on_cancelled_auto_release();
 
 
 --
--- Name: person on_email_change_update_frontend_username; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: person on_email_change_update_frontend_username; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER on_email_change_update_frontend_username AFTER UPDATE OF email ON public.person FOR EACH ROW EXECUTE FUNCTION public.trigger_person_on_email_change_update_frontend_username();
 
 
 --
--- Name: resource_configuration on_item_changed_cascade_document_lines; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: resource_configuration on_item_changed_cascade_document_lines; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER on_item_changed_cascade_document_lines AFTER UPDATE OF item_id ON public.resource_configuration FOR EACH ROW EXECUTE FUNCTION public.trigger_resource_configuration_on_item_changed_cascade_document();
 
 
 --
--- Name: document_line on_not_system_allocated; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line on_not_system_allocated; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER on_not_system_allocated BEFORE UPDATE OF resource_configuration_id ON public.document_line FOR EACH ROW WHEN ((NOT old.trigger_defer_allocate)) EXECUTE FUNCTION public.trigger_document_line_on_not_system_allocated();
 
 
 --
--- Name: document_line on_owner_changes_cascade_mates; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line on_owner_changes_cascade_mates; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER on_owner_changes_cascade_mates AFTER UPDATE OF site_id, item_id, dates, resource_configuration_id, backend_released, frontend_released ON public.document_line FOR EACH ROW WHEN ((new.share_owner = true)) EXECUTE FUNCTION public.trigger_document_line_on_owner_changes_cascade_mates();
 
 
 --
--- Name: document_line on_share_linked_copy_info; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line on_share_linked_copy_info; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER on_share_linked_copy_info AFTER INSERT OR UPDATE OF share_mate_owner_document_line_id ON public.document_line FOR EACH ROW EXECUTE FUNCTION public.trigger_document_line_on_share_linked_copy_info();
 
 
 --
--- Name: money_transfer on_success_send_history_email; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer on_success_send_history_email; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER on_success_send_history_email AFTER UPDATE OF successful ON public.money_transfer FOR EACH ROW WHEN (((old.successful = false) AND (new.successful = true))) EXECUTE FUNCTION public.trigger_money_transfer_on_success_send_history_email();
 
 
 --
--- Name: money_transfer on_verified; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer on_verified; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER on_verified AFTER UPDATE OF verified ON public.money_transfer FOR EACH ROW WHEN (new.receipts_transfer) EXECUTE FUNCTION public.trigger_money_transfer_on_verified();
 
 
 --
--- Name: history online_defer_send_email; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: history online_defer_send_email; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER online_defer_send_email AFTER INSERT ON public.history FOR EACH ROW WHEN ((((new.username)::text = 'online'::text) AND (new.money_transfer_id IS NULL))) EXECUTE FUNCTION public.trigger_history_online_defer_send_email();
 
 
 --
--- Name: document read_on_confirmed_or_arrived; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document read_on_confirmed_or_arrived; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER read_on_confirmed_or_arrived AFTER UPDATE OF confirmed, arrived ON public.document FOR EACH ROW WHEN ((new.confirmed OR new.arrived)) EXECUTE FUNCTION public.trigger_document_read_on_confirmed_or_arrived();
 
 
 --
--- Name: allocation_rule record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: allocation_rule record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.allocation_rule FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_allocation_rule();
 
 
 --
--- Name: document record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.document FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_document();
 
 
 --
--- Name: document_line record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER INSERT OR UPDATE ON public.document_line FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_document_line();
 
 
 --
--- Name: label record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: label record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER INSERT OR UPDATE ON public.label FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_label();
 
 
 --
--- Name: letter record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: letter record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.letter FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_letter();
 
 
 --
--- Name: mail record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: mail record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.mail FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_mail();
 
 
 --
--- Name: money_account record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_account record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.money_account FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_money_account();
 
 
 --
--- Name: money_transfer record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_transfer record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.money_transfer FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_money_transfer();
 
 
 --
--- Name: multiple_booking record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: multiple_booking record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.multiple_booking FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_multiple_booking();
 
 
 --
--- Name: option record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: option record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER INSERT OR UPDATE ON public.option FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_option();
 
 
 --
--- Name: organization record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: organization record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.organization FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_organization();
 
 
 --
--- Name: person record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: person record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.person FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_person();
 
 
 --
--- Name: rate record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: rate record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.rate FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_rate();
 
 
 --
--- Name: resource record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: resource record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.resource FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_resource();
 
 
 --
--- Name: resource_configuration record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: resource_configuration record_changes_for_notification; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER record_changes_for_notification AFTER UPDATE ON public.resource_configuration FOR EACH ROW EXECUTE FUNCTION public.record_changes_for_notification_resource_configuration();
 
 
 --
--- Name: document send_letter; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document send_letter; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER send_letter AFTER UPDATE OF trigger_send_letter_id ON public.document FOR EACH ROW WHEN ((new.trigger_send_letter_id IS NOT NULL)) EXECUTE FUNCTION public.trigger_document_send_letter();
 
 
 --
--- Name: document send_system_letter; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document send_system_letter; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER send_system_letter AFTER UPDATE OF trigger_send_system_letter_id ON public.document FOR EACH ROW WHEN ((new.trigger_send_system_letter_id IS NOT NULL)) EXECUTE FUNCTION public.trigger_document_send_system_letter();
 
 
 --
--- Name: document set_cancellation_date; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: person set_abc_names; Type: TRIGGER; Schema: public; Owner: bruno
+--
+
+CREATE TRIGGER set_abc_names BEFORE INSERT OR UPDATE OF first_name, last_name ON public.person FOR EACH ROW EXECUTE FUNCTION public.trigger_person_set_abc_names();
+
+
+--
+-- Name: document set_cancellation_date; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER set_cancellation_date BEFORE UPDATE OF cancelled ON public.document FOR EACH ROW WHEN (((NOT old.cancelled) AND new.cancelled)) EXECUTE FUNCTION public.trigger_document_set_cancellation_date();
 
 
 --
--- Name: document_line set_cancellation_date; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line set_cancellation_date; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER set_cancellation_date BEFORE UPDATE OF cancelled ON public.document_line FOR EACH ROW WHEN (((NOT old.cancelled) AND new.cancelled)) EXECUTE FUNCTION public.trigger_document_line_set_cancellation_date();
 
 
 --
--- Name: document_line set_donation_site; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line set_donation_site; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER set_donation_site BEFORE INSERT ON public.document_line FOR EACH ROW WHEN ((new.item_id = 104)) EXECUTE FUNCTION public.trigger_document_line_set_donation_site();
 
 
 --
--- Name: document_line set_lang; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document_line set_lang; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER set_lang AFTER INSERT OR UPDATE OF item_id ON public.document_line FOR EACH ROW EXECUTE FUNCTION public.trigger_document_line_set_lang();
 
 
 --
--- Name: document set_person_abc_names; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document set_person_abc_names; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER set_person_abc_names BEFORE INSERT OR UPDATE OF person_first_name, person_last_name ON public.document FOR EACH ROW EXECUTE FUNCTION public.trigger_document_set_person_abc_names();
 
 
 --
--- Name: document transfer_from_other_multiple_bookings; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: document transfer_from_other_multiple_bookings; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER transfer_from_other_multiple_bookings AFTER UPDATE OF trigger_transfer_from_other_multiple_bookings ON public.document FOR EACH ROW EXECUTE FUNCTION public.trigger_document_transfer_from_other_multiple_bookings();
 
 
 --
--- Name: money_flow transfer_ready_daily_batch; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: money_flow transfer_ready_daily_batch; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER transfer_ready_daily_batch BEFORE UPDATE OF trigger_transfer ON public.money_flow FOR EACH ROW WHEN (new.trigger_transfer) EXECUTE FUNCTION public.trigger_money_flow_transfer_ready_daily_batch();
 
 
 --
--- Name: multiple_booking update_counts; Type: TRIGGER; Schema: public; Owner: kbs
+-- Name: multiple_booking update_counts; Type: TRIGGER; Schema: public; Owner: bruno
 --
 
 CREATE TRIGGER update_counts AFTER UPDATE OF trigger_update_counts ON public.multiple_booking FOR EACH ROW EXECUTE FUNCTION public.trigger_multiple_booking_update_counts();
 
 
 --
--- Name: accounting_account accounting_account_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: accounting_account accounting_account_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_account
@@ -14390,7 +14733,7 @@ ALTER TABLE ONLY public.accounting_account
 
 
 --
--- Name: accounting_account accounting_account_model_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: accounting_account accounting_account_model_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_account
@@ -14398,7 +14741,7 @@ ALTER TABLE ONLY public.accounting_account
 
 
 --
--- Name: accounting_account accounting_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: accounting_account accounting_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_account
@@ -14406,7 +14749,7 @@ ALTER TABLE ONLY public.accounting_account
 
 
 --
--- Name: accounting_account_type accounting_account_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: accounting_account_type accounting_account_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.accounting_account_type
@@ -14414,7 +14757,7 @@ ALTER TABLE ONLY public.accounting_account_type
 
 
 --
--- Name: activity activity_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: activity activity_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.activity
@@ -14422,7 +14765,7 @@ ALTER TABLE ONLY public.activity
 
 
 --
--- Name: activity activity_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: activity activity_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.activity
@@ -14430,7 +14773,7 @@ ALTER TABLE ONLY public.activity
 
 
 --
--- Name: activity activity_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: activity activity_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.activity
@@ -14438,7 +14781,7 @@ ALTER TABLE ONLY public.activity
 
 
 --
--- Name: activity_state activity_state_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: activity_state activity_state_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.activity_state
@@ -14446,7 +14789,7 @@ ALTER TABLE ONLY public.activity_state
 
 
 --
--- Name: allocation_rule allocation_rule_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14454,7 +14797,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: allocation_rule allocation_rule_if_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_if_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14462,7 +14805,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: allocation_rule allocation_rule_if_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_if_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14470,7 +14813,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: allocation_rule allocation_rule_if_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_if_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14478,7 +14821,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: allocation_rule allocation_rule_if_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_if_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14486,7 +14829,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: allocation_rule allocation_rule_if_resource_configuration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_if_resource_configuration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14494,7 +14837,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: allocation_rule allocation_rule_if_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_if_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14502,7 +14845,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: allocation_rule allocation_rule_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14510,7 +14853,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: allocation_rule allocation_rule_resource_configuration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_resource_configuration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14518,7 +14861,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: allocation_rule allocation_rule_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: allocation_rule allocation_rule_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.allocation_rule
@@ -14526,7 +14869,7 @@ ALTER TABLE ONLY public.allocation_rule
 
 
 --
--- Name: attendance attendance_document_line_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: attendance attendance_document_line_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.attendance
@@ -14534,7 +14877,7 @@ ALTER TABLE ONLY public.attendance
 
 
 --
--- Name: attendance attendance_rate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: attendance attendance_rate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.attendance
@@ -14542,7 +14885,7 @@ ALTER TABLE ONLY public.attendance
 
 
 --
--- Name: attendance attendance_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: attendance attendance_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.attendance
@@ -14550,7 +14893,7 @@ ALTER TABLE ONLY public.attendance
 
 
 --
--- Name: attendance attendance_scheduled_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: attendance attendance_scheduled_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.attendance
@@ -14558,7 +14901,7 @@ ALTER TABLE ONLY public.attendance
 
 
 --
--- Name: authorization_assignment authorization_assignment_activity_state_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_assignment authorization_assignment_activity_state_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_assignment
@@ -14566,7 +14909,7 @@ ALTER TABLE ONLY public.authorization_assignment
 
 
 --
--- Name: authorization_assignment authorization_assignment_management_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_assignment authorization_assignment_management_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_assignment
@@ -14574,7 +14917,7 @@ ALTER TABLE ONLY public.authorization_assignment
 
 
 --
--- Name: authorization_assignment authorization_assignment_operation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_assignment authorization_assignment_operation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_assignment
@@ -14582,7 +14925,7 @@ ALTER TABLE ONLY public.authorization_assignment
 
 
 --
--- Name: authorization_assignment authorization_assignment_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_assignment authorization_assignment_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_assignment
@@ -14590,7 +14933,7 @@ ALTER TABLE ONLY public.authorization_assignment
 
 
 --
--- Name: authorization_assignment authorization_assignment_rule_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_assignment authorization_assignment_rule_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_assignment
@@ -14598,7 +14941,7 @@ ALTER TABLE ONLY public.authorization_assignment
 
 
 --
--- Name: authorization_assignment authorization_assignment_scope_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_assignment authorization_assignment_scope_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_assignment
@@ -14606,7 +14949,7 @@ ALTER TABLE ONLY public.authorization_assignment
 
 
 --
--- Name: authorization_management authorization_management_manager_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_management authorization_management_manager_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_management
@@ -14614,7 +14957,7 @@ ALTER TABLE ONLY public.authorization_management
 
 
 --
--- Name: authorization_management authorization_management_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_management authorization_management_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.authorization_management
@@ -14622,7 +14965,15 @@ ALTER TABLE ONLY public.authorization_management
 
 
 --
--- Name: bank bank_statement_system_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_rule authorization_rule_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_rule
+    ADD CONSTRAINT authorization_rule_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.authorization_role(id);
+
+
+--
+-- Name: bank bank_statement_system_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bank
@@ -14630,7 +14981,7 @@ ALTER TABLE ONLY public.bank
 
 
 --
--- Name: bank_system_account bank_system_account_statement_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: bank_system_account bank_system_account_statement_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bank_system_account
@@ -14638,7 +14989,7 @@ ALTER TABLE ONLY public.bank_system_account
 
 
 --
--- Name: bank_system bank_system_gateway_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: bank_system bank_system_gateway_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bank_system
@@ -14646,7 +14997,7 @@ ALTER TABLE ONLY public.bank_system
 
 
 --
--- Name: bookable_period bookable_period_end_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: bookable_period bookable_period_end_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bookable_period
@@ -14654,7 +15005,7 @@ ALTER TABLE ONLY public.bookable_period
 
 
 --
--- Name: bookable_period bookable_period_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: bookable_period bookable_period_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bookable_period
@@ -14662,7 +15013,7 @@ ALTER TABLE ONLY public.bookable_period
 
 
 --
--- Name: bookable_period bookable_period_start_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: bookable_period bookable_period_start_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.bookable_period
@@ -14670,7 +15021,7 @@ ALTER TABLE ONLY public.bookable_period
 
 
 --
--- Name: booking_form_layout booking_form_layout_organization_prompt_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: booking_form_layout booking_form_layout_organization_prompt_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.booking_form_layout
@@ -14678,7 +15029,7 @@ ALTER TABLE ONLY public.booking_form_layout
 
 
 --
--- Name: buddha buddha_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: buddha buddha_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.buddha
@@ -14686,7 +15037,7 @@ ALTER TABLE ONLY public.buddha
 
 
 --
--- Name: buddha buddha_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: buddha buddha_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.buddha
@@ -14694,7 +15045,7 @@ ALTER TABLE ONLY public.buddha
 
 
 --
--- Name: buddha buddha_who_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: buddha buddha_who_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.buddha
@@ -14702,7 +15053,7 @@ ALTER TABLE ONLY public.buddha
 
 
 --
--- Name: budget_line budget_line_budget_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: budget_line budget_line_budget_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget_line
@@ -14710,7 +15061,7 @@ ALTER TABLE ONLY public.budget_line
 
 
 --
--- Name: budget budget_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: budget budget_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget
@@ -14718,7 +15069,7 @@ ALTER TABLE ONLY public.budget
 
 
 --
--- Name: budget_transfer budget_transfer_from_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: budget_transfer budget_transfer_from_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget_transfer
@@ -14726,7 +15077,7 @@ ALTER TABLE ONLY public.budget_transfer
 
 
 --
--- Name: budget_transfer budget_transfer_to_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: budget_transfer budget_transfer_to_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.budget_transfer
@@ -14734,7 +15085,23 @@ ALTER TABLE ONLY public.budget_transfer
 
 
 --
--- Name: cart cart_forward_to_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: building building_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.building
+    ADD CONSTRAINT building_site_id_fkey FOREIGN KEY (site_id) REFERENCES public.site(id);
+
+
+--
+-- Name: building_zone building_zone_building_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.building_zone
+    ADD CONSTRAINT building_zone_building_id_fkey FOREIGN KEY (building_id) REFERENCES public.building(id);
+
+
+--
+-- Name: cart cart_forward_to_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart
@@ -14742,7 +15109,7 @@ ALTER TABLE ONLY public.cart
 
 
 --
--- Name: cart_message_condition cart_message_condition_cart_message_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: cart_message_condition cart_message_condition_cart_message_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart_message_condition
@@ -14750,7 +15117,7 @@ ALTER TABLE ONLY public.cart_message_condition
 
 
 --
--- Name: cart_message_condition cart_message_condition_item_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: cart_message_condition cart_message_condition_item_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart_message_condition
@@ -14758,7 +15125,7 @@ ALTER TABLE ONLY public.cart_message_condition
 
 
 --
--- Name: cart_message_condition cart_message_condition_site_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: cart_message_condition cart_message_condition_site_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart_message_condition
@@ -14766,7 +15133,7 @@ ALTER TABLE ONLY public.cart_message_condition
 
 
 --
--- Name: cart_message cart_message_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: cart_message cart_message_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart_message
@@ -14774,7 +15141,7 @@ ALTER TABLE ONLY public.cart_message
 
 
 --
--- Name: cart_message cart_message_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: cart_message cart_message_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.cart_message
@@ -14782,7 +15149,7 @@ ALTER TABLE ONLY public.cart_message
 
 
 --
--- Name: channel channel_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: channel channel_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.channel
@@ -14790,7 +15157,7 @@ ALTER TABLE ONLY public.channel
 
 
 --
--- Name: country country_account_model_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: country country_account_model_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.country
@@ -14798,7 +15165,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- Name: country country_continent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: country country_continent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.country
@@ -14806,7 +15173,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- Name: country country_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: country country_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.country
@@ -14814,7 +15181,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- Name: country country_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: country country_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.country
@@ -14822,7 +15189,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- Name: country country_main_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: country country_main_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.country
@@ -14830,7 +15197,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- Name: css css_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: css css_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.css
@@ -14838,7 +15205,7 @@ ALTER TABLE ONLY public.css
 
 
 --
--- Name: currency_support currency_support_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: currency_support currency_support_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.currency_support
@@ -14846,7 +15213,7 @@ ALTER TABLE ONLY public.currency_support
 
 
 --
--- Name: currency_support currency_support_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: currency_support currency_support_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.currency_support
@@ -14854,7 +15221,7 @@ ALTER TABLE ONLY public.currency_support
 
 
 --
--- Name: date_info date_info_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: date_info date_info_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.date_info
@@ -14862,7 +15229,7 @@ ALTER TABLE ONLY public.date_info
 
 
 --
--- Name: date_info date_info_fees_bottom_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: date_info date_info_fees_bottom_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.date_info
@@ -14870,7 +15237,7 @@ ALTER TABLE ONLY public.date_info
 
 
 --
--- Name: date_info date_info_fees_popup_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: date_info date_info_fees_popup_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.date_info
@@ -14878,7 +15245,7 @@ ALTER TABLE ONLY public.date_info
 
 
 --
--- Name: date_info date_info_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: date_info date_info_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.date_info
@@ -14886,7 +15253,7 @@ ALTER TABLE ONLY public.date_info
 
 
 --
--- Name: date_info date_info_option_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: date_info date_info_option_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.date_info
@@ -14894,7 +15261,7 @@ ALTER TABLE ONLY public.date_info
 
 
 --
--- Name: day_template day_template_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: day_template day_template_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.day_template
@@ -14902,7 +15269,7 @@ ALTER TABLE ONLY public.day_template
 
 
 --
--- Name: document document_activity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_activity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -14910,7 +15277,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -14918,7 +15285,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -14926,7 +15293,15 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document_line document_line_arrival_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_group_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.document
+    ADD CONSTRAINT document_group_document_id_fkey FOREIGN KEY (group_document_id) REFERENCES public.document(id);
+
+
+--
+-- Name: document_line document_line_arrival_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -14934,7 +15309,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_budget_line_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_budget_line_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -14942,7 +15317,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -14950,7 +15325,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_driver_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_driver_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -14958,7 +15333,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -14966,7 +15341,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_purchase_rate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_purchase_rate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -14974,7 +15349,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_purchase_vat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_purchase_vat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -14982,7 +15357,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_rate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_rate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -14990,7 +15365,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_resource_configuration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_resource_configuration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -14998,7 +15373,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -15006,7 +15381,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_share_mate_owner_document_line_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_share_mate_owner_document_line_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -15014,7 +15389,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -15022,7 +15397,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_stock_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_stock_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -15030,7 +15405,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_timeline_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_timeline_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -15038,7 +15413,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document_line document_line_vat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document_line document_line_vat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document_line
@@ -15046,7 +15421,7 @@ ALTER TABLE ONLY public.document_line
 
 
 --
--- Name: document document_multiple_booking_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_multiple_booking_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15054,7 +15429,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_not_multiple_booking_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_not_multiple_booking_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15062,7 +15437,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15070,7 +15445,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_branch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_branch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15078,7 +15453,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_carer1_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_carer1_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15086,7 +15461,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_carer1_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_carer1_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15094,7 +15469,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_carer2_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_carer2_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15102,7 +15477,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_carer2_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_carer2_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15110,7 +15485,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_geo_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_geo_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15118,7 +15493,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15126,7 +15501,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15134,7 +15509,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15142,7 +15517,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_person_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_person_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15150,7 +15525,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15158,7 +15533,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_trigger_send_letter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_trigger_send_letter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15166,7 +15541,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: document document_trigger_send_system_letter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: document document_trigger_send_system_letter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.document
@@ -15174,7 +15549,7 @@ ALTER TABLE ONLY public.document
 
 
 --
--- Name: domain domain_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: domain domain_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.domain
@@ -15182,7 +15557,7 @@ ALTER TABLE ONLY public.domain
 
 
 --
--- Name: driver driver_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: driver driver_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.driver
@@ -15190,7 +15565,7 @@ ALTER TABLE ONLY public.driver
 
 
 --
--- Name: enqueued_request enqueued_request_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: enqueued_request enqueued_request_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.enqueued_request
@@ -15198,7 +15573,7 @@ ALTER TABLE ONLY public.enqueued_request
 
 
 --
--- Name: error error_user_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: error error_user_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.error
@@ -15206,7 +15581,7 @@ ALTER TABLE ONLY public.error
 
 
 --
--- Name: event event_activity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_activity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15214,7 +15589,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_booking_form_layout_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_booking_form_layout_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15222,7 +15597,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_booking_success_message_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_booking_success_message_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15230,7 +15605,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_bookings_auto_confirm_event_id2_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_bookings_auto_confirm_event_id2_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15238,7 +15613,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_bookings_auto_confirm_event_id3_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_bookings_auto_confirm_event_id3_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15246,7 +15621,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_bookings_auto_confirm_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_bookings_auto_confirm_event_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15254,7 +15629,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_bookings_auto_confirm_letter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_bookings_auto_confirm_letter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15262,7 +15637,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_buddha_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_buddha_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15270,7 +15645,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_cart_message_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_cart_message_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15278,7 +15653,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_corporation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_corporation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15286,7 +15661,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_fees_bottom_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_fees_bottom_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15294,7 +15669,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15302,7 +15677,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15310,7 +15685,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_livestream_message_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_livestream_message_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15318,7 +15693,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_long_description_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_long_description_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15326,7 +15701,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_notification_cart_confirmed_label_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_notification_cart_confirmed_label_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15334,7 +15709,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_notification_cart_default_label_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_notification_cart_default_label_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15342,7 +15717,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_notification_cart_payed_confirmed_label_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_notification_cart_payed_confirmed_label_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15350,7 +15725,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_notification_cart_payed_label_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_notification_cart_payed_label_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15358,7 +15733,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_options_top_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_options_top_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15366,7 +15741,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15374,7 +15749,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_privacy_notice_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_privacy_notice_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15382,7 +15757,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_repeated_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_repeated_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15390,7 +15765,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_short_description_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_short_description_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15398,7 +15773,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_support_notice_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_support_notice_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15406,7 +15781,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15414,7 +15789,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event event_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15422,7 +15797,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: event_type event_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event_type event_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event_type
@@ -15430,7 +15805,7 @@ ALTER TABLE ONLY public.event_type
 
 
 --
--- Name: event_type event_type_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event_type event_type_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event_type
@@ -15438,7 +15813,7 @@ ALTER TABLE ONLY public.event_type
 
 
 --
--- Name: event_type event_type_recurring_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event_type event_type_recurring_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event_type
@@ -15446,7 +15821,7 @@ ALTER TABLE ONLY public.event_type
 
 
 --
--- Name: event event_venue_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: event event_venue_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.event
@@ -15454,7 +15829,7 @@ ALTER TABLE ONLY public.event
 
 
 --
--- Name: frontend_account frontend_account_corporation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: frontend_account frontend_account_corporation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.frontend_account
@@ -15462,7 +15837,7 @@ ALTER TABLE ONLY public.frontend_account
 
 
 --
--- Name: frontend_account frontend_account_trigger_send_password_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: frontend_account frontend_account_trigger_send_password_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.frontend_account
@@ -15470,7 +15845,7 @@ ALTER TABLE ONLY public.frontend_account
 
 
 --
--- Name: gateway_company gateway_company_alert_before_payment_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: gateway_company gateway_company_alert_before_payment_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.gateway_company
@@ -15478,7 +15853,7 @@ ALTER TABLE ONLY public.gateway_company
 
 
 --
--- Name: gateway_company gateway_company_information_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: gateway_company gateway_company_information_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.gateway_company
@@ -15486,7 +15861,7 @@ ALTER TABLE ONLY public.gateway_company
 
 
 --
--- Name: gateway_parameter gateway_parameter_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: gateway_parameter gateway_parameter_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.gateway_parameter
@@ -15494,7 +15869,7 @@ ALTER TABLE ONLY public.gateway_parameter
 
 
 --
--- Name: gateway_parameter gateway_parameter_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: gateway_parameter gateway_parameter_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.gateway_parameter
@@ -15502,7 +15877,7 @@ ALTER TABLE ONLY public.gateway_parameter
 
 
 --
--- Name: history history_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: history history_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.history
@@ -15510,15 +15885,7 @@ ALTER TABLE ONLY public.history
 
 
 --
--- Name: history history_mail_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
---
-
-ALTER TABLE ONLY public.history
-    ADD CONSTRAINT history_mail_id_fkey FOREIGN KEY (mail_id) REFERENCES public.mail(id) ON DELETE SET NULL;
-
-
---
--- Name: history history_money_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: history history_money_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.history
@@ -15526,7 +15893,7 @@ ALTER TABLE ONLY public.history
 
 
 --
--- Name: history history_user_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: history history_user_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.history
@@ -15534,7 +15901,31 @@ ALTER TABLE ONLY public.history
 
 
 --
--- Name: item_family item_family_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: invitation invitation_created_alias_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.invitation
+    ADD CONSTRAINT invitation_created_alias_person_id_fkey FOREIGN KEY (created_alias_person_id) REFERENCES public.person(id);
+
+
+--
+-- Name: invitation invitation_invitee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.invitation
+    ADD CONSTRAINT invitation_invitee_id_fkey FOREIGN KEY (invitee_id) REFERENCES public.person(id);
+
+
+--
+-- Name: invitation invitation_inviter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.invitation
+    ADD CONSTRAINT invitation_inviter_id_fkey FOREIGN KEY (inviter_id) REFERENCES public.person(id);
+
+
+--
+-- Name: item_family item_family_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item_family
@@ -15542,7 +15933,7 @@ ALTER TABLE ONLY public.item_family
 
 
 --
--- Name: item item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item
@@ -15550,7 +15941,7 @@ ALTER TABLE ONLY public.item
 
 
 --
--- Name: item_family item_family_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item_family item_family_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item_family
@@ -15558,7 +15949,7 @@ ALTER TABLE ONLY public.item_family
 
 
 --
--- Name: item_family item_family_per_resource_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item_family item_family_per_resource_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item_family
@@ -15566,7 +15957,7 @@ ALTER TABLE ONLY public.item_family
 
 
 --
--- Name: item_family item_family_sector_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item_family item_family_sector_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item_family
@@ -15574,7 +15965,7 @@ ALTER TABLE ONLY public.item_family
 
 
 --
--- Name: item item_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item item_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item
@@ -15582,7 +15973,7 @@ ALTER TABLE ONLY public.item
 
 
 --
--- Name: item item_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item item_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item
@@ -15590,7 +15981,7 @@ ALTER TABLE ONLY public.item
 
 
 --
--- Name: item item_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item item_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item
@@ -15598,7 +15989,7 @@ ALTER TABLE ONLY public.item
 
 
 --
--- Name: item item_per_resource_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item item_per_resource_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item
@@ -15606,7 +15997,7 @@ ALTER TABLE ONLY public.item
 
 
 --
--- Name: item item_rate_alias_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: item item_rate_alias_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.item
@@ -15614,7 +16005,7 @@ ALTER TABLE ONLY public.item
 
 
 --
--- Name: label label_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: label label_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.label
@@ -15622,7 +16013,7 @@ ALTER TABLE ONLY public.label
 
 
 --
--- Name: language language_main_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: language language_main_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.language
@@ -15630,7 +16021,7 @@ ALTER TABLE ONLY public.language
 
 
 --
--- Name: letter letter_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: letter letter_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter
@@ -15638,7 +16029,7 @@ ALTER TABLE ONLY public.letter
 
 
 --
--- Name: letter letter_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: letter letter_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter
@@ -15646,7 +16037,7 @@ ALTER TABLE ONLY public.letter
 
 
 --
--- Name: letter letter_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: letter letter_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter
@@ -15654,7 +16045,7 @@ ALTER TABLE ONLY public.letter
 
 
 --
--- Name: letter letter_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: letter letter_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter
@@ -15662,7 +16053,7 @@ ALTER TABLE ONLY public.letter
 
 
 --
--- Name: letter_type letter_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: letter_type letter_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.letter_type
@@ -15670,7 +16061,7 @@ ALTER TABLE ONLY public.letter_type
 
 
 --
--- Name: lt_test_event lt_test_event_lt_test_set_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: lt_test_event lt_test_event_lt_test_set_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.lt_test_event
@@ -15678,7 +16069,7 @@ ALTER TABLE ONLY public.lt_test_event
 
 
 --
--- Name: mail_account mail_account_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail_account mail_account_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail_account
@@ -15686,7 +16077,7 @@ ALTER TABLE ONLY public.mail_account
 
 
 --
--- Name: mail mail_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail mail_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail
@@ -15694,7 +16085,7 @@ ALTER TABLE ONLY public.mail
 
 
 --
--- Name: mail_account mail_account_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail_account mail_account_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail_account
@@ -15702,7 +16093,7 @@ ALTER TABLE ONLY public.mail_account
 
 
 --
--- Name: mail_account mail_account_signature_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail_account mail_account_signature_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail_account
@@ -15710,7 +16101,7 @@ ALTER TABLE ONLY public.mail_account
 
 
 --
--- Name: mail_account mail_account_smtp_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail_account mail_account_smtp_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail_account
@@ -15718,7 +16109,7 @@ ALTER TABLE ONLY public.mail_account
 
 
 --
--- Name: mail mail_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail mail_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail
@@ -15726,7 +16117,7 @@ ALTER TABLE ONLY public.mail
 
 
 --
--- Name: mail mail_letter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail mail_letter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail
@@ -15734,7 +16125,7 @@ ALTER TABLE ONLY public.mail
 
 
 --
--- Name: mail mail_magic_link_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail mail_magic_link_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail
@@ -15742,7 +16133,7 @@ ALTER TABLE ONLY public.mail
 
 
 --
--- Name: mail mail_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail mail_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail
@@ -15750,7 +16141,7 @@ ALTER TABLE ONLY public.mail
 
 
 --
--- Name: mail mail_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: mail mail_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.mail
@@ -15758,7 +16149,7 @@ ALTER TABLE ONLY public.mail
 
 
 --
--- Name: meal_estimation meal_estimation_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: meal_estimation meal_estimation_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.meal_estimation
@@ -15766,7 +16157,7 @@ ALTER TABLE ONLY public.meal_estimation
 
 
 --
--- Name: media_consumption media_consumption_attendance_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: media_consumption media_consumption_attendance_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.media_consumption
@@ -15774,7 +16165,7 @@ ALTER TABLE ONLY public.media_consumption
 
 
 --
--- Name: media_consumption media_consumption_media_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: media_consumption media_consumption_media_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.media_consumption
@@ -15782,7 +16173,7 @@ ALTER TABLE ONLY public.media_consumption
 
 
 --
--- Name: media_consumption media_consumption_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: media_consumption media_consumption_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.media_consumption
@@ -15790,7 +16181,7 @@ ALTER TABLE ONLY public.media_consumption
 
 
 --
--- Name: media media_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: media media_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.media
@@ -15798,7 +16189,7 @@ ALTER TABLE ONLY public.media
 
 
 --
--- Name: method method_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: method method_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.method
@@ -15806,7 +16197,7 @@ ALTER TABLE ONLY public.method
 
 
 --
--- Name: method_support method_support_method_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: method_support method_support_method_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.method_support
@@ -15814,7 +16205,7 @@ ALTER TABLE ONLY public.method_support
 
 
 --
--- Name: method_support method_support_money_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: method_support method_support_money_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.method_support
@@ -15822,7 +16213,7 @@ ALTER TABLE ONLY public.method_support
 
 
 --
--- Name: metrics metrics_lt_test_set_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: metrics metrics_lt_test_set_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.metrics
@@ -15830,7 +16221,7 @@ ALTER TABLE ONLY public.metrics
 
 
 --
--- Name: money_account money_account_bank_system_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account money_account_bank_system_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account
@@ -15838,7 +16229,7 @@ ALTER TABLE ONLY public.money_account
 
 
 --
--- Name: money_account money_account_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account money_account_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account
@@ -15846,7 +16237,7 @@ ALTER TABLE ONLY public.money_account
 
 
 --
--- Name: money_account money_account_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account money_account_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account
@@ -15854,7 +16245,7 @@ ALTER TABLE ONLY public.money_account
 
 
 --
--- Name: money_account money_account_gateway_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account money_account_gateway_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account
@@ -15862,7 +16253,7 @@ ALTER TABLE ONLY public.money_account
 
 
 --
--- Name: money_account money_account_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account money_account_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account
@@ -15870,7 +16261,7 @@ ALTER TABLE ONLY public.money_account
 
 
 --
--- Name: money_account money_account_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account money_account_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account
@@ -15878,7 +16269,7 @@ ALTER TABLE ONLY public.money_account
 
 
 --
--- Name: money_account money_account_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account money_account_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account
@@ -15886,7 +16277,7 @@ ALTER TABLE ONLY public.money_account
 
 
 --
--- Name: money_account money_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account money_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account
@@ -15894,7 +16285,7 @@ ALTER TABLE ONLY public.money_account
 
 
 --
--- Name: money_account_type money_account_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_account_type money_account_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_account_type
@@ -15902,7 +16293,7 @@ ALTER TABLE ONLY public.money_account_type
 
 
 --
--- Name: money_flow money_flow_from_money_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow money_flow_from_money_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow
@@ -15910,7 +16301,7 @@ ALTER TABLE ONLY public.money_flow
 
 
 --
--- Name: money_flow money_flow_method_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow money_flow_method_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow
@@ -15918,7 +16309,7 @@ ALTER TABLE ONLY public.money_flow
 
 
 --
--- Name: money_flow money_flow_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow money_flow_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow
@@ -15926,7 +16317,7 @@ ALTER TABLE ONLY public.money_flow
 
 
 --
--- Name: money_flow_priority money_flow_priority_flow_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow_priority money_flow_priority_flow_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow_priority
@@ -15934,7 +16325,7 @@ ALTER TABLE ONLY public.money_flow_priority
 
 
 --
--- Name: money_flow money_flow_to_money_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow money_flow_to_money_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow
@@ -15942,7 +16333,7 @@ ALTER TABLE ONLY public.money_flow
 
 
 --
--- Name: money_flow_type money_flow_type_from_money_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow_type money_flow_type_from_money_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow_type
@@ -15950,7 +16341,7 @@ ALTER TABLE ONLY public.money_flow_type
 
 
 --
--- Name: money_flow_type money_flow_type_to_money_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_flow_type money_flow_type_to_money_account_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_flow_type
@@ -15958,7 +16349,7 @@ ALTER TABLE ONLY public.money_flow_type
 
 
 --
--- Name: money_statement money_statement_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_statement money_statement_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_statement
@@ -15966,7 +16357,7 @@ ALTER TABLE ONLY public.money_statement
 
 
 --
--- Name: money_statement money_statement_system_acount_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_statement money_statement_system_acount_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_statement
@@ -15974,7 +16365,7 @@ ALTER TABLE ONLY public.money_statement
 
 
 --
--- Name: money_statement money_statement_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_statement money_statement_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_statement
@@ -15982,7 +16373,7 @@ ALTER TABLE ONLY public.money_statement
 
 
 --
--- Name: money_transfer money_transfer_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_transfer money_transfer_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer
@@ -15990,7 +16381,7 @@ ALTER TABLE ONLY public.money_transfer
 
 
 --
--- Name: money_transfer money_transfer_from_money_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_transfer money_transfer_from_money_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer
@@ -15998,7 +16389,7 @@ ALTER TABLE ONLY public.money_transfer
 
 
 --
--- Name: money_transfer money_transfer_gateway_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_transfer money_transfer_gateway_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer
@@ -16006,7 +16397,7 @@ ALTER TABLE ONLY public.money_transfer
 
 
 --
--- Name: money_transfer money_transfer_method_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_transfer money_transfer_method_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer
@@ -16014,7 +16405,7 @@ ALTER TABLE ONLY public.money_transfer
 
 
 --
--- Name: money_transfer money_transfer_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_transfer money_transfer_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer
@@ -16022,7 +16413,7 @@ ALTER TABLE ONLY public.money_transfer
 
 
 --
--- Name: money_transfer money_transfer_statement_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_transfer money_transfer_statement_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer
@@ -16030,7 +16421,7 @@ ALTER TABLE ONLY public.money_transfer
 
 
 --
--- Name: money_transfer money_transfer_to_money_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_transfer money_transfer_to_money_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer
@@ -16038,7 +16429,7 @@ ALTER TABLE ONLY public.money_transfer
 
 
 --
--- Name: money_transfer money_transfer_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: money_transfer money_transfer_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.money_transfer
@@ -16046,7 +16437,7 @@ ALTER TABLE ONLY public.money_transfer
 
 
 --
--- Name: multiple_booking multiple_booking_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: multiple_booking multiple_booking_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.multiple_booking
@@ -16054,7 +16445,7 @@ ALTER TABLE ONLY public.multiple_booking
 
 
 --
--- Name: news news_channel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: news news_channel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.news
@@ -16062,7 +16453,7 @@ ALTER TABLE ONLY public.news
 
 
 --
--- Name: news news_topic_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: news news_topic_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.news
@@ -16070,7 +16461,15 @@ ALTER TABLE ONLY public.news
 
 
 --
--- Name: operation operation_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: operation operation_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.operation
+    ADD CONSTRAINT operation_group_id_fkey FOREIGN KEY (group_id) REFERENCES public.operation_group(id);
+
+
+--
+-- Name: operation operation_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.operation
@@ -16078,7 +16477,7 @@ ALTER TABLE ONLY public.operation
 
 
 --
--- Name: option option_age_error_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_age_error_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16086,7 +16485,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_age_error_label_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_age_error_label_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16094,7 +16493,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_age_error_label_id_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_age_error_label_id_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16102,7 +16501,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_arrival_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_arrival_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16110,7 +16509,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_attendance_option_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_attendance_option_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16118,7 +16517,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_bottom_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_bottom_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16126,7 +16525,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_children_prompt_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_children_prompt_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16134,7 +16533,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_comment_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_comment_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16142,7 +16541,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16150,7 +16549,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16158,7 +16557,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey10; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey10; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16166,7 +16565,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey11; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey11; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16174,7 +16573,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey12; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey12; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16182,7 +16581,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey13; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey13; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16190,7 +16589,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey14; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey14; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16198,7 +16597,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey15; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey15; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16206,7 +16605,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey16; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey16; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16214,7 +16613,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey17; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey17; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16222,7 +16621,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey18; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey18; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16230,7 +16629,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey19; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey19; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16238,7 +16637,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16246,7 +16645,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey20; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey20; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16254,7 +16653,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey21; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey21; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16262,7 +16661,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey22; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey22; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16270,7 +16669,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey23; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey23; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16278,7 +16677,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey24; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey24; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16286,7 +16685,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey25; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey25; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16294,7 +16693,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey26; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey26; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16302,7 +16701,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey27; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey27; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16310,7 +16709,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey28; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey28; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16318,7 +16717,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey29; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey29; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16326,7 +16725,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey3; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey3; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16334,7 +16733,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey30; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey30; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16342,7 +16741,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey31; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey31; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16350,7 +16749,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey32; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey32; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16358,7 +16757,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey33; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey33; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16366,7 +16765,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey34; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey34; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16374,7 +16773,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey35; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey35; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16382,7 +16781,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey36; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey36; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16390,7 +16789,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey37; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey37; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16398,7 +16797,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey38; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey38; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16406,7 +16805,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey39; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey39; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16414,7 +16813,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey4; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey4; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16422,7 +16821,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey40; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey40; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16430,7 +16829,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey41; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey41; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16438,7 +16837,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey42; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey42; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16446,7 +16845,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey43; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey43; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16454,7 +16853,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey44; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey44; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16462,7 +16861,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey45; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey45; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16470,7 +16869,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey46; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey46; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16478,7 +16877,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey47; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey47; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16486,7 +16885,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey48; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey48; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16494,7 +16893,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey5; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey5; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16502,7 +16901,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey6; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey6; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16510,7 +16909,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey7; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey7; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16518,7 +16917,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey8; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey8; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16526,7 +16925,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_item_family_id_fkey9; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_item_family_id_fkey9; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16534,7 +16933,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_option_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_option_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16542,7 +16941,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16550,7 +16949,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16558,7 +16957,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey10; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey10; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16566,7 +16965,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey11; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey11; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16574,7 +16973,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey12; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey12; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16582,7 +16981,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey13; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey13; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16590,7 +16989,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey14; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey14; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16598,7 +16997,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey15; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey15; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16606,7 +17005,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey16; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey16; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16614,7 +17013,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey17; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey17; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16622,7 +17021,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey18; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey18; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16630,7 +17029,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey19; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey19; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16638,7 +17037,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16646,7 +17045,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey20; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey20; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16654,7 +17053,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey21; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey21; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16662,7 +17061,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey22; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey22; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16670,7 +17069,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey23; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey23; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16678,7 +17077,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey24; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey24; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16686,7 +17085,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey25; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey25; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16694,7 +17093,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey26; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey26; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16702,7 +17101,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey27; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey27; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16710,7 +17109,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey28; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey28; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16718,7 +17117,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey29; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey29; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16726,7 +17125,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey3; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey3; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16734,7 +17133,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey30; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey30; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16742,7 +17141,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey31; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey31; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16750,7 +17149,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey32; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey32; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16758,7 +17157,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey33; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey33; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16766,7 +17165,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey34; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey34; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16774,7 +17173,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey35; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey35; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16782,7 +17181,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey36; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey36; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16790,7 +17189,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey37; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey37; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16798,7 +17197,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey38; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey38; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16806,7 +17205,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey39; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey39; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16814,7 +17213,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey4; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey4; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16822,7 +17221,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey40; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey40; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16830,7 +17229,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey41; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey41; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16838,7 +17237,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey42; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey42; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16846,7 +17245,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey43; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey43; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16854,7 +17253,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey44; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey44; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16862,7 +17261,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey45; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey45; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16870,7 +17269,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey46; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey46; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16878,7 +17277,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey47; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey47; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16886,7 +17285,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey48; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey48; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16894,7 +17293,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey5; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey5; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16902,7 +17301,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey6; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey6; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16910,7 +17309,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey7; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey7; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16918,7 +17317,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey8; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey8; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16926,7 +17325,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_if_site_id_fkey9; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_if_site_id_fkey9; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16934,7 +17333,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_option_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_option_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16942,7 +17341,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option_condition option_condition_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option_condition option_condition_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option_condition
@@ -16950,7 +17349,7 @@ ALTER TABLE ONLY public.option_condition
 
 
 --
--- Name: option option_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16958,7 +17357,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_footer_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_footer_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16966,7 +17365,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16974,7 +17373,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16982,7 +17381,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16990,7 +17389,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -16998,7 +17397,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_popup_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_popup_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -17006,7 +17405,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_prompt_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_prompt_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -17014,7 +17413,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_quantity_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_quantity_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -17022,7 +17421,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_rate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_rate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -17030,7 +17429,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_sharing_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_sharing_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -17038,7 +17437,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -17046,7 +17445,7 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: option option_top_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: option option_top_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.option
@@ -17054,7 +17453,23 @@ ALTER TABLE ONLY public.option
 
 
 --
--- Name: organization organization_geo_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_organization_admin organization_admin_admin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_admin
+    ADD CONSTRAINT organization_admin_admin_id_fkey FOREIGN KEY (admin_id) REFERENCES public.person(id);
+
+
+--
+-- Name: authorization_organization_admin organization_admin_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_admin
+    ADD CONSTRAINT organization_admin_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+
+
+--
+-- Name: organization organization_geo_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization
@@ -17062,7 +17477,15 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- Name: organization organization_kdm_center_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: organization organization_global_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.organization
+    ADD CONSTRAINT organization_global_site_id_fkey FOREIGN KEY (global_site_id) REFERENCES public.site(id);
+
+
+--
+-- Name: organization organization_kdm_center_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization
@@ -17070,7 +17493,7 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- Name: organization organization_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: organization organization_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization
@@ -17078,7 +17501,7 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- Name: organization organization_teachings_day_ticket_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: organization organization_teachings_day_ticket_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization
@@ -17086,7 +17509,7 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- Name: organization organization_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: organization organization_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization
@@ -17094,7 +17517,7 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- Name: organization_type organization_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: organization_type organization_type_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.organization_type
@@ -17102,7 +17525,39 @@ ALTER TABLE ONLY public.organization_type
 
 
 --
--- Name: package_item package_item_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_organization_user_access organization_user_access_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_user_access
+    ADD CONSTRAINT organization_user_access_event_id_fkey FOREIGN KEY (event_id) REFERENCES public.event(id);
+
+
+--
+-- Name: authorization_organization_user_access organization_user_access_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_user_access
+    ADD CONSTRAINT organization_user_access_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+
+
+--
+-- Name: authorization_organization_user_access organization_user_access_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_user_access
+    ADD CONSTRAINT organization_user_access_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.authorization_role(id);
+
+
+--
+-- Name: authorization_organization_user_access organization_user_access_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_organization_user_access
+    ADD CONSTRAINT organization_user_access_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.person(id);
+
+
+--
+-- Name: package_item package_item_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.package_item
@@ -17110,7 +17565,7 @@ ALTER TABLE ONLY public.package_item
 
 
 --
--- Name: package_item package_item_package_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: package_item package_item_package_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.package_item
@@ -17118,7 +17573,7 @@ ALTER TABLE ONLY public.package_item
 
 
 --
--- Name: person person_account_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_account_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -17126,7 +17581,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: person person_branch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_branch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -17134,7 +17589,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: person person_carer1_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_carer1_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -17142,7 +17597,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: person person_carer2_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_carer2_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -17150,7 +17605,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: person person_frontend_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_frontend_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -17158,7 +17613,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: person person_geo_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_geo_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -17166,7 +17621,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: person person_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -17174,7 +17629,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: person person_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -17182,7 +17637,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: person person_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: person person_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.person
@@ -17190,7 +17645,7 @@ ALTER TABLE ONLY public.person
 
 
 --
--- Name: podcast podcast_channel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: podcast podcast_channel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.podcast
@@ -17198,7 +17653,7 @@ ALTER TABLE ONLY public.podcast
 
 
 --
--- Name: podcast podcast_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: podcast podcast_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.podcast
@@ -17206,7 +17661,63 @@ ALTER TABLE ONLY public.podcast
 
 
 --
--- Name: rate rate_arrival_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: pool_allocation pool_allocation_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool_allocation
+    ADD CONSTRAINT pool_allocation_event_id_fkey FOREIGN KEY (event_id) REFERENCES public.event(id);
+
+
+--
+-- Name: pool_allocation pool_allocation_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool_allocation
+    ADD CONSTRAINT pool_allocation_person_id_fkey FOREIGN KEY (person_id) REFERENCES public.person(id);
+
+
+--
+-- Name: pool_allocation pool_allocation_pool_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool_allocation
+    ADD CONSTRAINT pool_allocation_pool_id_fkey FOREIGN KEY (pool_id) REFERENCES public.pool(id);
+
+
+--
+-- Name: pool_allocation pool_allocation_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool_allocation
+    ADD CONSTRAINT pool_allocation_resource_id_fkey FOREIGN KEY (resource_id) REFERENCES public.resource(id);
+
+
+--
+-- Name: pool pool_description_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool
+    ADD CONSTRAINT pool_description_label_id_fkey FOREIGN KEY (description_label_id) REFERENCES public.label(id);
+
+
+--
+-- Name: pool pool_event_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool
+    ADD CONSTRAINT pool_event_type_id_fkey FOREIGN KEY (event_type_id) REFERENCES public.event_type(id);
+
+
+--
+-- Name: pool pool_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.pool
+    ADD CONSTRAINT pool_label_id_fkey FOREIGN KEY (label_id) REFERENCES public.label(id);
+
+
+--
+-- Name: rate rate_arrival_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17214,7 +17725,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17222,7 +17733,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17230,7 +17741,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey10; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey10; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17238,7 +17749,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey11; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey11; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17246,7 +17757,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey12; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey12; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17254,7 +17765,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey13; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey13; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17262,7 +17773,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey14; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey14; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17270,7 +17781,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey15; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey15; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17278,7 +17789,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey16; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey16; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17286,7 +17797,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey17; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey17; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17294,7 +17805,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey18; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey18; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17302,7 +17813,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey19; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey19; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17310,7 +17821,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17318,7 +17829,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey20; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey20; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17326,7 +17837,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey21; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey21; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17334,7 +17845,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey22; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey22; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17342,7 +17853,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey23; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey23; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17350,7 +17861,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey24; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey24; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17358,7 +17869,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey25; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey25; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17366,7 +17877,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey26; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey26; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17374,7 +17885,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey27; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey27; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17382,7 +17893,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey28; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey28; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17390,7 +17901,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey29; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey29; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17398,7 +17909,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey3; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey3; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17406,7 +17917,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey30; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey30; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17414,7 +17925,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey31; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey31; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17422,7 +17933,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey32; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey32; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17430,7 +17941,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey33; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey33; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17438,7 +17949,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey34; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey34; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17446,7 +17957,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey35; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey35; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17454,7 +17965,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey36; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey36; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17462,7 +17973,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey37; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey37; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17470,7 +17981,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey38; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey38; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17478,7 +17989,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey39; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey39; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17486,7 +17997,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey4; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey4; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17494,7 +18005,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey40; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey40; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17502,7 +18013,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey41; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey41; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17510,7 +18021,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey5; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey5; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17518,7 +18029,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey6; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey6; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17526,7 +18037,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey7; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey7; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17534,7 +18045,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey8; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey8; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17542,7 +18053,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_comment_label_id_fkey9; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_comment_label_id_fkey9; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17550,7 +18061,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17558,7 +18069,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17566,7 +18077,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17574,7 +18085,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_package_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_package_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17582,7 +18093,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17590,7 +18101,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: rate rate_vat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: rate rate_vat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.rate
@@ -17598,15 +18109,7 @@ ALTER TABLE ONLY public.rate
 
 
 --
--- Name: recipient recipient_mail_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
---
-
-ALTER TABLE ONLY public.recipient
-    ADD CONSTRAINT recipient_mail_id_fkey FOREIGN KEY (mail_id) REFERENCES public.mail(id) ON DELETE CASCADE;
-
-
---
--- Name: recipient recipient_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: recipient recipient_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.recipient
@@ -17614,7 +18117,7 @@ ALTER TABLE ONLY public.recipient
 
 
 --
--- Name: resource resource_building_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: resource resource_building_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.resource
@@ -17622,7 +18125,23 @@ ALTER TABLE ONLY public.resource
 
 
 --
--- Name: resource_configuration resource_configuration_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: resource resource_building_zone_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.resource
+    ADD CONSTRAINT resource_building_zone_id_fkey FOREIGN KEY (building_zone_id) REFERENCES public.building_zone(id);
+
+
+--
+-- Name: resource_configuration resource_configuration_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.resource_configuration
+    ADD CONSTRAINT resource_configuration_event_id_fkey FOREIGN KEY (event_id) REFERENCES public.event(id);
+
+
+--
+-- Name: resource_configuration resource_configuration_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.resource_configuration
@@ -17630,7 +18149,7 @@ ALTER TABLE ONLY public.resource_configuration
 
 
 --
--- Name: resource_configuration resource_configuration_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: resource_configuration resource_configuration_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.resource_configuration
@@ -17638,7 +18157,15 @@ ALTER TABLE ONLY public.resource_configuration
 
 
 --
--- Name: resource resource_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: resource resource_kbs2_to_kbs3_global_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.resource
+    ADD CONSTRAINT resource_kbs2_to_kbs3_global_resource_id_fkey FOREIGN KEY (kbs2_to_kbs3_global_resource_id) REFERENCES public.resource(id);
+
+
+--
+-- Name: resource resource_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.resource
@@ -17646,7 +18173,7 @@ ALTER TABLE ONLY public.resource
 
 
 --
--- Name: resource resource_site_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: resource resource_site_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.resource
@@ -17654,7 +18181,7 @@ ALTER TABLE ONLY public.resource
 
 
 --
--- Name: role_attribution role_attribution_from_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: role_attribution role_attribution_from_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.role_attribution
@@ -17662,7 +18189,7 @@ ALTER TABLE ONLY public.role_attribution
 
 
 --
--- Name: role_attribution role_attribution_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: role_attribution role_attribution_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.role_attribution
@@ -17670,7 +18197,7 @@ ALTER TABLE ONLY public.role_attribution
 
 
 --
--- Name: role_attribution role_attribution_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: role_attribution role_attribution_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.role_attribution
@@ -17678,7 +18205,7 @@ ALTER TABLE ONLY public.role_attribution
 
 
 --
--- Name: role_attribution role_attribution_to_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: role_attribution role_attribution_to_language_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.role_attribution
@@ -17686,7 +18213,7 @@ ALTER TABLE ONLY public.role_attribution
 
 
 --
--- Name: role role_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: role role_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.role
@@ -17694,7 +18221,31 @@ ALTER TABLE ONLY public.role
 
 
 --
--- Name: scheduled_item scheduled_item_bookable_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_role_operation role_operation_operation_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_role_operation
+    ADD CONSTRAINT role_operation_operation_group_id_fkey FOREIGN KEY (operation_group_id) REFERENCES public.operation_group(id);
+
+
+--
+-- Name: authorization_role_operation role_operation_operation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_role_operation
+    ADD CONSTRAINT role_operation_operation_id_fkey FOREIGN KEY (operation_id) REFERENCES public.operation(id);
+
+
+--
+-- Name: authorization_role_operation role_operation_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_role_operation
+    ADD CONSTRAINT role_operation_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.authorization_role(id);
+
+
+--
+-- Name: scheduled_item scheduled_item_bookable_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -17702,7 +18253,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_item scheduled_item_comment_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_item scheduled_item_comment_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -17710,7 +18261,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_item scheduled_item_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_item scheduled_item_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -17718,7 +18269,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_item scheduled_item_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_item scheduled_item_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -17726,7 +18277,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_item scheduled_item_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_item scheduled_item_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -17734,7 +18285,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_item scheduled_item_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_item scheduled_item_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -17742,7 +18293,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_item scheduled_item_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_item scheduled_item_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -17750,7 +18301,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_item scheduled_item_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_item scheduled_item_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -17758,7 +18309,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_item scheduled_item_timeline_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_item scheduled_item_timeline_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_item
@@ -17766,7 +18317,7 @@ ALTER TABLE ONLY public.scheduled_item
 
 
 --
--- Name: scheduled_resource scheduled_resource_configuration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_resource scheduled_resource_configuration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_resource
@@ -17774,7 +18325,7 @@ ALTER TABLE ONLY public.scheduled_resource
 
 
 --
--- Name: scheduled_resource scheduled_resource_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: scheduled_resource scheduled_resource_scheduled_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.scheduled_resource
@@ -17782,7 +18333,7 @@ ALTER TABLE ONLY public.scheduled_resource
 
 
 --
--- Name: session_agent session_agent_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_agent session_agent_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_agent
@@ -17790,7 +18341,7 @@ ALTER TABLE ONLY public.session_agent
 
 
 --
--- Name: session_agent session_agent_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_agent session_agent_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_agent
@@ -17798,7 +18349,7 @@ ALTER TABLE ONLY public.session_agent
 
 
 --
--- Name: session_application session_application_agent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_application session_application_agent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_application
@@ -17806,7 +18357,7 @@ ALTER TABLE ONLY public.session_application
 
 
 --
--- Name: session_application session_application_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_application session_application_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_application
@@ -17814,7 +18365,7 @@ ALTER TABLE ONLY public.session_application
 
 
 --
--- Name: session_application session_application_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_application session_application_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_application
@@ -17822,7 +18373,7 @@ ALTER TABLE ONLY public.session_application
 
 
 --
--- Name: session_connection session_connection_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_connection session_connection_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_connection
@@ -17830,7 +18381,7 @@ ALTER TABLE ONLY public.session_connection
 
 
 --
--- Name: session_connection session_connection_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_connection session_connection_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_connection
@@ -17838,7 +18389,7 @@ ALTER TABLE ONLY public.session_connection
 
 
 --
--- Name: session_connection session_connection_process_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_connection session_connection_process_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_connection
@@ -17846,7 +18397,7 @@ ALTER TABLE ONLY public.session_connection
 
 
 --
--- Name: session_process session_process_application_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_process session_process_application_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_process
@@ -17854,7 +18405,7 @@ ALTER TABLE ONLY public.session_process
 
 
 --
--- Name: session_process session_process_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_process session_process_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_process
@@ -17862,7 +18413,7 @@ ALTER TABLE ONLY public.session_process
 
 
 --
--- Name: session_process session_process_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_process session_process_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.session_process
@@ -17870,7 +18421,7 @@ ALTER TABLE ONLY public.session_process
 
 
 --
--- Name: session_user session_user_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_user session_user_next_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public."session_user"
@@ -17878,7 +18429,7 @@ ALTER TABLE ONLY public."session_user"
 
 
 --
--- Name: session_user session_user_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_user session_user_previous_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public."session_user"
@@ -17886,7 +18437,7 @@ ALTER TABLE ONLY public."session_user"
 
 
 --
--- Name: session_user session_user_process_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_user session_user_process_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public."session_user"
@@ -17894,7 +18445,7 @@ ALTER TABLE ONLY public."session_user"
 
 
 --
--- Name: session_user session_user_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: session_user session_user_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public."session_user"
@@ -17902,7 +18453,7 @@ ALTER TABLE ONLY public."session_user"
 
 
 --
--- Name: site site_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site site_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site
@@ -17910,7 +18461,7 @@ ALTER TABLE ONLY public.site
 
 
 --
--- Name: site site_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site site_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site
@@ -17918,7 +18469,7 @@ ALTER TABLE ONLY public.site
 
 
 --
--- Name: site site_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site site_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site
@@ -17926,7 +18477,7 @@ ALTER TABLE ONLY public.site
 
 
 --
--- Name: site_item_family site_item_family_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site_item_family site_item_family_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site_item_family
@@ -17934,7 +18485,7 @@ ALTER TABLE ONLY public.site_item_family
 
 
 --
--- Name: site_item_family site_item_family_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site_item_family site_item_family_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site_item_family
@@ -17942,7 +18493,7 @@ ALTER TABLE ONLY public.site_item_family
 
 
 --
--- Name: site site_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site site_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site
@@ -17950,7 +18501,7 @@ ALTER TABLE ONLY public.site
 
 
 --
--- Name: site site_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site site_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site
@@ -17958,7 +18509,7 @@ ALTER TABLE ONLY public.site
 
 
 --
--- Name: site site_top_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: site site_top_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.site
@@ -17966,7 +18517,7 @@ ALTER TABLE ONLY public.site
 
 
 --
--- Name: smtp_account smtp_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: smtp_account smtp_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.smtp_account
@@ -17974,7 +18525,7 @@ ALTER TABLE ONLY public.smtp_account
 
 
 --
--- Name: smtp_account smtp_quota_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: smtp_account smtp_quota_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.smtp_account
@@ -17982,7 +18533,7 @@ ALTER TABLE ONLY public.smtp_account
 
 
 --
--- Name: stock stock_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: stock stock_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock
@@ -17990,7 +18541,7 @@ ALTER TABLE ONLY public.stock
 
 
 --
--- Name: stock stock_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: stock stock_third_party_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock
@@ -17998,7 +18549,7 @@ ALTER TABLE ONLY public.stock
 
 
 --
--- Name: stock_transfer stock_transfer_document_line_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: stock_transfer stock_transfer_document_line_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock_transfer
@@ -18006,7 +18557,7 @@ ALTER TABLE ONLY public.stock_transfer
 
 
 --
--- Name: stock_transfer stock_transfer_from_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: stock_transfer stock_transfer_from_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock_transfer
@@ -18014,7 +18565,7 @@ ALTER TABLE ONLY public.stock_transfer
 
 
 --
--- Name: stock_transfer stock_transfer_provision_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: stock_transfer stock_transfer_provision_transfer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock_transfer
@@ -18022,7 +18573,7 @@ ALTER TABLE ONLY public.stock_transfer
 
 
 --
--- Name: stock_transfer stock_transfer_to_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: stock_transfer stock_transfer_to_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock_transfer
@@ -18030,7 +18581,7 @@ ALTER TABLE ONLY public.stock_transfer
 
 
 --
--- Name: stock stock_warehouse_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: stock stock_warehouse_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.stock
@@ -18038,7 +18589,7 @@ ALTER TABLE ONLY public.stock
 
 
 --
--- Name: subscription subscription_activity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: subscription subscription_activity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.subscription
@@ -18046,7 +18597,7 @@ ALTER TABLE ONLY public.subscription
 
 
 --
--- Name: subscription subscription_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: subscription subscription_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.subscription
@@ -18054,7 +18605,7 @@ ALTER TABLE ONLY public.subscription
 
 
 --
--- Name: subscription subscription_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: subscription subscription_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.subscription
@@ -18062,7 +18613,7 @@ ALTER TABLE ONLY public.subscription
 
 
 --
--- Name: subscription subscription_sector_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: subscription subscription_sector_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.subscription
@@ -18070,7 +18621,15 @@ ALTER TABLE ONLY public.subscription
 
 
 --
--- Name: tagged tagged_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: authorization_super_admin super_admin_super_admin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
+--
+
+ALTER TABLE ONLY public.authorization_super_admin
+    ADD CONSTRAINT super_admin_super_admin_id_fkey FOREIGN KEY (super_admin_id) REFERENCES public.person(id);
+
+
+--
+-- Name: tagged tagged_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.tagged
@@ -18078,7 +18637,7 @@ ALTER TABLE ONLY public.tagged
 
 
 --
--- Name: task_metrics task_metrics_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: task_metrics task_metrics_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.task_metrics
@@ -18086,7 +18645,7 @@ ALTER TABLE ONLY public.task_metrics
 
 
 --
--- Name: teacher teacher_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: teacher teacher_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.teacher
@@ -18094,7 +18653,7 @@ ALTER TABLE ONLY public.teacher
 
 
 --
--- Name: teacher teacher_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: teacher teacher_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.teacher
@@ -18102,7 +18661,7 @@ ALTER TABLE ONLY public.teacher
 
 
 --
--- Name: teacher teacher_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: teacher teacher_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.teacher
@@ -18110,7 +18669,7 @@ ALTER TABLE ONLY public.teacher
 
 
 --
--- Name: teacher teacher_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: teacher teacher_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.teacher
@@ -18118,7 +18677,7 @@ ALTER TABLE ONLY public.teacher
 
 
 --
--- Name: teacher teacher_who_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: teacher teacher_who_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.teacher
@@ -18126,7 +18685,7 @@ ALTER TABLE ONLY public.teacher
 
 
 --
--- Name: timeline timeline_day_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timeline timeline_day_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline
@@ -18134,7 +18693,7 @@ ALTER TABLE ONLY public.timeline
 
 
 --
--- Name: timeline timeline_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timeline timeline_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline
@@ -18142,7 +18701,7 @@ ALTER TABLE ONLY public.timeline
 
 
 --
--- Name: timeline timeline_event_timeline_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timeline timeline_event_timeline_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline
@@ -18150,7 +18709,7 @@ ALTER TABLE ONLY public.timeline
 
 
 --
--- Name: timeline timeline_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timeline timeline_item_family_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline
@@ -18158,7 +18717,7 @@ ALTER TABLE ONLY public.timeline
 
 
 --
--- Name: timeline timeline_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timeline timeline_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline
@@ -18166,7 +18725,7 @@ ALTER TABLE ONLY public.timeline
 
 
 --
--- Name: timeline timeline_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timeline timeline_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline
@@ -18174,7 +18733,7 @@ ALTER TABLE ONLY public.timeline
 
 
 --
--- Name: timeline timeline_label_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timeline timeline_label_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline
@@ -18182,7 +18741,7 @@ ALTER TABLE ONLY public.timeline
 
 
 --
--- Name: timeline timeline_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: timeline timeline_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.timeline
@@ -18190,7 +18749,7 @@ ALTER TABLE ONLY public.timeline
 
 
 --
--- Name: topic topic_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: topic topic_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.topic
@@ -18198,7 +18757,7 @@ ALTER TABLE ONLY public.topic
 
 
 --
--- Name: vat vat_account_model_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: vat vat_account_model_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.vat
@@ -18206,7 +18765,7 @@ ALTER TABLE ONLY public.vat
 
 
 --
--- Name: video video_news_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: video video_news_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.video
@@ -18214,7 +18773,7 @@ ALTER TABLE ONLY public.video
 
 
 --
--- Name: video video_playlist_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: video video_playlist_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.video
@@ -18222,7 +18781,7 @@ ALTER TABLE ONLY public.video
 
 
 --
--- Name: video video_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: video video_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.video
@@ -18230,7 +18789,7 @@ ALTER TABLE ONLY public.video
 
 
 --
--- Name: warehouse warehouse_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kbs
+-- Name: warehouse warehouse_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: bruno
 --
 
 ALTER TABLE ONLY public.warehouse
@@ -18243,862 +18802,9 @@ ALTER TABLE ONLY public.warehouse
 
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 GRANT ALL ON SCHEMA public TO PUBLIC;
-GRANT USAGE ON SCHEMA public TO kbs_odoo;
-
-
---
--- Name: TABLE attendance; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.attendance TO kbs_odoo;
-
-
---
--- Name: TABLE document; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.document TO kbs_odoo;
-
-
---
--- Name: TABLE document_line; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.document_line TO kbs_odoo;
-
-
---
--- Name: TABLE rate; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.rate TO kbs_odoo;
-
-
---
--- Name: TABLE money_transfer; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.money_transfer TO kbs_odoo;
-
-
---
--- Name: TABLE accounting_account; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.accounting_account TO kbs_odoo;
-
-
---
--- Name: TABLE accounting_account_type; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.accounting_account_type TO kbs_odoo;
-
-
---
--- Name: TABLE accounting_model; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.accounting_model TO kbs_odoo;
-
-
---
--- Name: TABLE activity; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.activity TO kbs_odoo;
-
-
---
--- Name: TABLE activity_state; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.activity_state TO kbs_odoo;
-
-
---
--- Name: TABLE allocation_rule; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.allocation_rule TO kbs_odoo;
-
-
---
--- Name: TABLE authorization_assignment; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.authorization_assignment TO kbs_odoo;
-
-
---
--- Name: TABLE authorization_management; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.authorization_management TO kbs_odoo;
-
-
---
--- Name: TABLE authorization_role; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.authorization_role TO kbs_odoo;
-
-
---
--- Name: TABLE authorization_rule; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.authorization_rule TO kbs_odoo;
-
-
---
--- Name: TABLE authorization_scope; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.authorization_scope TO kbs_odoo;
-
-
---
--- Name: TABLE bank; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.bank TO kbs_odoo;
-
-
---
--- Name: TABLE bank_system; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.bank_system TO kbs_odoo;
-
-
---
--- Name: TABLE bank_system_account; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.bank_system_account TO kbs_odoo;
-
-
---
--- Name: TABLE booking_form_layout; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.booking_form_layout TO kbs_odoo;
-
-
---
--- Name: TABLE event; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.event TO kbs_odoo;
-
-
---
--- Name: TABLE bookings; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.bookings TO kbs_odoo;
-
-
---
--- Name: TABLE bracket_pattern; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.bracket_pattern TO kbs_odoo;
-
-
---
--- Name: TABLE buddha; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.buddha TO kbs_odoo;
-
-
---
--- Name: TABLE budget; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.budget TO kbs_odoo;
-
-
---
--- Name: TABLE budget_line; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.budget_line TO kbs_odoo;
-
-
---
--- Name: TABLE budget_transfer; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.budget_transfer TO kbs_odoo;
-
-
---
--- Name: TABLE building; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.building TO kbs_odoo;
-
-
---
--- Name: TABLE cart; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.cart TO kbs_odoo;
-
-
---
--- Name: TABLE cart_message; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.cart_message TO kbs_odoo;
-
-
---
--- Name: TABLE cart_message_condition; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.cart_message_condition TO kbs_odoo;
-
-
---
--- Name: TABLE centre; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.centre TO kbs_odoo;
-
-
---
--- Name: TABLE channel; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.channel TO kbs_odoo;
-
-
---
--- Name: TABLE continent; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.continent TO kbs_odoo;
-
-
---
--- Name: TABLE country; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.country TO kbs_odoo;
-
-
---
--- Name: TABLE css; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.css TO kbs_odoo;
-
-
---
--- Name: TABLE currency; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.currency TO kbs_odoo;
-
-
---
--- Name: TABLE currency_support; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.currency_support TO kbs_odoo;
-
-
---
--- Name: TABLE date_info; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.date_info TO kbs_odoo;
-
-
---
--- Name: TABLE domain; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.domain TO kbs_odoo;
-
-
---
--- Name: TABLE driver; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.driver TO kbs_odoo;
-
-
---
--- Name: TABLE enqueued_request; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.enqueued_request TO kbs_odoo;
-
-
---
--- Name: TABLE event_type; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.event_type TO kbs_odoo;
-
-
---
--- Name: TABLE filter; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.filter TO kbs_odoo;
-
-
---
--- Name: TABLE frontend_account; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.frontend_account TO kbs_odoo;
-
-
---
--- Name: TABLE gateway_company; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.gateway_company TO kbs_odoo;
-
-
---
--- Name: TABLE gateway_parameter; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.gateway_parameter TO kbs_odoo;
-
-
---
--- Name: TABLE history; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.history TO kbs_odoo;
-
-
---
--- Name: TABLE image; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.image TO kbs_odoo;
-
-
---
--- Name: TABLE item; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.item TO kbs_odoo;
-
-
---
--- Name: TABLE item_family; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.item_family TO kbs_odoo;
-
-
---
--- Name: TABLE kbs1_country; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.kbs1_country TO kbs_odoo;
-
-
---
--- Name: TABLE kdm_center; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.kdm_center TO kbs_odoo;
-
-
---
--- Name: TABLE label; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.label TO kbs_odoo;
-
-
---
--- Name: TABLE language; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.language TO kbs_odoo;
-
-
---
--- Name: TABLE letter; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.letter TO kbs_odoo;
-
-
---
--- Name: TABLE letter_type; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.letter_type TO kbs_odoo;
-
-
---
--- Name: TABLE lt_test_event; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.lt_test_event TO kbs_odoo;
-
-
---
--- Name: TABLE lt_test_set; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.lt_test_set TO kbs_odoo;
-
-
---
--- Name: TABLE magic_link; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.magic_link TO kbs_odoo;
-
-
---
--- Name: TABLE mail; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.mail TO kbs_odoo;
-
-
---
--- Name: TABLE mail_account; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.mail_account TO kbs_odoo;
-
-
---
--- Name: TABLE meal_estimation; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.meal_estimation TO kbs_odoo;
-
-
---
--- Name: TABLE method; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.method TO kbs_odoo;
-
-
---
--- Name: TABLE method_support; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.method_support TO kbs_odoo;
-
-
---
--- Name: TABLE metrics; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.metrics TO kbs_odoo;
-
-
---
--- Name: TABLE money_account; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.money_account TO kbs_odoo;
-
-
---
--- Name: TABLE money_account_type; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.money_account_type TO kbs_odoo;
-
-
---
--- Name: TABLE money_flow; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.money_flow TO kbs_odoo;
-
-
---
--- Name: TABLE money_flow_priority; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.money_flow_priority TO kbs_odoo;
-
-
---
--- Name: TABLE money_flow_type; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.money_flow_type TO kbs_odoo;
-
-
---
--- Name: TABLE money_statement; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.money_statement TO kbs_odoo;
-
-
---
--- Name: TABLE multiple_booking; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.multiple_booking TO kbs_odoo;
-
-
---
--- Name: TABLE news; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.news TO kbs_odoo;
-
-
---
--- Name: TABLE operation; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.operation TO kbs_odoo;
-
-
---
--- Name: TABLE option; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.option TO kbs_odoo;
-
-
---
--- Name: TABLE option_condition; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.option_condition TO kbs_odoo;
-
-
---
--- Name: TABLE organization; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.organization TO kbs_odoo;
-
-
---
--- Name: TABLE organization_type; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.organization_type TO kbs_odoo;
-
-
---
--- Name: TABLE package; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.package TO kbs_odoo;
-
-
---
--- Name: TABLE package_item; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.package_item TO kbs_odoo;
-
-
---
--- Name: TABLE person; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.person TO kbs_odoo;
-
-
---
--- Name: TABLE podcast; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.podcast TO kbs_odoo;
-
-
---
--- Name: TABLE recipient; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.recipient TO kbs_odoo;
-
-
---
--- Name: TABLE resource; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.resource TO kbs_odoo;
-
-
---
--- Name: TABLE resource_configuration; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.resource_configuration TO kbs_odoo;
-
-
---
--- Name: TABLE role; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.role TO kbs_odoo;
-
-
---
--- Name: TABLE role_attribution; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.role_attribution TO kbs_odoo;
-
-
---
--- Name: TABLE room_cleaning; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.room_cleaning TO kbs_odoo;
-
-
---
--- Name: TABLE scheduled_item; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.scheduled_item TO kbs_odoo;
-
-
---
--- Name: TABLE scheduled_resource; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.scheduled_resource TO kbs_odoo;
-
-
---
--- Name: TABLE sector; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.sector TO kbs_odoo;
-
-
---
--- Name: TABLE session_agent; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.session_agent TO kbs_odoo;
-
-
---
--- Name: TABLE session_application; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.session_application TO kbs_odoo;
-
-
---
--- Name: TABLE session_connection; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.session_connection TO kbs_odoo;
-
-
---
--- Name: TABLE session_process; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.session_process TO kbs_odoo;
-
-
---
--- Name: TABLE "session_user"; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public."session_user" TO kbs_odoo;
-
-
---
--- Name: TABLE site; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.site TO kbs_odoo;
-
-
---
--- Name: TABLE site_item_family; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.site_item_family TO kbs_odoo;
-
-
---
--- Name: TABLE smtp_account; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.smtp_account TO kbs_odoo;
-
-
---
--- Name: TABLE smtp_quota; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.smtp_quota TO kbs_odoo;
-
-
---
--- Name: TABLE stock; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.stock TO kbs_odoo;
-
-
---
--- Name: TABLE stock_transfer; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.stock_transfer TO kbs_odoo;
-
-
---
--- Name: TABLE subscription; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.subscription TO kbs_odoo;
-
-
---
--- Name: TABLE sys_log; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.sys_log TO kbs_odoo;
-
-
---
--- Name: TABLE sys_sync; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.sys_sync TO kbs_odoo;
-
-
---
--- Name: TABLE tag; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.tag TO kbs_odoo;
-
-
---
--- Name: TABLE tagged; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.tagged TO kbs_odoo;
-
-
---
--- Name: TABLE teacher; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.teacher TO kbs_odoo;
-
-
---
--- Name: TABLE third_party; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.third_party TO kbs_odoo;
-
-
---
--- Name: TABLE timeline; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.timeline TO kbs_odoo;
-
-
---
--- Name: TABLE timezone; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.timezone TO kbs_odoo;
-
-
---
--- Name: TABLE topic; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.topic TO kbs_odoo;
-
-
---
--- Name: TABLE vat; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.vat TO kbs_odoo;
-
-
---
--- Name: TABLE video; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.video TO kbs_odoo;
-
-
---
--- Name: TABLE visibility; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.visibility TO kbs_odoo;
-
-
---
--- Name: TABLE warehouse; Type: ACL; Schema: public; Owner: kbs
---
-
-GRANT SELECT ON TABLE public.warehouse TO kbs_odoo;
 
 
 --
 -- PostgreSQL database dump complete
---
-
---
--- Database "postgres" dump
---
-
-\connect postgres
-
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 17.5
--- Dumped by pg_dump version 17.5
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database cluster dump complete
 --
 
