@@ -4,28 +4,126 @@ This document covers CSS styling, internationalization (i18n), and configuration
 
 ## CSS File Conventions
 
-Each module can have both JavaFX and Web CSS files. Since the project compiles to both native JavaFX and GWT (web), separate CSS files are maintained for each platform.
+Since the project compiles to both native JavaFX and GWT (web), CSS must work on both platforms. **The recommended approach is to use unified CSS files** (`-fxweb@main.css`) which automatically generate both platform-specific CSS files from a single source. Legacy separate files (`-javafx@main.css` and `-web@main.css`) are still supported.
 
 ### Location and Naming
 
 **Location**: `src/main/webfx/css/`
 
-**Naming Pattern**: `[module-name]-[platform]@main.css`
+**Naming Patterns**:
 
-- **JavaFX CSS**: `[module-name]-javafx@main.css`
-- **Web CSS**: `[module-name]-web@main.css`
+- **Unified CSS (Recommended)**: `[module-name]-fxweb@main.css`
+- **Platform-Specific (Legacy)**: `[module-name]-javafx@main.css` and `[module-name]-web@main.css`
 
 **Examples**:
 ```
+# Recommended - Unified CSS (single file generates both platforms)
+modality-booking-frontoffice-bookingpage-fxweb@main.css
+modality-catering-kitchen-fxweb@main.css
+modality-hotel-backoffice-activities-household-fxweb@main.css
+
+# Legacy - Separate platform files (still supported)
 kbs-backoffice-festivalcreator-javafx@main.css
 kbs-backoffice-festivalcreator-web@main.css
-
-modality-client-brand-javafx@main.css
-modality-client-brand-web@main.css
-
-webfx-extras-bootstrap-javafx@main.css
-webfx-extras-bootstrap-web@main.css
 ```
+
+### Unified CSS Approach (Recommended)
+
+WebFX now supports a unified CSS approach where a **single CSS file** written in JavaFX syntax automatically generates both JavaFX and Web CSS files at build time.
+
+#### Benefits
+
+1. **Single Source of Truth** - Maintain only one CSS file
+2. **Automatic Synchronization** - Both platforms always stay in sync
+3. **Build-Time Validation** - Errors caught during build (e.g., padding/margin in CSS)
+4. **Simpler Workflow** - No need to learn Web CSS conversion rules
+
+#### How It Works
+
+1. Create a file named `[module-name]-fxweb@main.css` in `src/main/webfx/css/`
+2. Write CSS using **JavaFX CSS syntax** (with `-fx-` properties)
+3. At build time, WebFX generates both JavaFX and Web CSS files automatically
+
+#### Syntax Rules for Unified CSS
+
+| Element | Syntax | Example |
+|---------|--------|---------|
+| Root selector | `*` | `* { -my-var: #color; }` |
+| Variables | `-variable-name` (single dash prefix) | `-my-module-primary: #0096D6;` |
+| Properties | `-fx-` prefix | `-fx-background-color: white;` |
+| Variable reference | Direct reference | `-fx-text-fill: -my-module-primary;` |
+| Theme cascade | Include `*` child selector | `.theme-dark, .theme-dark * { ... }` |
+
+#### Complete Example
+
+```css
+/* modality-example-fxweb@main.css */
+
+/* CSS Variables - use single dash prefix */
+* {
+    -example-primary: #0096D6;
+    -example-primary-dark: #007AB8;
+    -example-text: #212529;
+    -example-text-muted: #6c757d;
+}
+
+/* Theme variations - include * for child inheritance */
+.theme-dark,
+.theme-dark * {
+    -example-primary: #00C9FF;
+    -example-text: #ffffff;
+}
+
+/* Component styles */
+.example-card {
+    -fx-background-color: white;
+    -fx-border-color: -example-primary;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.example-card:hover {
+    -fx-border-color: -example-primary-dark;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 12, 0, 0, 4);
+}
+
+.example-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -example-text;
+}
+
+.example-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: -example-text-muted;
+}
+```
+
+#### Critical: No Padding/Margin in CSS
+
+**The unified CSS build process enforces the existing rule about padding/margin.** The build will **fail with an error** if padding, margin, or spacing is found in the `-fxweb@main.css` file.
+
+**❌ WILL CAUSE BUILD ERROR:**
+```css
+.example-card {
+    -fx-padding: 16px;        /* BUILD ERROR! */
+    -fx-spacing: 12px;        /* BUILD ERROR! */
+}
+```
+
+**✅ Set padding/spacing in Java code:**
+```java
+card.setPadding(new Insets(16));
+vbox.setSpacing(12);
+hbox.setPadding(new Insets(10, 20, 10, 20));
+```
+
+This enforcement ensures cross-platform consistency since padding behavior can differ between JavaFX and Web.
+
+### Platform-Specific CSS (Legacy)
+
+For cases requiring platform-specific styling, you can still use separate files (`-javafx@main.css` and `-web@main.css`). See [Converting JavaFX CSS to Web CSS](#converting-javafx-css-to-web-css) for detailed conversion rules.
 
 ### CSS Class Namespacing
 
@@ -203,6 +301,8 @@ hbox.setPadding(new Insets(15));
 ```
 
 ### Converting JavaFX CSS to Web CSS
+
+> **Note**: This section applies to **legacy separate CSS files** (`-javafx@main.css` and `-web@main.css`). For new modules, use [unified CSS](#unified-css-approach-recommended) (`-fxweb@main.css`) which handles this conversion automatically.
 
 When converting JavaFX CSS to Web CSS for WebFX/GWT compilation, you need to understand the DOM structure and CSS variable system used by WebFX.
 
@@ -584,11 +684,12 @@ When converting JavaFX CSS to Web CSS:
 
 ### CSS Best Practices
 
-1. **Use CSS variables** for colors, fonts, and reusable values
-2. **Keep platform-specific files in sync** for visual consistency
-3. **Test on both platforms** when making CSS changes
-4. **Always use dual-layer styling** in Web CSS (main class + fx-* elements)
-5. **Include border-style** when specifying borders
+1. **Use unified CSS (`-fxweb@main.css`)** for new modules - single file generates both platforms
+2. **Use CSS variables** for colors, fonts, and reusable values
+3. **Never use padding/margin in CSS** - set in Java code (enforced at build time for unified CSS)
+4. **Test on both platforms** when making CSS changes
+5. **Always use dual-layer styling** in Web CSS (main class + fx-* elements) - only for legacy separate files
+6. **Include border-style** when specifying borders
 
 ### Dynamic Styling in WebFX (Database-Driven Colors)
 
@@ -987,8 +1088,9 @@ CustomLabel: modality.base.StandardLabel
 
 | File Type | Location | Pattern | Example |
 |-----------|----------|---------|---------|
-| JavaFX CSS | `src/main/webfx/css/` | `[name]-javafx@main.css` | `kbs-backoffice-festivalcreator-javafx@main.css` |
-| Web CSS | `src/main/webfx/css/` | `[name]-web@main.css` | `kbs-backoffice-festivalcreator-web@main.css` |
+| **Unified CSS** | `src/main/webfx/css/` | `[name]-fxweb@main.css` | `modality-booking-frontoffice-bookingpage-fxweb@main.css` |
+| JavaFX CSS (legacy) | `src/main/webfx/css/` | `[name]-javafx@main.css` | `kbs-backoffice-festivalcreator-javafx@main.css` |
+| Web CSS (legacy) | `src/main/webfx/css/` | `[name]-web@main.css` | `kbs-backoffice-festivalcreator-web@main.css` |
 | YAML i18n | `src/main/webfx/i18n/` | `[name]@[lang].yaml` | `modality-base-i18n@en.yaml` |
 | Properties i18n | `src/main/webfx/i18n/` | `[name]_[lang].properties` | `kbs-client-festivaltypes_en.properties` |
 | YAML config | `src/main/webfx/conf/` | `[namespace].yaml` | `modality.base.client.i18n.yaml` |
@@ -998,8 +1100,8 @@ CustomLabel: modality.base.StandardLabel
 ## Best Practices
 
 ### CSS
-1. Set sizing and padding in Java code, not CSS
-2. Maintain both JavaFX and Web CSS files for visual consistency
+1. **Use unified CSS (`-fxweb@main.css`) for new modules** - generates both platforms automatically
+2. **Set sizing and padding in Java code, not CSS** - enforced at build time for unified CSS
 3. Use CSS variables for reusable values
 4. Test on both platforms after changes
 

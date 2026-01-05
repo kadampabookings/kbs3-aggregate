@@ -37,35 +37,34 @@ label.getStyleClass().add(Bootstrap.STRONG);
 - Override styles in CSS files
 - Maintain a unified design system
 
-### Rule 2: Padding and Sizing MUST Be Set in Java Code
+### Rule 2: Padding and Margins MUST Be Set in Java Code
 
-**❌ WRONG** - Padding/sizing in CSS files:
+**❌ WRONG** - Padding/margins in CSS files:
 ```css
 /* In CSS file - DO NOT DO THIS */
 .my-button {
-    -fx-min-width: 100px;
-    -fx-pref-width: 150px;
     -fx-padding: 10 20 10 20;
+    margin: 10px;
 }
 ```
 
-**✅ CORRECT** - Padding/sizing in Java code:
+**✅ CORRECT** - Padding/margins in Java code:
 ```java
-// Set sizing in Java
-button.setMinWidth(100);
-button.setPrefWidth(150);
-button.setMaxWidth(200);
+// Set padding in Java
 button.setPadding(new Insets(10, 20, 10, 20));
+
+// Set margins in Java
+VBox.setMargin(button, new Insets(10));
 
 // Or use Bootstrap helper (includes padding)
 Button button = Bootstrap.button(new Button());  // Applies default padding
 ```
 
-**Why**: Due to GWT compilation, padding and sizing set in CSS don't work correctly on the web platform. **Always set these in Java code.**
+**Why**: Due to GWT compilation, padding and margins set in CSS don't work correctly on the web platform. **Always set these in Java code.**
 
-**What goes in CSS**: Only visual styling like colors, fonts, borders, background colors, text styles.
+**What goes in CSS**: Visual styling like colors, fonts (including font-size), borders, background colors, text styles, and sizing (min/max/preferred width/height).
 
-**What goes in Java code**: Padding, margins, sizing (min/max/preferred width/height), spacing, gaps.
+**What goes in Java code**: Padding, margins, spacing, gaps.
 
 ### Rule 3: Use Bootstrap and ModalityStyle Helpers
 
@@ -144,6 +143,8 @@ panel.getStyleClass().add("roomsetup-card");  // Safe, no conflicts
 ### Rule 4.1: Remove Unused CSS Classes and Verify Web CSS Properties
 
 **Purpose**: Keep CSS files clean and ensure Web CSS uses proper standard CSS properties.
+
+> **Note**: For new modules, use **unified CSS** (`-fxweb@main.css`) which automatically generates both JavaFX and Web CSS from a single file written in JavaFX syntax. The rules below apply primarily to legacy separate CSS files (`-javafx@main.css` and `-web@main.css`). See [Module Conventions - Unified CSS](module-conventions.md#unified-css-approach-recommended).
 
 #### Part A: Remove Unused CSS Classes
 
@@ -927,18 +928,20 @@ button.setStyle("-fx-background-color: blue;");
 button = Bootstrap.primaryButton(button);
 ```
 
-### Violation 2: Padding in CSS
+### Violation 2: Padding/Margins in CSS
 
 ```css
 /* ❌ WRONG - in CSS file */
 .my-container {
     -fx-padding: 20px;
+    margin: 10px;
 }
 ```
 
 ```java
 // ✅ CORRECT - in Java
 container.setPadding(new Insets(20));
+VBox.setMargin(container, new Insets(10));
 ```
 
 ### Violation 3: Hardcoded Text
@@ -1050,7 +1053,7 @@ When reviewing code, check for:
 
 - [ ] **No inline CSS** (`setStyle()` calls)
 - [ ] **CSS class namespacing** - all CSS classes prefixed with module name (e.g., `roomsetup-card`, not `card`)
-- [ ] **Padding/sizing in Java**, not CSS
+- [ ] **Padding/margins in Java**, not CSS (sizing like font-size is OK in CSS)
 - [ ] **No hardcoded text** - all use i18n keys
 - [ ] **I18nControls for UI creation** - use `I18nControls.newLabel()`, `I18nControls.newButton()`, etc. (not `new Label(I18n.getI18nText())`)
 - [ ] **I18n bindings** - use `I18n.bindI18nTextProperty()` for properties like promptText
@@ -1078,6 +1081,8 @@ When reviewing code, check for:
 | Property binding | I18n | `I18n.bindI18nTextProperty(property, key)` |
 | Translations | properties files | `module_en.properties` |
 | Padding | Java code | `node.setPadding(new Insets(20))` |
+| Margins | Java code | `VBox.setMargin(node, new Insets(10))` |
+| Font size | CSS | `.my-class { font-size: 20px; }` |
 | Background (Web CSS) | CSS variables | `.my-class { --fx-background-color: blue; }` |
 | Border (Web CSS) | CSS variables | `.my-class { --fx-border-color: #ddd; --fx-border-style: solid; }` |
 | Text color (Web CSS) | fx-text element | `.my-class fx-text { color: blue; }` |

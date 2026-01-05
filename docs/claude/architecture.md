@@ -185,9 +185,12 @@ if (Platform.isServer()) {
 ```
 
 **Resource files**: Use platform suffixes
-- `-javafx@main.css` - JavaFX/Desktop
-- `-web@main.css` - GWT/Web
+- `-fxweb@main.css` - **Unified CSS (Recommended)** - generates both JavaFX and Web CSS
+- `-javafx@main.css` - JavaFX/Desktop (legacy)
+- `-web@main.css` - GWT/Web (legacy)
 - `-gluon@main.css` - Gluon/Mobile
+
+See [Module Conventions - Unified CSS](module-conventions.md#unified-css-approach-recommended) for details.
 
 ## Module Dependencies
 
