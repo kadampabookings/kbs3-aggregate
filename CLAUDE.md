@@ -52,6 +52,13 @@ Reference this when:
 - Planning database queries
 - Understanding data types and field patterns
 
+### 📦 [Booking Data API](docs/claude/booking-data-api.md)
+Reference this when:
+- Working with booking state management (WorkingBooking)
+- Understanding initial vs current booking state
+- Loading booking data (DocumentAggregate)
+- Binding UI to booking properties (WorkingBookingProperties)
+
 ### 🎨 [Module Conventions](docs/claude/module-conventions.md)
 Reference this when:
 - Working with CSS files (JavaFX vs Web)
@@ -126,6 +133,7 @@ The database structure is defined by **Java entity classes** in:
 - For architecture questions → [Architecture](docs/claude/architecture.md)
 - For writing DSQL queries → [Database Entities](docs/claude/database-entities.md)
 - For table/field lookup → [Database Schema Reference](docs/claude/database-schema-reference.md)
+- For booking state management → [Booking Data API](docs/claude/booking-data-api.md)
 - For styling/i18n → [Module Conventions](docs/claude/module-conventions.md)
 - For git/submodule issues → [Submodule Management](docs/claude/submodules.md)
 - For configuration → [Configuration](docs/claude/configuration.md)
