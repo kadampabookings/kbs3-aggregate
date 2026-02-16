@@ -1187,7 +1187,7 @@ private EntityButtonSelector<Person> createPersonButtonSelector(DataSourceModel 
         FXMainFrameDialogArea::getDialogArea,  // Dialog area provider
         dataSourceModel
     )
-    .setSearchCondition("abcNames(p?.fullName) like ?abcSearchLike or lower(p?.email) like ?searchEmailLike");
+    .setSearchCondition("abcNames(p?.fullName) like :abcSearchLike or lower(p?.email) like :searchEmailLike");
 }
 ```
 
@@ -1241,7 +1241,7 @@ private static EntityButtonSelector<Person> createPersonButtonSelector(
         dataSourceModel
     )
     // Add search functionality
-    .setSearchCondition("abcNames(p?.fullName) like ?abcSearchLike or lower(p?.email) like ?searchEmailLike");
+    .setSearchCondition("abcNames(p?.fullName) like :abcSearchLike or lower(p?.email) like :searchEmailLike");
 }
 ```
 
