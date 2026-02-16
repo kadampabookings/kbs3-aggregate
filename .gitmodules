@@ -28,3 +28,6 @@
 [submodule "webfx-stack-parent-fork"]
 	path = webfx-stack-parent-fork
 	url = https://github.com/kadampabookings/webfx-stack-parent-fork.git
+[submodule "kbs3-react"]
+	path = kbs3-react
+	url = https://github.com/kadampabookings/kbs3-react.git
