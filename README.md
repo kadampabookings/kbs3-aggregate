@@ -37,6 +37,7 @@ cd webfx-lib-javacupruntime-fork && git checkout staging && cd ..
 ```sh
 git config submodule.kbsx.ignore all  
 git config submodule.kbs3.ignore all
+git config submodule.kbs3-react.ignore all
 git config submodule.modality-fork.ignore all
 git config submodule.webfx-extras-fork.ignore all
 git config submodule.webfx-fork.ignore all
