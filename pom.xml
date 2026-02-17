@@ -39,7 +39,6 @@
         <module>kbs3</module>
         <module>kbsx</module>
         <module>modality-fork</module>
-        <module>webfx-cli</module>
         <module>webfx-extras-fork</module>
         <module>webfx-fork</module>
         <module>webfx-lib-javacupruntime-fork</module>
