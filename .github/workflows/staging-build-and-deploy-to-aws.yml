@@ -155,6 +155,8 @@ jobs:
           cp $SERVER_FAT_JAR $DOCKER_CONF_DIR
           cp $BACK_OFFICE_WAR $DOCKER_CONF_DIR
           cp $FRONT_OFFICE_WAR $DOCKER_CONF_DIR
+          cp $BACK_OFFICE_REACT_ZIP $DOCKER_CONF_DIR
+          cp $FRONT_OFFICE_REACT_ZIP $DOCKER_CONF_DIR
           cd $DOCKER_CONF_DIR
           cat override@modality.base.server.datasource.properties.tpl | envsubst > override@modality.base.server.datasource.properties
           cat public-variables.properties.tpl | envsubst > public-variables.properties
