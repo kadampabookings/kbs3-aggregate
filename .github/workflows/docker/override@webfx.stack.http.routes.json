@@ -1,7 +1,7 @@
 {
   "httpStaticRoutes": [
     {
-      "routePattern": "/react/*",
+      "routePattern": "/admin/*",
       "hostnamePatterns": ["backoffice.*"],
       "pathToStaticFolder": "/opt/kbs/kbs-backoffice-react.zip!/"
     },
@@ -11,7 +11,7 @@
       "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_backoffice_application_gwt"
     },
     {
-      "routePattern": "/react/*",
+      "routePattern": "/app/*",
       "hostnamePatterns": ["frontoffice.*", "app.*"],
       "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-react.zip!/"
     },
