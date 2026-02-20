@@ -345,47 +345,6 @@ entityStore.executeQuery("select * from Event where id=?", eventId)
 - `UpdateStore` = **WRITE** operations (INSERT/UPDATE)
 - Always create `UpdateStore` above `EntityStore`: `UpdateStore.createAbove(entityStore)`
 
-### Important: Soft-Delete Pattern
-
-**CRITICAL RULE**: NEVER hard-delete entities from the database. Always use soft-delete by setting the `removed` field to `true`.
-
-**Why soft-delete?**
-- Preserves referential integrity with related records (bookings, payments, history, etc.)
-- Maintains audit trail and historical data
-- Prevents cascade deletion issues
-- Allows for data recovery if needed
-
-**How to implement soft-delete:**
-
-```java
-// ❌ WRONG - Never hard-delete
-// entity.delete(); // Don't do this!
-
-// ❌ WRONG - Missing updateEntity() call
-EntityStore entityStore = EntityStore.create(dataSourceModel);
-UpdateStore updateStore = UpdateStore.createAbove(entityStore);
-entityStore.<Person>executeQuery("select id,removed from Person where id=?", personId)
-    .onSuccess(persons -> {
-        Person person = persons.get(0);  // ❌ This entity is not tracked by UpdateStore!
-        person.setRemoved(true);
-        updateStore.submitChanges();  // ❌ This won't work - changes not tracked!
-    });
-
-// ✅ CORRECT - Always soft-delete with updateEntity()
-EntityStore entityStore = EntityStore.create(dataSourceModel);
-UpdateStore updateStore = UpdateStore.createAbove(entityStore);
-
-// Load entity and register it in UpdateStore to track changes
-entityStore.<Person>executeQuery("select id,removed from Person where id=?", personId)
-    .onSuccess(persons -> {
-        // CRITICAL: Must call updateEntity() to track changes!
-        Person person = updateStore.updateEntity(persons.get(0));
-        person.setRemoved(true);  // Soft-delete by setting removed=true
-
-        updateStore.submitChanges()
-            .onSuccess(result -> Console.log("Person soft-deleted successfully"));
-    });
-```
 
 **Key Point**: When loading an entity from `EntityStore` that you want to modify:
 1. Load the entity via `entityStore.executeQuery()`

@@ -568,10 +568,6 @@ Examples:
 - Example: $50.00 stored as 5000
 - Fields: `price`, `price_net`, `amount`, `balance`, etc.
 
-### Soft Deletes
-- `removed` boolean - Mark as deleted without actual deletion
-- `cancelled` boolean - Cancel booking/order
-- `closed` boolean - Close account/organization
 
 ### i18n Fields
 - `label_id` → `label` table for multilingual text
