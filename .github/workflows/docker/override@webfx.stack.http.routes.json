@@ -11,14 +11,13 @@
       "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_backoffice_application_gwt"
     },
     {
-      "routePattern": "/app/*",
-      "hostnamePatterns": ["frontoffice.*", "app.*"],
-      "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-react.zip!/"
+      "routePattern": "/*",
+      "hostnamePatterns": ["app.*"],
+      "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_frontoffice_application_gwt"
     },
     {
       "routePattern": "/*",
-      "hostnamePatterns": ["frontoffice.*", "app.*"],
-      "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_frontoffice_application_gwt"
-    }
+      "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-react.zip!/"
+    },
   ]
 }
