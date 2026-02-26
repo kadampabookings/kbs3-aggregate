@@ -18,6 +18,6 @@
     {
       "routePattern": "/*",
       "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-react.zip!/"
-    },
+    }
   ]
 }
