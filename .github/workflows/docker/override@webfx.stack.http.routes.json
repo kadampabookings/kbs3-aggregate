@@ -1,14 +1,19 @@
 {
   "httpStaticRoutes": [
     {
-      "routePattern": "/admin/*",
-      "hostnamePatterns": ["backoffice.*"],
-      "pathToStaticFolder": "/opt/kbs/kbs-backoffice-react.zip!/"
+      "routePattern": "/java/*",
+      "hostnamePatterns": ["backoffice.staging.kadampabookings.org"],
+      "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_backoffice_application_gwt"
+    },
+    {
+      "routePattern": "/*",
+      "hostnamePatterns": ["backoffice.kadampabookings.org"],
+      "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_backoffice_application_gwt"
     },
     {
       "routePattern": "/*",
       "hostnamePatterns": ["backoffice.*"],
-      "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_backoffice_application_gwt"
+      "pathToStaticFolder": "/opt/kbs/kbs-backoffice-react.zip!/"
     },
     {
       "routePattern": "/*",
@@ -18,6 +23,6 @@
     {
       "routePattern": "/*",
       "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-react.zip!/"
-    },
+    }
   ]
 }
