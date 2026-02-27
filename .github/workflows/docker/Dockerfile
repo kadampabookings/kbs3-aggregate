@@ -3,8 +3,9 @@ FROM azul/zulu-openjdk:19
 RUN set -eux; \
         mkdir -p /opt/kbs/conf
 
-COPY kbs-backoffice-react.zip /opt/kbs
-COPY kbs-frontoffice-react.zip /opt/kbs
+# Commented for production (not yet generated in production)
+#COPY kbs-backoffice-react.zip /opt/kbs
+#COPY kbs-frontoffice-react.zip /opt/kbs
 
 COPY kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar /opt/kbs
 COPY kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war /opt/kbs
