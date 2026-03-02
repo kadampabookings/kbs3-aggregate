@@ -1,24 +1,28 @@
 {
   "httpStaticRoutes": [
     {
-      "routePattern": "/admin/*",
+      "routePattern": "/java/*",
+      "hostnamePatterns": ["backoffice.staging.kadampabookings.org"],
+      "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_backoffice_application_gwt"
+    },
+    {
+      "routePattern": "/*",
+      "hostnamePatterns": ["backoffice.kadampabookings.org"],
+      "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_backoffice_application_gwt"
+    },
+    {
+      "routePattern": "/*",
       "hostnamePatterns": ["backoffice.*"],
       "pathToStaticFolder": "/opt/kbs/kbs-backoffice-react.zip!/"
     },
     {
       "routePattern": "/*",
-      "hostnamePatterns": ["backoffice.*"],
-      "pathToStaticFolder": "/opt/kbs/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_backoffice_application_gwt"
-    },
-    {
-      "routePattern": "/app/*",
-      "hostnamePatterns": ["frontoffice.*", "app.*"],
-      "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-react.zip!/"
+      "hostnamePatterns": ["app.*"],
+      "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_frontoffice_application_gwt"
     },
     {
       "routePattern": "/*",
-      "hostnamePatterns": ["frontoffice.*", "app.*"],
-      "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war!/kbs_frontoffice_application_gwt"
+      "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-react.zip!/"
     }
   ]
 }

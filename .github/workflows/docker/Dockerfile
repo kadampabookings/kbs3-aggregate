@@ -3,6 +3,7 @@ FROM azul/zulu-openjdk:19
 RUN set -eux; \
         mkdir -p /opt/kbs/conf
 
+# To comment for production (not yet generated in production)
 COPY kbs-backoffice-react.zip /opt/kbs
 COPY kbs-frontoffice-react.zip /opt/kbs
 
