@@ -22,6 +22,7 @@ git clone --recursive https://github.com/kadampabookings/kbs3-aggregate.git .
 ```sh
 cd kbsx && git checkout staging && cd ..  
 cd kbs3 && git checkout staging && cd ..  
+cd kbs3-react && git checkout staging && cd ..  
 cd modality-fork && git checkout staging && cd ..  
 cd webfx-extras-fork && git checkout staging && cd ..  
 cd webfx-fork && git checkout staging && cd ..  
