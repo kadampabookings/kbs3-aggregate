@@ -59,6 +59,8 @@ jobs:
           npm ci --workspaces
 
       - name: Build React applications
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAP_JS_API_KEY }}
         run: |
           cd kbs3-react
           npm run build:all
