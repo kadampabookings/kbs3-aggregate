@@ -11,7 +11,7 @@
       "pathToStaticFolder": "/opt/kbs/kbs-backoffice-react.zip!/"
     },
     {
-      "routePattern": "/beta/*",
+      "routePattern": "/react/*",
       "hostnamePatterns": ["app.*"],
       "pathToStaticFolder": "/opt/kbs/kbs-frontoffice-react.zip!/"
     },
