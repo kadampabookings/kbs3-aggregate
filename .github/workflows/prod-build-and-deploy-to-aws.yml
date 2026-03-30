@@ -108,6 +108,16 @@ jobs:
       - name: Build with Maven
         run: mvn package -P 'production,vertx-fatjar,gwt-compile,gwt-sourcemaps' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt -B --no-transfer-progress
 
+      - name: Inject Apple Pay domain association into front-office WAR
+        env:
+          APPLE_PAY_DOMAIN_ASSOCIATION: ${{ secrets.APPLE_PAY_DOMAIN_ASSOCIATION }}
+        run: |
+          WAR=kbs3/kbs-frontoffice-application-gwt/target/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war
+          TMPDIR=$(mktemp -d)
+          mkdir -p $TMPDIR/kbs_frontoffice_application_gwt/.well-known
+          printf '%s' "$APPLE_PAY_DOMAIN_ASSOCIATION" > $TMPDIR/kbs_frontoffice_application_gwt/.well-known/apple-developer-merchantid-domain-association
+          cd $TMPDIR && zip -u $OLDPWD/$WAR kbs_frontoffice_application_gwt/.well-known/apple-developer-merchantid-domain-association
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
