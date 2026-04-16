@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script>
+    var hash = location.hash;
+    var path = hash.startsWith('#/') ? hash.slice(2) : '';
+    var host = location.hostname.replace(/^app\./, '');
+    location.replace(location.protocol + '//' + host + '/' + path);
+  </script>
+</head>
+</html>

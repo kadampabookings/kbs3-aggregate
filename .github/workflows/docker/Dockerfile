@@ -6,6 +6,7 @@ RUN set -eux; \
 # To comment for production (not yet generated in production)
 COPY kbs-backoffice-react.zip /opt/kbs
 COPY kbs-frontoffice-react.zip /opt/kbs
+COPY react-redirect /opt/kbs/react-redirect
 
 COPY kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar /opt/kbs
 COPY kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war /opt/kbs
