@@ -41,7 +41,7 @@
     var url  = location.protocol + '//' + host + '/' + path;
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('link').href = url;
-      document.getElementById('link').textContent = url;
+      document.getElementById('link').textContent = host;
       setTimeout(function() { location.replace(url); }, 3000);
     });
   </script>
