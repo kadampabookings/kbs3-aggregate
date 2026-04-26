@@ -72,15 +72,6 @@ jobs:
           cd ../../frontoffice/dist
           zip -r ../../../kbs-frontoffice-react.zip .
 
-      - name: Injecting variables & secrets into front-office config (Legacy Java/GWT)
-        env:
-          FRONTOFFICE_ORIGIN: ${{ vars.FRONTOFFICE_ORIGIN }}
-          GOOGLE_MAP_JS_API_KEY: ${{ secrets.GOOGLE_MAP_JS_API_KEY }}
-        run: |
-          conf_file=kbs3/kbs-frontoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
-          echo "FRONTOFFICE_ORIGIN=$FRONTOFFICE_ORIGIN" >> $conf_file
-          echo "GOOGLE_MAP_JS_API_KEY=$GOOGLE_MAP_JS_API_KEY" >> $conf_file
-
       - name: Injecting variables into back-office config (Legacy Java/GWT)
         env:
           BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
@@ -106,17 +97,7 @@ jobs:
       #  run: mvn webfx:update --no-transfer-progress
 
       - name: Build with Maven
-        run: mvn package -P 'production,vertx-fatjar,gwt-compile,gwt-sourcemaps' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt -B --no-transfer-progress
-
-      - name: Inject Apple Pay domain association into front-office WAR
-        env:
-          APPLE_PAY_DOMAIN_ASSOCIATION: ${{ secrets.APPLE_PAY_DOMAIN_ASSOCIATION }}
-        run: |
-          WAR=kbs3/kbs-frontoffice-application-gwt/target/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war
-          TMPDIR=$(mktemp -d)
-          mkdir -p $TMPDIR/kbs_frontoffice_application_gwt/.well-known
-          printf '%s' "$APPLE_PAY_DOMAIN_ASSOCIATION" > $TMPDIR/kbs_frontoffice_application_gwt/.well-known/apple-developer-merchantid-domain-association
-          cd $TMPDIR && zip -u $OLDPWD/$WAR kbs_frontoffice_application_gwt/.well-known/apple-developer-merchantid-domain-association
+        run: mvn package -P 'production,vertx-fatjar,gwt-compile,gwt-sourcemaps' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt -B --no-transfer-progress
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -133,7 +114,6 @@ jobs:
         env:
           SERVER_FAT_JAR: "kbs3/kbs-server-application-vertx/target/kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar"
           BACK_OFFICE_WAR: "kbs3/kbs-backoffice-application-gwt/target/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war"
-          FRONT_OFFICE_WAR: "kbs3/kbs-frontoffice-application-gwt/target/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war"
           BACK_OFFICE_REACT_ZIP: "kbs-backoffice-react.zip"
           FRONT_OFFICE_REACT_ZIP: "kbs-frontoffice-react.zip"
           BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
@@ -166,7 +146,6 @@ jobs:
         run: |
           cp $SERVER_FAT_JAR $DOCKER_CONF_DIR
           cp $BACK_OFFICE_WAR $DOCKER_CONF_DIR
-          cp $FRONT_OFFICE_WAR $DOCKER_CONF_DIR
           cp $BACK_OFFICE_REACT_ZIP $DOCKER_CONF_DIR
           cp $FRONT_OFFICE_REACT_ZIP $DOCKER_CONF_DIR
           cd $DOCKER_CONF_DIR
