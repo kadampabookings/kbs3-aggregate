@@ -97,7 +97,7 @@ jobs:
         run: mvn webfx:update --no-transfer-progress
 
       - name: Build with Maven
-        run: mvn package -P 'staging,vertx-fatjar,gwt-compile,gwt-sourcemaps' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt,kbs3/kbs-frontoffice-application-gwt -B --no-transfer-progress
+        run: mvn package -P 'staging,vertx-fatjar,gwt-compile,gwt-sourcemaps' -am -pl kbs3/kbs-server-application-vertx,kbs3/kbs-backoffice-application-gwt -B --no-transfer-progress
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -114,7 +114,6 @@ jobs:
         env:
           SERVER_FAT_JAR: "kbs3/kbs-server-application-vertx/target/kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar"
           BACK_OFFICE_WAR: "kbs3/kbs-backoffice-application-gwt/target/kbs-backoffice-application-gwt-1.0.0-SNAPSHOT.war"
-          FRONT_OFFICE_WAR: "kbs3/kbs-frontoffice-application-gwt/target/kbs-frontoffice-application-gwt-1.0.0-SNAPSHOT.war"
           BACK_OFFICE_REACT_ZIP: "kbs-backoffice-react.zip"
           FRONT_OFFICE_REACT_ZIP: "kbs-frontoffice-react.zip"
           BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
