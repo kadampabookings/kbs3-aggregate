@@ -72,15 +72,6 @@ jobs:
           cd ../../frontoffice/dist
           zip -r ../../../kbs-frontoffice-react.zip .
 
-      - name: Injecting variables & secrets into front-office config (Legacy Java/GWT)
-        env:
-          FRONTOFFICE_ORIGIN: ${{ vars.FRONTOFFICE_ORIGIN }}
-          GOOGLE_MAP_JS_API_KEY: ${{ secrets.GOOGLE_MAP_JS_API_KEY }}
-        run: |
-          conf_file=kbs3/kbs-frontoffice-application-gwt/src/main/resources/dev/webfx/platform/conf/src-root.properties
-          echo "FRONTOFFICE_ORIGIN=$FRONTOFFICE_ORIGIN" >> $conf_file
-          echo "GOOGLE_MAP_JS_API_KEY=$GOOGLE_MAP_JS_API_KEY" >> $conf_file
-
       - name: Injecting variables into back-office config (Legacy Java/GWT)
         env:
           BACKOFFICE_ORIGIN: ${{ vars.BACKOFFICE_ORIGIN }}
