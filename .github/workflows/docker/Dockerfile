@@ -4,6 +4,7 @@ RUN set -eux; \
         mkdir -p /opt/kbs/conf
 
 COPY kbs-backoffice-react.zip /opt/kbs
+COPY kbs-frontoffice-react.zip /opt/kbs
 COPY react-redirect /opt/kbs/react-redirect
 
 COPY kbs-server-application-vertx-1.0.0-SNAPSHOT-fat.jar /opt/kbs
