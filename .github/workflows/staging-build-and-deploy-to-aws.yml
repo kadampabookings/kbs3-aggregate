@@ -156,7 +156,6 @@ jobs:
         run: |
           cp $SERVER_FAT_JAR $DOCKER_CONF_DIR
           cp $BACK_OFFICE_WAR $DOCKER_CONF_DIR
-          cp $FRONT_OFFICE_WAR $DOCKER_CONF_DIR
           cp $BACK_OFFICE_REACT_ZIP $DOCKER_CONF_DIR
           cp $FRONT_OFFICE_REACT_ZIP $DOCKER_CONF_DIR
           cd $DOCKER_CONF_DIR
